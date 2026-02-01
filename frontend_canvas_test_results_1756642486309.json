@@ -1,0 +1,127 @@
+{
+  "summary": {
+    "total": 18,
+    "passed": 8,
+    "failed": 10,
+    "successRate": 44.44444444444444
+  },
+  "details": [
+    {
+      "testName": "LLM Tool Result: Chart Generation Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T12:14:11.458Z"
+    },
+    {
+      "testName": "LLM Tool Result: Line Chart Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T12:14:14.377Z"
+    },
+    {
+      "testName": "LLM Tool Result: Document Creation Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T12:14:18.549Z"
+    },
+    {
+      "testName": "LLM Tool Result: Technical Report Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T12:14:22.919Z"
+    },
+    {
+      "testName": "LLM Tool Result: Code Generation Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T12:14:28.418Z"
+    },
+    {
+      "testName": "LLM Tool Result: JavaScript Code Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T12:14:32.560Z"
+    },
+    {
+      "testName": "Canvas Detection: Chart Data Structure",
+      "status": "PASS",
+      "details": "Correctly detected chart activation: true",
+      "timestamp": "2025-08-31T12:14:32.561Z"
+    },
+    {
+      "testName": "Canvas Detection: Document Data Structure",
+      "status": "PASS",
+      "details": "Correctly detected document activation: true",
+      "timestamp": "2025-08-31T12:14:32.561Z"
+    },
+    {
+      "testName": "Canvas Detection: Code Data Structure",
+      "status": "PASS",
+      "details": "Correctly detected code activation: true",
+      "timestamp": "2025-08-31T12:14:32.561Z"
+    },
+    {
+      "testName": "Canvas Detection: Regular Chat Response",
+      "status": "PASS",
+      "details": "Correctly detected none activation: false",
+      "timestamp": "2025-08-31T12:14:32.561Z"
+    },
+    {
+      "testName": "Canvas Flow: Chart Activation Flow",
+      "status": "FAIL",
+      "details": "Completed 0/5 steps: ",
+      "timestamp": "2025-08-31T12:14:36.663Z"
+    },
+    {
+      "testName": "Canvas Flow: Document Activation Flow",
+      "status": "FAIL",
+      "details": "Completed 0/5 steps: ",
+      "timestamp": "2025-08-31T12:14:40.597Z"
+    },
+    {
+      "testName": "Canvas Flow: Code Activation Flow",
+      "status": "FAIL",
+      "details": "Completed 0/5 steps: ",
+      "timestamp": "2025-08-31T12:14:44.534Z"
+    },
+    {
+      "testName": "Canvas Memory: Storage Test",
+      "status": "PASS",
+      "details": "Memory stored successfully",
+      "timestamp": "2025-08-31T12:14:45.293Z"
+    },
+    {
+      "testName": "Canvas Memory: Retrieval Test",
+      "status": "FAIL",
+      "details": "Memory retrieval failed",
+      "timestamp": "2025-08-31T12:14:46.307Z"
+    },
+    {
+      "testName": "Canvas Rendering: Chart Component Data Processing",
+      "status": "PASS",
+      "details": "ScandinavianChart ready with features: Plotly Integration, Responsive Design, Export Functionality",
+      "timestamp": "2025-08-31T12:14:46.308Z"
+    },
+    {
+      "testName": "Canvas Rendering: Document Component Processing",
+      "status": "PASS",
+      "details": "ScandinavianDocument ready with features: Typewriter Effect, Version Control, Export Options",
+      "timestamp": "2025-08-31T12:14:46.308Z"
+    },
+    {
+      "testName": "Canvas Rendering: Code Component Processing",
+      "status": "PASS",
+      "details": "ScandinavianCode ready with features: CodeMirror Integration, Syntax Highlighting, Copy Functionality",
+      "timestamp": "2025-08-31T12:14:46.308Z"
+    }
+  ],
+  "config": {
+    "baseUrl": "http://localhost:3001",
+    "apiUrl": "http://localhost:3001/api",
+    "testUserId": "test_canvas_user_001",
+    "timeout": 30000,
+    "retries": 3
+  },
+  "timestamp": "2025-08-31T12:14:46.309Z",
+  "architecture": "Frontend Canvas Activation via Tool Results Detection"
+}

@@ -1,0 +1,167 @@
+{
+    "common": {
+        "loading": "Laden...",
+        "error": "Fehler",
+        "success": "Erfolg",
+        "cancel": "Abbrechen",
+        "save": "Speichern",
+        "close": "Schließen",
+        "open": "Öffnen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "search": "Suchen",
+        "settings": "Einstellungen",
+        "help": "Hilfe",
+        "back": "Zurück",
+        "next": "Weiter",
+        "previous": "Vorherige",
+        "continue": "Fortsetzen",
+        "submit": "Senden",
+        "download": "Herunterladen",
+        "upload": "Hochladen",
+        "retry": "Wiederholen",
+        "refresh": "Aktualisieren",
+        "new": "NEU",
+        "updated": "AKTUALISIERT",
+        "enhanced": "VERBESSERT"
+    },
+    "navigation": {
+        "home": "Startseite",
+        "playground": "Der Spielplatz",
+        "dashboard": "Lernzentrum",
+        "forum": "Forum",
+        "games": "Spiele",
+        "about": "Über uns",
+        "test": "Test",
+        "contact": "Kontakt",
+        "profile": "Profil",
+        "logout": "Abmelden",
+        "login": "Anmelden",
+        "sign_in": "Einloggen",
+        "sign_up": "Registrieren",
+        "begin_journey": "Die Reise Beginnen",
+        "registration_disabled": "Registrierung Deaktiviert"
+    },
+    "parentHome": {
+        "hero": {
+            "title": "Ihre Lernreise Beginnt Hier",
+            "titleHighlight": "Entfalten Sie Ihr Potenzial",
+            "subtitle": "Eine KI-gestützte Plattform, die sich an Ihren einzigartigen Lernstil anpasst und Selbstvertrauen sowie kognitive Fähigkeiten durch personalisierte, neurowissenschaftlich fundierte Bildung aufbaut.",
+            "cta": "Kostenlose Testversion Starten",
+            "learnMore": "Mehr Erfahren"
+        },
+        "stats": {
+            "understanding": {
+                "title": "Tiefes Verständnis",
+                "value": "95%",
+                "description": "der Nutzer sehen Verbesserungen beim Lernen"
+            },
+            "memory": {
+                "title": "Verbessertes Gedächtnis",
+                "value": "3x",
+                "description": "schnellere Speicherung durch personalisiertes Lernen"
+            },
+            "growth": {
+                "title": "Messbares Wachstum",
+                "value": "100%",
+                "description": "der Lernenden zeigen kognitive Entwicklungsfortschritte"
+            }
+        },
+        "science": {
+            "title": "Die Wissenschaft Hinter Unserem Ansatz",
+            "subtitle": "Jede Funktion basiert auf bewährten neuropsychologischen Prinzipien"
+        },
+        "features": {
+            "courses": {
+                "title": "Personalisierte Kurse",
+                "description": "KI-generierte Kurse, die sich an Ihr Lerntempo und Ihren Stil anpassen",
+                "benefit1": "Angepasst an Ihr Niveau",
+                "benefit2": "Deckt alle Fächer ab: MINT, Sprachen und mehr",
+                "benefit3": "Fortschrittsverfolgung und detaillierte Berichte",
+                "benefit4": "Ansprechende, interaktive Inhalte"
+            },
+            "memory": {
+                "title": "Langzeitgedächtnissystem",
+                "description": "Unsere KI erinnert sich an alles, was Sie lernen, und erstellt eine personalisierte Wissensdatenbank",
+                "benefit1": "Vergisst nie, was Sie gelernt haben",
+                "benefit2": "Baut automatisch auf Vorkenntnissen auf",
+                "benefit3": "Verbindet Konzepte über Fächer hinweg",
+                "benefit4": "Passt den Unterricht basierend auf Gedächtnismustern an"
+            }
+        },
+        "tutor": {
+            "title": "Ihr Persönlicher KI-Tutor",
+            "subtitle": "Ein Tutor, der wirklich versteht und sich anpasst",
+            "remembers": {
+                "title": "Erinnert Sich an Alles",
+                "description": "Unser KI-Tutor erinnert sich an jedes Gespräch, jede Lektion und jeden Erfolg. Er erstellt ein vollständiges Bild Ihrer Lernreise."
+            },
+            "patient": {
+                "title": "Unendlich Geduldig",
+                "description": "Keine Urteile, keine Frustration. Sie können so oft wie nötig Fragen stellen, in Ihrem eigenen Tempo, ohne Druck."
+            },
+            "celebrates": {
+                "title": "Feiert Jeden Erfolg",
+                "description": "Jeder kleine Erfolg wird anerkannt und gefeiert, was Selbstvertrauen und Motivation für weiteres Lernen aufbaut."
+            },
+            "adapts": {
+                "title": "Passt Sich in Echtzeit An",
+                "description": "Der Tutor passt seinen Lehrstil sofort an, basierend darauf, wie Sie reagieren, um in jedem Moment optimales Lernen zu gewährleisten."
+            },
+            "quote": "\"Jeder Mensch lernt anders. Unser KI-Tutor passt sich an Sie an, nicht umgekehrt.\""
+        },
+        "safety": {
+            "title": "Sicherheit und Schutz",
+            "subtitle": "Ihre Sicherheit hat höchste Priorität",
+            "encryption": {
+                "title": "Ende-zu-Ende-Verschlüsselung",
+                "description": "Alle Daten sind verschlüsselt und sicher. Ihre Informationen sind mit branchenführenden Sicherheitsmaßnahmen geschützt."
+            },
+            "content": {
+                "title": "Inhaltsmoderation",
+                "description": "KI-gestützte Inhaltsfilterung stellt sicher, dass alle Bildungsinhalte angemessen und sicher sind."
+            },
+            "privacy": {
+                "title": "Datenschutz Zuerst",
+                "description": "Wir geben Ihre Daten niemals an Dritte weiter. Datenschutz ist in jeden Aspekt unserer Plattform integriert."
+            },
+            "control": {
+                "title": "Benutzerkontrollen",
+                "description": "Sie haben volle Kontrolle über Ihre Lernerfahrung mit umfassenden Einstellungen und Tools."
+            }
+        },
+        "howItWorks": {
+            "title": "Wie Es Funktioniert",
+            "subtitle": "Der Einstieg ist einfach und dauert nur Minuten",
+            "step1": {
+                "title": "Registrieren und Profil Erstellen",
+                "description": "Richten Sie Ihr Lernprofil in Minuten ein",
+                "point1": "Wählen Sie Ihre Interessen",
+                "point2": "Legen Sie Lernziele und Präferenzen fest",
+                "point3": "Beginnen Sie mit einer kostenlosen Testversion - keine Kreditkarte erforderlich"
+            },
+            "step2": {
+                "title": "KI Erstellt Personalisierten Plan",
+                "description": "Unsere KI analysiert und erstellt einen individuellen Lernpfad",
+                "point1": "KI bewertet Ihren Lernstil",
+                "point2": "Generiert personalisierte Kurse und Aktivitäten",
+                "point3": "Passt Inhalte an Ihr Tempo an"
+            },
+            "step3": {
+                "title": "Lernen und Wachsen",
+                "description": "Lernen und entwickeln Sie sich mit Echtzeit-Einblicken",
+                "point1": "Verfolgen Sie Fortschritte mit detaillierten Analysen",
+                "point2": "Erhalten Sie Erkenntnisse und Empfehlungen",
+                "point3": "Feiern Sie Erfolge und Meilensteine"
+            }
+        },
+        "cta": {
+            "title": "Bereit, Ihr Lernen zu Transformieren?",
+            "subtitle": "Schließen Sie sich Tausenden von Lernenden an, die NeuraPlay für ihre Bildung vertrauen",
+            "comingSoon": "Bald auf Mobilgeräten und Tablets Verfügbar",
+            "noCard": "Keine Kreditkarte Erforderlich",
+            "safe": "100% Sicher und Geschützt",
+            "cancel": "Jederzeit Kündbar"
+        }
+    }
+}

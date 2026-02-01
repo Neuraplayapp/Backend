@@ -1,0 +1,137 @@
+{
+  "common": {
+    "loading": "Жүктелуде...",
+    "error": "Қате",
+    "success": "Сәтті",
+    "cancel": "Бас тарту",
+    "save": "Сақтау",
+    "close": "Жабу",
+    "open": "Ашу",
+    "edit": "Өңдеу",
+    "delete": "Жою",
+    "search": "Іздеу",
+    "settings": "Баптаулар",
+    "help": "Көмек",
+    "back": "Артқа",
+    "next": "Келесі",
+    "previous": "Алдыңғы",
+    "continue": "Жалғастыру",
+    "submit": "Жіберу",
+    "download": "Жүктеп алу",
+    "upload": "Жүктеп салу",
+    "retry": "Қайталау",
+    "refresh": "Жаңарту"
+  },
+  "navigation": {
+    "home": "Бас бет",
+    "playground": "Ойын алаңы",
+    "dashboard": "Оқыту орталығы",
+    "forum": "Форум",
+    "games": "Ойындар",
+    "about": "Біз туралы",
+    "test": "Сынақ",
+    "contact": "Байланыс",
+    "profile": "Профиль",
+    "logout": "Шығу",
+    "login": "Кіру",
+    "begin_journey": "Саяхатты бастау"
+  },
+  "assistant": {
+    "greeting": "Сәлем! Мен дауыстық мүмкіндіктері бар AI көмекшісімін.",
+    "greeting_time": {
+      "morning": "Қайырлы таң, {{name}}!",
+      "afternoon": "Қайырлы күн, {{name}}!",
+      "evening": "Қайырлы кеш, {{name}}!"
+    },
+    "capabilities": {
+      "voice_input": "Дауыстық енгізу",
+      "text_to_speech": "Мәтіннен дауысқа",
+      "document_reader": "Құжат оқығышы",
+      "chart_creator": "Диаграмма жасаушы",
+      "code_editor": "Код редакторы"
+    },
+    "placeholder": "Маған кез келген нәрсе сұраңыз...",
+    "listening": "Тыңдап тұр...",
+    "processing": "Өңделуде...",
+    "thinking": "Ойлануда...",
+    "error_generic": "Қате кетті. Қайталап көріңіз.",
+    "no_microphone": "Микрофонға қол жетімділік жоқ немесе қолжетімді емес",
+    "voice_not_supported": "Дауыстық мүмкіндіктер осы браузерде қолдау көрсетілмейді"
+  },
+  "canvas": {
+    "title": "NeuraBoard канвасы",
+    "tools": {
+      "pen": "Қалам",
+      "eraser": "Өшіргіш",
+      "text": "Мәтін",
+      "shapes": "Пішіндер",
+      "clear": "Бәрін өшіру",
+      "save": "Сақтау",
+      "export": "Экспорт"
+    },
+    "colors": {
+      "black": "Қара",
+      "red": "Қызыл",
+      "blue": "Көк",
+      "green": "Жасыл",
+      "yellow": "Сары",
+      "purple": "Күлгін"
+    }
+  },
+  "games": {
+    "select_game": "Ойын таңдау",
+    "difficulty": {
+      "easy": "Оңай",
+      "medium": "Орташа",
+      "hard": "Қиын"
+    },
+    "score": "Ұпай: {{score}}",
+    "time": "Уақыт: {{time}}",
+    "level": "Деңгей {{level}}",
+    "game_over": "Ойын аяқталды!",
+    "try_again": "Қайталап көру",
+    "new_game": "Жаңа ойын",
+    "pause": "Тоқтату",
+    "resume": "Жалғастыру"
+  },
+  "language": {
+    "current": "Ағымдағы тіл",
+    "select": "Тіл таңдау",
+    "change": "Тілді өзгерту",
+    "auto_detect": "Автоматты анықтау",
+    "detection_failed": "Тіл анықтау сәтсіз, ағылшын тілін қолдану"
+  },
+  "tools": {
+    "web_search": "Веб іздеу",
+    "image_generation": "Кескін генерациясы",
+    "math_diagrams": "Математикалық диаграммалар",
+    "weather": "Ауа райы",
+    "calculator": "Калькулятор",
+    "tool_executed": "Құрал сәтті орындалды",
+    "tool_failed": "Құралды орындау сәтсіз"
+  },
+  "documents": {
+    "title": "Құжат",
+    "version": "Нұсқа {{version}}",
+    "export_pdf": "PDF-ке экспорт",
+    "export_txt": "Мәтінге экспорт",
+    "all_versions": "Барлық нұсқалар",
+    "show_history": "Тарихты көрсету",
+    "hide_history": "Тарихты жасыру"
+  },
+  "errors": {
+    "network": "Желі байланыс қатесі",
+    "server": "Сервер қатесі орын алды",
+    "permission": "Рұқсат жоқ",
+    "not_found": "Мазмұн табылмады",
+    "invalid_input": "Жарамсыз енгізу берілді",
+    "session_expired": "Сессия мерзімі аяқталды"
+  },
+  "accessibility": {
+    "close_dialog": "Диалогты жабу",
+    "open_menu": "Мәзірді ашу",
+    "toggle_theme": "Қараңғы режимді ауыстыру",
+    "screen_reader_content": "Экран оқығыштарға арналған мазмұн",
+    "skip_to_main": "Негізгі мазмұнға өту"
+  }
+}

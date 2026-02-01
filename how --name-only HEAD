@@ -1,0 +1,5 @@
+[33md43cbb2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m feat: Complete Canvas Integration Suite - Charts & Documents
+[33m55a5b59[m feat: implement state-of-the-art vector search system with advanced semantic capabilities
+[33m8de304a[m feat: fix fullscreen UI & conversation errors; upgrade database to state-of-the-art NPU integration with 50+ language support, cross-chat knowledge, real-time analytics
+[33m2b71b85[m feat: enhance voice processing - add comprehensive debugging, create VoiceManager service, improve API key detection for AssemblyAI and ElevenLabs
+[33m4db9683[m fix: move cross-env to production dependencies, add NODE_ENV fallback for Render deployment

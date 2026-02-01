@@ -1,0 +1,398 @@
+NEURAPLAY PROPRIETARY SOFTWARE LICENSE AGREEMENT
+
+Copyright © 2025 Neuraplay. All Rights Reserved.
+
+================================================================================
+IMPORTANT - READ CAREFULLY
+================================================================================
+
+This Proprietary Software License Agreement ("Agreement") is a legally binding contract between you (either an individual or a single legal entity, hereinafter "User," "you," or "your") and Neuraplay ("Company," "we," "us," or "our"), governing your access to and use of the Neuraplay platform, including but not limited to all software, applications, services, content, algorithms, neural processing systems, AI models, cognitive assessment tools, games, educational content, and all associated intellectual property (collectively, the "Software" or "Platform").
+
+BY ACCESSING, DOWNLOADING, INSTALLING, OR USING THE SOFTWARE IN ANY MANNER, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY ALL TERMS AND CONDITIONS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO THESE TERMS, YOU MUST NOT ACCESS OR USE THE SOFTWARE.
+
+================================================================================
+1. GRANT OF LIMITED LICENSE
+================================================================================
+
+1.1. Limited Access License
+Subject to your strict compliance with all terms of this Agreement and payment of applicable fees, Neuraplay grants you a limited, non-exclusive, non-transferable, non-sublicensable, revocable license to access and use the Software solely for your personal, non-commercial educational purposes or, if applicable, for internal business use as explicitly authorized under your subscription tier.
+
+1.2. Scope Limitations
+This license does NOT grant you any right to:
+   a) Download, copy, or extract the Software's source code, algorithms, or proprietary methodologies
+   b) Use the Software for any commercial purpose without explicit written authorization
+   c) Access the Software on behalf of third parties or allow third-party access through your account
+   d) Use the Software in any jurisdiction where such use is prohibited by law
+
+1.3. Reservation of Rights
+ALL RIGHTS NOT EXPRESSLY GRANTED HEREIN ARE RESERVED BY NEURAPLAY. This Agreement does not transfer any ownership rights to you.
+
+================================================================================
+2. PROPRIETARY RIGHTS AND INTELLECTUAL PROPERTY
+================================================================================
+
+2.1. Absolute Ownership
+Neuraplay retains exclusive ownership of all right, title, and interest in and to:
+   a) The Software, including all source code, object code, and executable files
+   b) All algorithms, neural processing architectures, and AI models (including but not limited to the Intent Analysis Service and all cognitive assessment algorithms)
+   c) All proprietary methodologies, including Socratic teaching methods, adaptive learning systems, and behavioral analysis frameworks
+   d) All databases, knowledge bases, and data structures
+   e) All game mechanics, storylines, characters, and interactive content
+   f) All trademarks, service marks, trade names, and logos, including but not limited to "Neuraplay™"
+   g) All documentation, user interfaces, designs, graphics, and multimedia content
+   h) All improvements, modifications, and derivative works of any of the foregoing
+
+2.2. Trade Secrets
+The Software contains valuable trade secrets and confidential proprietary information. You acknowledge that the Software's architecture, algorithms, business methods, and operational processes constitute trade secrets of Neuraplay and are protected under applicable trade secret laws.
+
+2.3. Patents and Innovations
+All patentable inventions, processes, and methods embodied in or related to the Software are the exclusive property of Neuraplay. This includes but is not limited to:
+   - Cognitive assessment methodologies
+   - Adaptive learning algorithms
+   - Multi-modal AI integration systems
+   - Neural processing architectures
+   - Behavioral pattern analysis systems
+
+================================================================================
+3. STRICT USAGE RESTRICTIONS
+================================================================================
+
+3.1. Prohibited Actions
+You shall NOT, and shall not permit any third party to:
+   a) Copy, reproduce, duplicate, or create derivative works of the Software
+   b) Reverse engineer, decompile, disassemble, or attempt to derive the source code or underlying algorithms of the Software
+   c) Modify, adapt, translate, or create derivative works based on the Software
+   d) Remove, alter, or obscure any copyright, trademark, or other proprietary rights notices
+   e) Rent, lease, lend, sell, sublicense, assign, distribute, publish, transfer, or otherwise make available the Software to any third party
+   f) Use the Software to develop, train, or improve competing products, services, or AI systems
+   g) Scrape, mine, or extract data from the Software using automated tools or bots
+   h) Benchmark, test, or analyze the Software's performance for competitive purposes
+   i) Use the Software to create training datasets for machine learning models
+   j) Access the Software through any means other than the official user interface provided by Neuraplay
+   k) Circumvent, disable, or interfere with security features or access controls
+   l) Share, sell, or transfer your account credentials or access rights
+   m) Use the Software for any unlawful, fraudulent, or malicious purpose
+   n) Interfere with or disrupt the integrity or performance of the Software or its servers
+
+3.2. AI and Machine Learning Restrictions
+You explicitly agree that you will NOT:
+   a) Use any content, output, or data from the Software to train, fine-tune, or improve any AI model, machine learning system, or neural network
+   b) Feed prompts, responses, or generated content from Neuraplay into competing AI systems (including but not limited to ChatGPT, Claude, Gemini, or any other large language models)
+   c) Reverse engineer or attempt to replicate Neuraplay's AI methodologies or prompt engineering techniques
+   d) Extract patterns, structures, or teaching methodologies to build competing educational platforms
+
+3.3. Commercial Use Prohibition
+Unless explicitly authorized in writing by Neuraplay, you shall not:
+   a) Use the Software for commercial training, tutoring, or educational services
+   b) Charge fees for access to or use of the Software
+   c) Incorporate the Software into commercial products or services
+   d) Use the Software's cognitive assessments for employment screening or commercial evaluation
+
+================================================================================
+4. SUBSCRIPTION TERMS AND PAYMENT
+================================================================================
+
+4.1. Subscription Tiers
+Access to the Software is provided through subscription-based tiers, including:
+   - Community (Free Tier): Limited access with usage restrictions
+   - Premium Tiers: Enhanced features, higher usage limits, and priority support
+   - Enterprise: Custom solutions with dedicated support and SLA guarantees
+
+4.2. Billing and Payments
+   a) Subscription fees are billed on a recurring monthly or annual basis
+   b) All fees are non-refundable except as required by applicable law
+   c) You authorize Neuraplay to charge your payment method automatically
+   d) Failure to pay will result in immediate suspension or termination of access
+
+4.3. Price Changes
+Neuraplay reserves the right to modify subscription pricing at any time with 30 days' prior notice. Continued use after price changes constitutes acceptance of the new pricing.
+
+4.4. Free Tier Limitations
+Free tier access is provided at Neuraplay's sole discretion and may be modified, limited, or terminated at any time without notice.
+
+================================================================================
+5. USER-GENERATED AND AI-GENERATED CONTENT
+================================================================================
+
+5.1. User-Generated Content License
+By posting, uploading, or submitting any content to the Software (including forum posts, profile information, comments, or feedback), you grant Neuraplay a worldwide, perpetual, irrevocable, royalty-free, fully sublicensable license to use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, perform, and display such content in any media format and through any channels, for purposes of operating, promoting, and improving the Software.
+
+5.2. AI-Generated Content
+   a) Content generated by the Software's AI systems (including but not limited to educational content, stories, assessments, and recommendations) is created using Neuraplay's proprietary algorithms
+   b) You receive a limited, non-exclusive license to use AI-generated content solely for personal, non-commercial purposes
+   c) You shall not use AI-generated content to train competing AI systems or for any commercial purpose without explicit written authorization
+   d) Neuraplay retains all rights to the underlying prompts, techniques, and methodologies used to generate content
+
+5.3. Data and Analytics
+You acknowledge and agree that Neuraplay may collect, analyze, and use aggregated and anonymized data derived from your use of the Software for purposes of improving the Software, developing new features, and conducting research.
+
+================================================================================
+6. THIRD-PARTY SERVICES AND INTEGRATIONS
+================================================================================
+
+6.1. Third-Party Components
+The Software integrates with third-party services, including but not limited to:
+   - AI models (e.g., OpenAI, Anthropic, Google Gemini, Google Veo)
+   - Text-to-Speech and Speech-to-Text services (e.g., ElevenLabs, Deepgram)
+   - Payment processors
+   - Analytics services
+
+6.2. Third-Party Terms
+Your use of integrated third-party services is subject to those providers' terms and policies. Neuraplay is not responsible for third-party service availability, performance, or content.
+
+6.3. No Endorsement
+Integration of third-party services does not constitute endorsement by Neuraplay.
+
+================================================================================
+7. DATA PRIVACY AND SECURITY
+================================================================================
+
+7.1. Data Collection
+Neuraplay collects and processes personal data as described in our Privacy Policy, which is incorporated by reference into this Agreement.
+
+7.2. Educational Data
+For users under 18, Neuraplay complies with applicable educational privacy laws, including COPPA (Children's Online Privacy Protection Act) and FERPA (Family Educational Rights and Privacy Act) where applicable.
+
+7.3. Security Measures
+While Neuraplay implements industry-standard security measures, you acknowledge that no system is completely secure. Neuraplay is not liable for unauthorized access resulting from circumstances beyond its reasonable control.
+
+================================================================================
+8. DISCLAIMERS AND WARRANTIES
+================================================================================
+
+8.1. "AS IS" Provision
+THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO:
+   a) MERCHANTABILITY
+   b) FITNESS FOR A PARTICULAR PURPOSE
+   c) NON-INFRINGEMENT
+   d) ACCURACY, RELIABILITY, OR COMPLETENESS OF CONTENT
+   e) UNINTERRUPTED OR ERROR-FREE OPERATION
+   f) SECURITY OF DATA OR SYSTEMS
+
+8.2. Educational Disclaimer
+   a) The Software is designed for educational and entertainment purposes only
+   b) The Software is NOT a substitute for professional medical, psychological, educational, or therapeutic advice, diagnosis, or treatment
+   c) Cognitive assessments and AI-generated recommendations should not be used as the sole basis for educational or medical decisions
+   d) While informed by neuropsychology and clinical psychology professionals, content is not reviewed by licensed professionals in real-time
+
+8.3. AI Content Disclaimer
+   a) AI-generated content is produced by automated systems and may contain errors, inaccuracies, or inappropriate material
+   b) Neuraplay does not guarantee the accuracy, appropriateness, cultural sensitivity, or safety of AI-generated content
+   c) Parents and educators should supervise children's use of AI features
+   d) Users should independently verify any educational or factual content
+
+8.4. Third-Party Content
+Neuraplay is not responsible for the accuracy, legality, or appropriateness of content provided by third-party services.
+
+================================================================================
+9. LIMITATION OF LIABILITY
+================================================================================
+
+9.1. Maximum Liability Cap
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, NEURAPLAY'S TOTAL AGGREGATE LIABILITY ARISING OUT OF OR RELATED TO THIS AGREEMENT SHALL NOT EXCEED THE AMOUNT YOU PAID TO NEURAPLAY IN THE TWELVE (12) MONTHS PRECEDING THE EVENT GIVING RISE TO LIABILITY, OR ONE HUNDRED US DOLLARS ($100), WHICHEVER IS GREATER.
+
+9.2. Exclusion of Damages
+IN NO EVENT SHALL NEURAPLAY, ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, OR AFFILIATES BE LIABLE FOR:
+   a) INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES
+   b) LOSS OF PROFITS, REVENUE, DATA, OR USE
+   c) LOSS OF BUSINESS OPPORTUNITIES OR GOODWILL
+   d) COSTS OF PROCUREMENT OF SUBSTITUTE SERVICES
+   e) PERSONAL INJURY OR EMOTIONAL DISTRESS
+   f) DAMAGES RESULTING FROM UNAUTHORIZED ACCESS OR DATA BREACHES
+   g) DAMAGES RESULTING FROM RELIANCE ON EDUCATIONAL CONTENT OR AI RECOMMENDATIONS
+
+This limitation applies regardless of the legal theory (contract, tort, negligence, strict liability, or otherwise) and even if Neuraplay has been advised of the possibility of such damages.
+
+9.3. Jurisdictional Limitations
+Some jurisdictions do not allow the exclusion or limitation of certain warranties or liabilities. In such jurisdictions, the above limitations shall apply to the maximum extent permitted by law.
+
+================================================================================
+10. INDEMNIFICATION
+================================================================================
+
+10.1. Your Indemnification Obligations
+You agree to indemnify, defend, and hold harmless Neuraplay, its officers, directors, employees, agents, affiliates, licensors, and service providers from and against any and all claims, liabilities, damages, losses, costs, expenses, or fees (including reasonable attorneys' fees) arising from or related to:
+   a) Your use or misuse of the Software
+   b) Your violation of this Agreement
+   c) Your violation of any third-party rights, including intellectual property rights
+   d) Your violation of applicable laws or regulations
+   e) Content you submit to the Software
+   f) Unauthorized access to your account resulting from your failure to secure credentials
+
+================================================================================
+11. TERMINATION
+================================================================================
+
+11.1. Termination by Neuraplay
+Neuraplay may immediately suspend or terminate your access to the Software, without prior notice or liability, for any reason, including but not limited to:
+   a) Breach of any provision of this Agreement
+   b) Fraudulent, abusive, or illegal activity
+   c) Non-payment of fees
+   d) Behavior that harms other users or Neuraplay's reputation
+   e) At Neuraplay's sole discretion, with or without cause
+
+11.2. Termination by User
+You may terminate this Agreement by discontinuing use of the Software and closing your account.
+
+11.3. Effects of Termination
+Upon termination:
+   a) Your license to use the Software immediately ceases
+   b) You must immediately cease all use of and access to the Software
+   c) All provisions of this Agreement that by their nature should survive shall survive, including but not limited to intellectual property rights, disclaimers, limitations of liability, and indemnification obligations
+   d) Neuraplay may delete your account data in accordance with its data retention policies
+   e) No refunds will be provided for prepaid subscription fees except as required by law
+
+================================================================================
+12. CONFIDENTIALITY
+================================================================================
+
+12.1. Confidential Information
+You acknowledge that the Software, its algorithms, methodologies, business practices, and any non-public information disclosed by Neuraplay constitute confidential and proprietary information ("Confidential Information").
+
+12.2. Non-Disclosure Obligation
+You agree to:
+   a) Keep all Confidential Information strictly confidential
+   b) Not disclose Confidential Information to any third party
+   c) Use Confidential Information solely for purposes authorized under this Agreement
+   d) Protect Confidential Information with the same degree of care you use for your own confidential information, but no less than reasonable care
+
+12.3. Exceptions
+Confidential Information does not include information that:
+   a) Is or becomes publicly available through no breach of this Agreement
+   b) Was rightfully in your possession prior to disclosure by Neuraplay
+   c) Is rightfully disclosed to you by a third party without confidentiality obligations
+   d) Is independently developed by you without use of or reference to Confidential Information
+
+================================================================================
+13. EXPORT COMPLIANCE
+================================================================================
+
+13.1. Export Control Laws
+The Software may be subject to export control laws and regulations. You agree to comply with all applicable international and national laws, including:
+   a) US Export Administration Regulations (EAR)
+   b) International Traffic in Arms Regulations (ITAR)
+   c) Economic sanctions programs administered by OFAC
+
+13.2. Prohibited Jurisdictions
+You represent and warrant that you are not located in, under the control of, or a national or resident of any country subject to US embargo or designated as a "terrorist supporting" country.
+
+================================================================================
+14. GOVERNING LAW AND DISPUTE RESOLUTION
+================================================================================
+
+14.1. Governing Law
+This Agreement shall be governed by and construed in accordance with the laws of the Republic of Kazakhstan, without regard to its conflict of law provisions.
+
+14.2. Jurisdiction
+Any disputes arising out of or related to this Agreement shall be subject to the exclusive jurisdiction of the courts located in Almaty, Republic of Kazakhstan.
+
+14.3. Arbitration (Optional)
+At Neuraplay's sole discretion, disputes may be resolved through binding arbitration in accordance with the rules of the Kazakhstan International Arbitrage Center.
+
+14.4. Class Action Waiver
+YOU AGREE THAT ANY PROCEEDINGS TO RESOLVE DISPUTES WILL BE CONDUCTED ONLY ON AN INDIVIDUAL BASIS AND NOT IN A CLASS, CONSOLIDATED, OR REPRESENTATIVE ACTION.
+
+14.5. Injunctive Relief
+Notwithstanding the above, Neuraplay may seek injunctive or other equitable relief in any court of competent jurisdiction to prevent violation of its intellectual property rights or confidential information.
+
+================================================================================
+15. COMPLIANCE WITH LAWS
+================================================================================
+
+15.1. Your Obligations
+You agree to comply with all applicable local, national, and international laws and regulations in connection with your use of the Software, including but not limited to:
+   a) Data privacy and protection laws (GDPR, CCPA, etc.)
+   b) Educational privacy laws (COPPA, FERPA)
+   c) Intellectual property laws
+   d) Export control laws
+   e) Anti-money laundering regulations
+
+15.2. Prohibited Use for Harmful Purposes
+You shall not use the Software to:
+   a) Generate, distribute, or promote harmful, illegal, or abusive content
+   b) Harass, threaten, or harm others
+   c) Violate anyone's privacy or publicity rights
+   d) Engage in fraudulent activities
+   e) Violate any third-party policies governing use of integrated AI services
+
+================================================================================
+16. MODIFICATIONS TO AGREEMENT
+================================================================================
+
+16.1. Right to Modify
+Neuraplay reserves the right to modify, amend, or update this Agreement at any time, with or without notice. Changes will be effective immediately upon posting of the updated Agreement on the Software.
+
+16.2. Notification
+Neuraplay will make reasonable efforts to notify you of material changes through email, in-app notifications, or prominent notices on the website.
+
+16.3. Continued Use
+Your continued use of the Software after changes to this Agreement constitutes acceptance of the modified terms. If you do not agree to the changes, you must immediately discontinue use of the Software.
+
+================================================================================
+17. GENERAL PROVISIONS
+================================================================================
+
+17.1. Entire Agreement
+This Agreement, together with the Privacy Policy and any other policies incorporated by reference, constitutes the entire agreement between you and Neuraplay regarding the Software and supersedes all prior or contemporaneous agreements, communications, and understandings.
+
+17.2. Severability
+If any provision of this Agreement is found to be invalid, illegal, or unenforceable, the remaining provisions shall continue in full force and effect.
+
+17.3. Waiver
+No waiver of any provision of this Agreement shall be deemed or shall constitute a waiver of any other provision, nor shall any waiver constitute a continuing waiver.
+
+17.4. Assignment
+You may not assign or transfer this Agreement or any rights granted hereunder without Neuraplay's prior written consent. Neuraplay may freely assign this Agreement without restriction.
+
+17.5. Force Majeure
+Neuraplay shall not be liable for any failure or delay in performance due to circumstances beyond its reasonable control, including but not limited to acts of God, war, terrorism, natural disasters, pandemics, government actions, or internet service failures.
+
+17.6. Relationship of Parties
+Nothing in this Agreement creates any partnership, joint venture, employment, or agency relationship between you and Neuraplay.
+
+17.7. No Third-Party Beneficiaries
+This Agreement is for the sole benefit of the parties and does not create any third-party beneficiary rights.
+
+17.8. Notices
+All notices to Neuraplay must be sent to:
+Neuraplay
+   Legal Department
+   [Physical Address - Kazakhstan]
+   Email: legal@neuraplay.com
+
+17.9. Language
+This Agreement is executed in English. In the event of any translation, the English version shall prevail.
+
+17.10. Headings
+Section headings are for convenience only and do not affect interpretation.
+
+================================================================================
+18. CONTACT INFORMATION
+================================================================================
+
+For questions, concerns, or requests regarding this Agreement, please contact:
+
+Neuraplay Legal Team
+Email: legal@neuraplay.com
+Website: https://neuraplay.com/license
+Support: https://neuraplay.com/contact
+
+For technical support:
+Email: support@neuraplay.com
+
+For business inquiries:
+Email: business@neuraplay.com
+
+================================================================================
+ACKNOWLEDGMENT
+================================================================================
+
+BY CLICKING "I AGREE," REGISTERING FOR AN ACCOUNT, OR ACCESSING OR USING THE SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THIS AGREEMENT AND ALL INCORPORATED POLICIES.
+
+IF YOU ARE ACCEPTING THIS AGREEMENT ON BEHALF OF AN ORGANIZATION, YOU REPRESENT AND WARRANT THAT YOU HAVE THE AUTHORITY TO BIND THAT ORGANIZATION TO THIS AGREEMENT.
+
+Last Updated: December 18, 2025
+Version: 2.0
+
+© 2025 Neuraplay. All Rights Reserved.
+Neuraplay™ is a trademark of Neuraplay.

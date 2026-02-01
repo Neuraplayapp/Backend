@@ -1,0 +1,206 @@
+{
+  "summary": {
+    "total": 31,
+    "passed": 6,
+    "failed": 25,
+    "successRate": 19.35483870967742
+  },
+  "details": [
+    {
+      "testName": "Image Generation: Simple Photo Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.368Z"
+    },
+    {
+      "testName": "Image Generation: Artistic Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.372Z"
+    },
+    {
+      "testName": "Image Generation: Logo Design Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.374Z"
+    },
+    {
+      "testName": "Image Generation: Illustration Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.376Z"
+    },
+    {
+      "testName": "Separation Logic: Clear Image Request 1",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.379Z"
+    },
+    {
+      "testName": "Separation Logic: Clear Image Request 2",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.382Z"
+    },
+    {
+      "testName": "Separation Logic: Clear Image Request 3",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.384Z"
+    },
+    {
+      "testName": "Separation Logic: Data Visualization Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.388Z"
+    },
+    {
+      "testName": "Separation Logic: Code Generation Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.391Z"
+    },
+    {
+      "testName": "Separation Logic: Document Creation Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.394Z"
+    },
+    {
+      "testName": "Separation Logic: Ambiguous Visual Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.396Z"
+    },
+    {
+      "testName": "Separation Logic: Technical Diagram Request",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.398Z"
+    },
+    {
+      "testName": "Vision LLM: Text Extraction Test",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.401Z"
+    },
+    {
+      "testName": "Vision LLM: Chart Analysis Test",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.403Z"
+    },
+    {
+      "testName": "Vision LLM: Document Reading Test",
+      "status": "FAIL",
+      "details": "API request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.406Z"
+    },
+    {
+      "testName": "Image Upload: Single Image Upload",
+      "status": "FAIL",
+      "details": "Upload processing failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.410Z"
+    },
+    {
+      "testName": "Image Upload: Multiple Image Upload",
+      "status": "FAIL",
+      "details": "Upload processing failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.412Z"
+    },
+    {
+      "testName": "Image Upload: Large Image Handling",
+      "status": "FAIL",
+      "details": "Upload processing failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.414Z"
+    },
+    {
+      "testName": "Intent Analysis: Photo Generation Intent",
+      "status": "FAIL",
+      "details": "Analysis request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.417Z"
+    },
+    {
+      "testName": "Intent Analysis: Artwork Generation Intent",
+      "status": "FAIL",
+      "details": "Analysis request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.419Z"
+    },
+    {
+      "testName": "Intent Analysis: Data Visualization Intent",
+      "status": "FAIL",
+      "details": "Analysis request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.421Z"
+    },
+    {
+      "testName": "Intent Analysis: Document Creation Intent",
+      "status": "FAIL",
+      "details": "Analysis request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.423Z"
+    },
+    {
+      "testName": "Intent Analysis: Informational Intent",
+      "status": "FAIL",
+      "details": "Analysis request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.425Z"
+    },
+    {
+      "testName": "Intent Analysis: Technical Support Intent",
+      "status": "FAIL",
+      "details": "Analysis request failed: undefined",
+      "timestamp": "2025-08-31T11:22:46.427Z"
+    },
+    {
+      "testName": "Error Recovery: Invalid Image Format",
+      "status": "PASS",
+      "details": "System handled error gracefully",
+      "timestamp": "2025-08-31T11:22:46.430Z"
+    },
+    {
+      "testName": "Error Recovery: Oversized Image Request",
+      "status": "PASS",
+      "details": "System handled error gracefully",
+      "timestamp": "2025-08-31T11:22:46.432Z"
+    },
+    {
+      "testName": "Error Recovery: Impossible Image Request",
+      "status": "PASS",
+      "details": "System handled error gracefully",
+      "timestamp": "2025-08-31T11:22:46.435Z"
+    },
+    {
+      "testName": "Error Recovery: Conflicting Request",
+      "status": "PASS",
+      "details": "System handled error gracefully",
+      "timestamp": "2025-08-31T11:22:46.437Z"
+    },
+    {
+      "testName": "Performance: Image Generation Speed",
+      "status": "PASS",
+      "details": "Generation time: 3ms (target: <30000ms)",
+      "timestamp": "2025-08-31T11:22:46.440Z"
+    },
+    {
+      "testName": "Performance: Vision Processing Speed",
+      "status": "PASS",
+      "details": "Processing time: 2ms (target: <15000ms)",
+      "timestamp": "2025-08-31T11:22:46.442Z"
+    },
+    {
+      "testName": "Quality: Intent Analysis Accuracy",
+      "status": "FAIL",
+      "details": "Accuracy: 0.0% (target: ≥85%)",
+      "timestamp": "2025-08-31T11:22:46.448Z"
+    }
+  ],
+  "config": {
+    "baseUrl": "http://localhost:3001",
+    "apiUrl": "http://localhost:3001/api",
+    "testUserId": "test_vision_user_001",
+    "timeout": 45000,
+    "retries": 3,
+    "testImagePath": "C:\\Users\\sammy\\neuraplay-ai-platform\\test-assets\\test-chart.png",
+    "testDocumentPath": "C:\\Users\\sammy\\neuraplay-ai-platform\\test-assets\\test-document.pdf"
+  },
+  "timestamp": "2025-08-31T11:22:46.448Z"
+}

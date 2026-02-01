@@ -1,0 +1,297 @@
+/* NeuraPlay Mobile Optimization Styles */
+
+/* Touch-friendly base styles */
+.mobile-touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px;
+}
+
+.mobile-touch-target-large {
+  min-height: 48px;
+  min-width: 48px;
+  padding: 12px;
+}
+
+/* Mobile-specific typography */
+@media (max-width: 768px) {
+  .mobile-text-xs { font-size: 12px; line-height: 16px; }
+  .mobile-text-sm { font-size: 14px; line-height: 20px; }
+  .mobile-text-base { font-size: 16px; line-height: 24px; }
+  .mobile-text-lg { font-size: 18px; line-height: 28px; }
+  .mobile-text-xl { font-size: 20px; line-height: 32px; }
+  
+  /* Mobile message bubbles - Enhanced responsive sizing */
+  .mobile-message-bubble {
+    padding: 12px 16px;
+    border-radius: 18px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .mobile-message-bubble.user {
+    max-width: 82%;
+  }
+  
+  .mobile-message-bubble.assistant {
+    max-width: 88%;
+  }
+  
+  /* Mobile input styles */
+  .mobile-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px 16px;
+    border-radius: 24px;
+    min-height: 48px;
+  }
+  
+  /* Mobile button styles */
+  .mobile-button {
+    min-height: 48px;
+    min-width: 48px;
+    font-size: 16px;
+    padding: 12px 20px;
+    border-radius: 24px;
+  }
+  
+  /* Mobile sidebar */
+  .mobile-sidebar {
+    width: 100%;
+    max-width: 320px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Mobile canvas controls */
+  .mobile-canvas-controls {
+    position: fixed;
+    top: auto;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+  }
+}
+
+/* Tablet-specific adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tablet-layout {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .tablet-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+  }
+  
+  .tablet-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  /* Tablet message bubbles */
+  .mobile-message-bubble.user {
+    max-width: 75%;
+  }
+  
+  .mobile-message-bubble.assistant {
+    max-width: 80%;
+  }
+}
+
+/* Desktop-specific message bubble optimizations */
+@media (min-width: 1025px) {
+  .mobile-message-bubble.user {
+    max-width: 70%;
+  }
+  
+  .mobile-message-bubble.assistant {
+    max-width: 75%;
+  }
+}
+
+/* Landscape mobile adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .mobile-landscape-header {
+    padding: 8px 16px;
+    height: 56px;
+  }
+  
+  .mobile-landscape-content {
+    height: calc(100vh - 56px - 80px); /* Header + input height */
+  }
+  
+  .mobile-landscape-input {
+    padding: 8px 16px;
+    height: 64px;
+  }
+}
+
+/* High DPI / Retina display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .mobile-icon {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Safe area handling for devices with notches */
+.mobile-safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.mobile-safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.mobile-safe-area-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.mobile-safe-area-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Accessibility enhancements for mobile */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-motion-reduce {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Touch feedback animations */
+.mobile-touch-feedback {
+  transition: transform 0.1s ease-in-out;
+}
+
+.mobile-touch-feedback:active {
+  transform: scale(0.95);
+}
+
+/* Mobile-specific focus states */
+.mobile-focus-ring:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Mobile scrolling improvements */
+.mobile-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Mobile gesture indicators */
+.mobile-gesture-hint {
+  position: relative;
+}
+
+.mobile-gesture-hint::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 2px;
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 1px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-gesture-hint:hover::after {
+  opacity: 1;
+}
+
+/* Mobile loading states */
+.mobile-loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  border-top: 2px solid #8b5cf6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Refined chat loading animation - smooth and subtle */
+.chat-loading-dot {
+  animation: chat-pulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.chat-loading-dot:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.chat-loading-dot:nth-child(2) {
+  animation-delay: 200ms;
+}
+
+.chat-loading-dot:nth-child(3) {
+  animation-delay: 400ms;
+}
+
+@keyframes chat-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(0.85) translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) translateY(-4px);
+  }
+}
+
+/* Alternative fade animation for ultra-smooth feel */
+.chat-loading-dot-fade {
+  animation: chat-fade 1.2s ease-in-out infinite;
+}
+
+.chat-loading-dot-fade:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.chat-loading-dot-fade:nth-child(2) {
+  animation-delay: 160ms;
+}
+
+.chat-loading-dot-fade:nth-child(3) {
+  animation-delay: 320ms;
+}
+
+@keyframes chat-fade {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Mobile card stack animations */
+.mobile-card-stack {
+  perspective: 1000px;
+}
+
+.mobile-card {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.mobile-card.active {
+  transform: translateZ(0px);
+}
+
+.mobile-card.inactive {
+  transform: translateZ(-50px) scale(0.95);
+  opacity: 0.7;
+}
+
+

@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- Global Animated Background & Core Styles --- */
+body {
+  background-color: #0c0a1a; /* Dark violet fallback */
+  color: #e2e8f0; /* Default light text color (slate-200) */
+  margin: 0;
+  padding: 0;
+}
+
+body, #root {
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+/* Base style for all glass panels */
+.glass-panel {
+  background-color: rgba(17, 24, 39, 0.5); /* bg-gray-900/50 */
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem; /* rounded-2xl */
+}
+
+
+
+
+

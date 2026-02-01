@@ -1,0 +1,411 @@
+W// Unified Route Handler - ALL external API calls go through here
+const express = require('express');
+const router = express.Router();
+
+// For Node.js versions without native fetch
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+
+// Import modules inside routes to prevent module loading failures
+// const { handleImageGeneration } = require('../services/imageGeneration.cjs');
+
+// DEBUG: Add comprehensive logging to unified-route.cjs
+router.use((req, res, next) => {
+  console.log(`🔍 UNIFIED-ROUTE DEBUG: ${req.method} ${req.originalUrl}`);
+  console.log(`🔍 Route matched in unified-route.cjs: ${req.path} (mounted at /api/unified-route)`);
+  console.log(`🔍 Available routes in unified-route: [POST /, GET /debug]`);
+  next();
+});
+
+// DEBUG: Add health check endpoint to test basic routing
+router.get('/debug', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Unified-route.cjs is receiving requests',
+    timestamp: new Date().toISOString(),
+    availableRoutes: ['POST / (mapped to /api/unified-route)', 'GET /debug'],
+    mountPoint: '/api/unified-route'
+  });
+});
+
+// Unified API routing endpoint - now at root since mounted at /api/unified-route
+router.post('/', async (req, res) => {
+  try {
+    const { service, endpoint, data } = req.body;
+    console.log(`🔀 UnifiedRoute: Processing ${service}/${endpoint}`);
+    
+    // Route based on service and endpoint
+    switch (service) {
+      case 'fireworks':
+        return await handleFireworksRequest(endpoint, data, res);
+      case 'together':
+        return await handleTogetherRequest(endpoint, data, res);
+      case 'elevenlabs':
+        return await handleElevenLabsRequest(endpoint, data, res);
+      default:
+        return res.status(400).json({ error: `Unknown service: ${service}` });
+    }
+  } catch (error) {
+    console.error('❌ UnifiedRoute error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DEVELOPMENT FALLBACK: Provides mock responses when using demo API keys
+async function handleDemoFireworksResponse(endpoint, data, res) {
+  switch (endpoint) {
+    case 'llm-completion':
+      // Mock LLM response for chat completions
+      const mockResponse = {
+        choices: [{
+          message: {
+            role: 'assistant',
+            content: `This is a demo response for development. Your message was: "${data.messages?.slice(-1)[0]?.content || 'No message'}"`,
+            tool_calls: data.messages?.some(m => m.content?.includes('canvas') || m.content?.includes('image') || m.content?.includes('chart')) ? [{
+              id: 'demo_tool_call',
+              type: 'function',
+              function: {
+                name: 'canvas-document-creation',
+                arguments: JSON.stringify({
+                  content: `# Demo Canvas Document\n\nThis is a demo response for development mode. The system detected your request and created this placeholder content.\n\n**Your request:** ${data.messages?.slice(-1)[0]?.content || 'Canvas request'}\n\n**Status:** Development mode - using fallback responses.`,
+                  mode: 'create'
+                })
+              }
+            }] : undefined
+          },
+          finish_reason: 'stop'
+        }],
+        model: data.model || 'demo-model',
+        usage: { prompt_tokens: 10, completion_tokens: 25, total_tokens: 35 }
+      };
+      return res.json(mockResponse);
+
+    case 'vision':
+      // Mock vision analysis response
+      const visionResponse = {
+        choices: [{
+          message: {
+            role: 'assistant',
+            content: 'This is a demo vision analysis response. In development mode, I cannot actually analyze images, but this simulates the expected response format for testing purposes.'
+          },
+          finish_reason: 'stop'
+        }],
+        model: 'demo-vision-model',
+        usage: { prompt_tokens: 15, completion_tokens: 30, total_tokens: 45 }
+      };
+      return res.json(visionResponse);
+
+    case 'image-generation':
+      // Mock image generation response
+      const imageResponse = {
+        success: true,
+        images: [{
+          url: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzM0OTVmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+RGVtbyBJbWFnZTwvdGV4dD48L3N2Zz4=',
+          revised_prompt: `Demo image for: ${data.prompt || 'development testing'}`
+        }],
+        metadata: { model: 'demo-image-model', mode: 'development' }
+      };
+      return res.json(imageResponse);
+
+    default:
+      return res.status(400).json({ error: `Demo mode: Unsupported endpoint ${endpoint}` });
+  }
+}
+
+async function handleFireworksRequest(endpoint, data, res) {
+  const apiKey = process.env.Neuraplay || process.env.FIREWORKS_API_KEY || process.env.VITE_FIREWORKS_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'Fireworks API key not configured' });
+  }
+
+  // DEVELOPMENT MODE: Detect demo/placeholder keys and provide fallback responses
+  const isDemoKey = apiKey === 'fireworks' || apiKey === 'demo-fireworks-key' || apiKey.includes('demo') || apiKey.includes('placeholder');
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  
+  if (isDemoKey && isDevelopment) {
+    console.log('🎭 Demo mode: Using fallback response for endpoint:', endpoint);
+    return handleDemoFireworksResponse(endpoint, data, res);
+  }
+
+  switch (endpoint) {
+    case 'image-generation':
+      try {
+        // Import inside route to prevent module loading failures
+        const { handleImageGeneration } = require('../services/imageGeneration.cjs');
+        const result = await handleImageGeneration(data, apiKey);
+        return res.json(result);
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+
+    case 'vision':
+      try {
+        const { model = 'accounts/fireworks/models/llama-v4-maverick-vision', messages, ...options } = data;
+
+        if (!Array.isArray(messages) || messages.length === 0) {
+          return res.status(400).json({ error: 'messages array required for vision analysis' });
+        }
+
+        console.log('👁️ UnifiedRoute: Processing vision request with Llama4-Maverick');
+
+        const fwRes = await fetch('https://api.fireworks.ai/inference/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model,
+            messages,
+            temperature: options.temperature ?? 0.3,
+            max_tokens: options.max_tokens ?? 1000,
+            stream: false,
+            top_p: options.top_p ?? 1.0
+          })
+        });
+
+        if (!fwRes.ok) {
+          const txt = await fwRes.text();
+          console.error(`🚨 Fireworks Vision API failed: ${fwRes.status} - ${txt.slice(0,200)}`);
+          
+          return res.status(fwRes.status).json({
+            success: false,
+            error: `Fireworks Vision API error: ${fwRes.status} - ${txt.slice(0,200)}`,
+            details: {
+              status: fwRes.status,
+              model: model,
+              endpoint: 'vision'
+            }
+          });
+        }
+
+        const fwJson = await fwRes.json();
+        return res.json({
+          success: true,
+          data: {
+            response: fwJson.choices?.[0]?.message?.content || '',
+            completion: fwJson.choices?.[0]?.message?.content || '',
+            generated_text: fwJson.choices?.[0]?.message?.content || ''
+          },
+          usage: fwJson.usage,
+          model: model
+        });
+      } catch (err) {
+        console.error('🚨 vision error:', err);
+        
+        return res.status(500).json({
+          success: false,
+          error: `Vision analysis failed: ${err.message || String(err)}`,
+          details: {
+            model: data.model || 'llama-v4-maverick-vision',
+            endpoint: 'vision',
+            errorType: err.name || 'Unknown'
+          }
+        });
+      }
+
+    case 'llm-completion':
+      try {
+        const { messages, model = 'accounts/fireworks/models/gpt-oss-120b', options = {} } = data;
+
+        if (!Array.isArray(messages) || messages.length === 0) {
+          return res.status(400).json({ error: 'messages array required' });
+        }
+
+        const fwRes = await fetch('https://api.fireworks.ai/inference/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model,
+            messages,
+            temperature: options.temperature ?? 0.7,
+            max_tokens: options.max_tokens ?? 1024,
+            stream: false
+          })
+        });
+
+        if (!fwRes.ok) {
+          const txt = await fwRes.text();
+          console.error(`🚨 Fireworks API failed: ${fwRes.status} - ${txt.slice(0,200)}`);
+          console.error(`🔍 Request details: model=${model}, messages=${JSON.stringify(messages).slice(0,100)}`);
+          
+          // Log the actual error and return structured error response
+          return res.status(fwRes.status).json({
+            success: false,
+            error: `Fireworks API error: ${fwRes.status} - ${txt.slice(0,200)}`,
+            fallback: false,
+            details: {
+              status: fwRes.status,
+              model: model,
+              endpoint: 'llm-completion'
+            }
+          });
+        }
+
+        const fwJson = await fwRes.json();
+        return res.json({
+          success: true,
+          data: fwJson.choices?.[0]?.message?.content || '',
+          usage: fwJson.usage
+        });
+      } catch (err) {
+        console.error('🚨 llm-completion error:', err);
+        console.error('🔍 Error details:', {
+          message: err.message,
+          stack: err.stack?.slice(0,500),
+          model: model,
+          apiKey: apiKey ? 'present' : 'missing'
+        });
+        
+        // Return proper error response instead of fake success
+        return res.status(500).json({
+          success: false,
+          error: `LLM completion failed: ${err.message || String(err)}`,
+          fallback: false,
+          details: {
+            model: model,
+            endpoint: 'llm-completion',
+            errorType: err.name || 'Unknown'
+          }
+        });
+      }
+
+    case 'chart-generation':
+      try {
+        const { prompt, type } = data;
+        const response = await fetch('https://api.fireworks.ai/inference/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'accounts/fireworks/models/llama-v3p1-70b-instruct',
+            messages: [{
+              role: 'system',
+              content: `You are a data visualization expert. Create comprehensive chart specifications based on user requests.
+
+CRITICAL: Return ONLY a JSON object with this exact structure:
+{
+  "title": "Chart Title",
+  "chartType": "${type || 'bar'}",
+  "series": [{"label": "Label", "value": number}],
+  "description": "Detailed explanation of the chart and its insights"
+}`
+            }, {
+              role: 'user',
+              content: `Create a ${type || 'bar'} chart for: ${prompt}`
+            }],
+            temperature: 0.3,
+            max_tokens: 1000
+          })
+        });
+
+        const result = await response.json();
+        const chartSpec = JSON.parse(result.choices[0].message.content);
+        
+        return res.json({
+          success: true,
+          data: {
+            type: 'chart',
+            ...chartSpec,
+            library: 'plotly'
+          }
+        });
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+
+    case 'document-generation':
+      try {
+        const { prompt, type, comprehensiveness, style } = data;
+        const response = await fetch('https://api.fireworks.ai/inference/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'accounts/fireworks/models/llama-v3p1-70b-instruct', // Document model, not coder
+            messages: [{
+              role: 'system',
+              content: `You are an expert document writer and researcher. Create comprehensive, well-structured documents with maximum detail and professional quality.
+
+DOCUMENT GENERATION REQUIREMENTS:
+- Comprehensiveness: MAXIMUM (1000+ words minimum)
+- Professional Quality: EXPERT LEVEL
+- Detail Level: EXTENSIVE with examples, explanations, and insights
+- Structure: Clear headings, subheadings, and logical flow
+- Format: Markdown with rich formatting
+- Style: ${style || 'professional'}
+
+Create documents that are:
+✓ Thoroughly researched and informative
+✓ Well-organized with clear sections
+✓ Rich in detail and examples
+✓ Professional and engaging
+✓ Comprehensive and complete
+
+NEVER create short or sparse content. Always provide full, detailed information.`
+            }, {
+              role: 'user',
+              content: `Create a comprehensive ${type || 'document'} about: ${prompt}`
+            }],
+            temperature: 0.7,
+            max_tokens: 4000 // More tokens for comprehensive content
+          })
+        });
+
+        const result = await response.json();
+        const content = result.choices[0].message.content;
+        
+        // Extract title from first heading or generate one
+        const titleMatch = content.match(/^#\s+(.+)$/m);
+        const title = titleMatch ? titleMatch[1] : `${type || 'Document'}: ${prompt.substring(0, 50)}`;
+        
+        return res.json({
+          success: true,
+          data: {
+            content,
+            title,
+            type: type || 'document',
+            wordCount: content.split(/\s+/).length,
+            metadata: {
+              generatedAt: Date.now(),
+              model: 'llama-v3p1-70b-instruct',
+              comprehensiveness: 'maximum'
+            }
+          }
+        });
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+
+    default:
+      return res.status(400).json({ error: `Unknown Fireworks endpoint: ${endpoint}` });
+  }
+}
+
+async function handleTogetherRequest(endpoint, data, res) {
+  const apiKey = process.env.together_token || process.env.TOGETHER_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'Together AI API key not configured' });
+  }
+  
+  // Implement Together AI routing here
+  return res.status(501).json({ error: 'Together AI routing not implemented yet' });
+}
+
+async function handleElevenLabsRequest(endpoint, data, res) {
+  const apiKey = process.env.VITE_ELEVENLABS_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'ElevenLabs API key not configured' });
+  }
+  
+  // Implement ElevenLabs routing here
+  return res.status(501).json({ error: 'ElevenLabs routing not implemented yet' });
+}
+
+module.exports = router;

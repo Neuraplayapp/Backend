@@ -1,0 +1,259 @@
+{
+  "common": {
+    "loading": "Laddar...",
+    "error": "Fel",
+    "success": "Lyckades",
+    "cancel": "Avbryt",
+    "save": "Spara",
+    "close": "Stäng",
+    "open": "Öppna",
+    "edit": "Redigera",
+    "delete": "Ta bort",
+    "search": "Sök",
+    "settings": "Inställningar",
+    "help": "Hjälp",
+    "back": "Tillbaka",
+    "next": "Nästa",
+    "previous": "Föregående",
+    "continue": "Fortsätt",
+    "submit": "Skicka",
+    "download": "Ladda ner",
+    "upload": "Ladda upp",
+    "retry": "Försök igen",
+    "refresh": "Uppdatera"
+  },
+  "navigation": {
+    "home": "Startsida",
+    "playground": "Lekplatsen",
+    "dashboard": "Lärcentralen",
+    "forum": "Forum",
+    "games": "Spel",
+    "about": "Om oss",
+    "test": "Test",
+    "contact": "Kontakt",
+    "profile": "Profil",
+    "logout": "Logga ut",
+    "login": "Logga in",
+    "begin_journey": "Börja resan"
+  },
+  "parentHome": {
+    "hero": {
+      "title": "Lär dig vad som helst. Kom ihåg allt.",
+      "titleHighlight": "En lärare som verkligen förstår dig.",
+      "subtitle": "Generera personliga kurser i vilket ämne som helst. Vår plattform minns dina framsteg, märker när förståelsen bleknar och tar tillbaka det som är viktigt — precis när du är på väg att glömma det. Inte ännu ett kursbibliotek. En äkta lärkompanjon.",
+      "cta": "Starta gratis provperiod (Kommer snart)",
+      "learnMore": "Läs mer"
+    },
+    "stats": {
+      "understanding": {
+        "title": "Förstår hur du lär dig",
+        "value": "Djupt personligt",
+        "description": "Upptäcker dina unika inlärningsmönster genom riktiga samtal, inte standardiserade bedömningar"
+      },
+      "memory": {
+        "title": "Glömmer aldrig",
+        "value": "Bestående kunskap",
+        "description": "Repetitioner återkommer i det exakta ögonblicket innan glömskan börjar — bygger minne som verkligen varar"
+      },
+      "growth": {
+        "title": "Växer med dig",
+        "value": "Kontinuerlig anpassning",
+        "description": "Varje session bygger på den förra och skapar en lärresa som utvecklas i takt med dig"
+      }
+    },
+    "science": {
+      "title": "Byggt på hur minnet faktiskt fungerar",
+      "subtitle": "De flesta lärplattformar behandlar alla lika. Vi upptäckte att verkligt lärande sker när man förstår rytmen i varje sinne — när man ska utmana, när man ska förstärka, när man ska låta idéer sjunka in."
+    },
+    "features": {
+      "courses": {
+        "title": "Generera vilken kurs som helst, direkt",
+        "description": "Vill du lära dig Python? Arabisk kalligrafi? Kvantfysik? Fråga bara. Vår plattform genererar kompletta, personliga kurser i vilket ämne som helst — byggda utifrån din faktiska förståelse, inte en standardläroplan.",
+        "benefit1": "Vilket ämne som helst, vilken nivå som helst, vilket mål som helst",
+        "benefit2": "Innehållet anpassas när din förståelse fördjupas",
+        "benefit3": "Lagom stora bitar som respekterar din tid",
+        "benefit4": "Flera sätt att bemästra varje koncept"
+      },
+      "memory": {
+        "title": "Neural mellanrumsrepetition",
+        "description": "Vi har gått förbi föråldrade flashcard-system. Vår metod lär sig dina unika glömskemönster och tar tillbaka koncept i det ögonblick de är på väg att blekna — förvandlar bräcklig kunskap till permanent förståelse.",
+        "benefit1": "Repetitioner synkade med din personliga minnesrytm",
+        "benefit2": "Misstag blir fokuserade inlärningsmöjligheter",
+        "benefit3": "Stärker kopplingar mellan ämnen",
+        "benefit4": "Bygger självförtroende genom genuint mästerskap"
+      }
+    },
+    "tutor": {
+      "title": "En lärare som verkligen känner dig",
+      "subtitle": "Ingen chatbot. Inget videobibliotek. En tålmodig kompanjon som minns, förstår och växer tillsammans med dig.",
+      "remembers": {
+        "title": "Minns varje genombrott",
+        "description": "Det ögonblicket när konceptet äntligen föll på plats? När mönstret blev tydligt? Din lärare minns — och bygger vidare på de segrarna i varje framtida samtal."
+      },
+      "patient": {
+        "title": "Oändligt tålmodig",
+        "description": "Ingen frustration. Ingen brådska. Ingen känsla av att ligga efter. Varje fråga välkomnas, varje svårighet stöttas, varje tempo är rätt tempo."
+      },
+      "celebrates": {
+        "title": "Firar verkliga framsteg",
+        "description": "Inte tom beröm för att slutföra övningar — genuin erkänsla när förståelsen fördjupas. Du kommer känna skillnaden mellan ihålig uppmuntran och förtjänat självförtroende."
+      },
+      "adapts": {
+        "title": "Anpassar sig till din energi",
+        "description": "Ont om tid? Kort fokuserad session. Redo för en djupdykning? Låt oss utforska något nytt. Upplevelsen möter dig där du är."
+      },
+      "quote": "\"De bästa lärarna levererar inte bara information. De observerar. De minns. De vet när de ska pusha och när de ska pausa. Det är vad vi har byggt.\""
+    },
+    "safety": {
+      "title": "Säkerhet du kan lita på",
+      "subtitle": "Din lärresa är personlig. Varje interaktion, varje bit data, varje ögonblick på vår plattform skyddas av flera säkerhetslager.",
+      "encryption": {
+        "title": "End-to-end-kryptering",
+        "description": "Din lärresa är privat. Samtal, framsteg och personlig information är krypterade och delas aldrig."
+      },
+      "content": {
+        "title": "Kvalitetssäkrat innehåll",
+        "description": "Varje svar valideras genom våra innehållssystem, vilket säkerställer korrekt och hjälpsam information."
+      },
+      "privacy": {
+        "title": "Din data förblir din",
+        "description": "Vi säljer inte data. Vi delar den inte med annonsörer. Din information finns bara för att tjäna ditt lärande."
+      },
+      "control": {
+        "title": "Full insyn",
+        "description": "Se hela din lärhistorik, följ dina framsteg och förstå hur din kunskap växer — när du vill."
+      }
+    },
+    "howItWorks": {
+      "title": "Att komma igång är enkelt",
+      "subtitle": "Tre steg från registrering till lärande. Ingen komplicerad installation, ingen inlärningskurva.",
+      "step1": {
+        "title": "Skapa din profil",
+        "description": "Några frågor hjälper oss förstå dina intressen, mål och var du befinner dig i din lärresa.",
+        "point1": "Tar bara två minuter",
+        "point2": "Personanpassad upplevelse från dag ett",
+        "point3": "Du kontrollerar dina sekretessinställningar"
+      },
+      "step2": {
+        "title": "Börja lära dig vad som helst",
+        "description": "Skriv in vilket ämne som helst. Vår plattform genererar en komplett, personlig kurs byggd kring hur du lär dig bäst.",
+        "point1": "Vilket ämne som helst — från språk till programmering till musik",
+        "point2": "Kurser genereras direkt, skräddarsydda för dig",
+        "point3": "Röst-, text- eller visuella inlärningsstilar"
+      },
+      "step3": {
+        "title": "Se kunskapen fastna",
+        "description": "Vår neurala mellanrumsrepetition säkerställer att det som lärs förblir inlärt. Du kommer se verklig förståelse, inte bara avklarade övningar.",
+        "point1": "Smarta repetitioner förhindrar glömska",
+        "point2": "Framstegsinsikter du kan följa",
+        "point3": "Växande mästerskap över tid"
+      }
+    },
+    "cta": {
+      "title": "Redo att lära dig vad som helst och komma ihåg det?",
+      "subtitle": "Gå med lärare som har upptäckt vad som händer när teknologi verkligen förstår hur människor lär sig.",
+      "comingSoon": "Kommer snart till mobilen",
+      "noCard": "Inget kreditkort krävs",
+      "safe": "100% säkert och skyddat",
+      "cancel": "Avsluta när som helst"
+    }
+  },
+  "assistant": {
+    "greeting": "Hej! Jag är din AI-assistent med röstfunktioner.",
+    "greeting_time": {
+      "morning": "God morgon, {{name}}!",
+      "afternoon": "God eftermiddag, {{name}}!",
+      "evening": "God kväll, {{name}}!"
+    },
+    "capabilities": {
+      "voice_input": "Röstinmatning",
+      "text_to_speech": "Text-till-tal",
+      "document_reader": "Dokumentläsare",
+      "chart_creator": "Diagramskapare",
+      "code_editor": "Kodredigerare"
+    },
+    "placeholder": "Fråga mig vad som helst...",
+    "listening": "Lyssnar...",
+    "processing": "Bearbetar...",
+    "thinking": "Tänker...",
+    "error_generic": "Jag stötte på ett fel. Försök igen.",
+    "no_microphone": "Mikrofonåtkomst nekad eller inte tillgänglig",
+    "voice_not_supported": "Röstfunktioner stöds inte i denna webbläsare"
+  },
+  "canvas": {
+    "title": "NeuraBoard Canvas",
+    "tools": {
+      "pen": "Penna",
+      "eraser": "Suddgummi",
+      "text": "Text",
+      "shapes": "Former",
+      "clear": "Rensa allt",
+      "save": "Spara",
+      "export": "Exportera"
+    },
+    "colors": {
+      "black": "Svart",
+      "red": "Röd",
+      "blue": "Blå",
+      "green": "Grön",
+      "yellow": "Gul",
+      "purple": "Lila"
+    }
+  },
+  "games": {
+    "select_game": "Välj ett spel",
+    "difficulty": {
+      "easy": "Lätt",
+      "medium": "Medium",
+      "hard": "Svår"
+    },
+    "score": "Poäng: {{score}}",
+    "time": "Tid: {{time}}",
+    "level": "Nivå {{level}}",
+    "game_over": "Spelet är slut!",
+    "try_again": "Försök igen",
+    "new_game": "Nytt spel",
+    "pause": "Paus",
+    "resume": "Fortsätt"
+  },
+  "language": {
+    "current": "Nuvarande språk",
+    "select": "Välj språk",
+    "change": "Byt språk",
+    "auto_detect": "Automatisk identifiering",
+    "detection_failed": "Språkidentifiering misslyckades, använder engelska"
+  },
+  "tools": {
+    "web_search": "Webbsökning",
+    "image_generation": "Bildgenerering",
+    "math_diagrams": "Matematiska diagram",
+    "weather": "Väder",
+    "calculator": "Kalkylator",
+    "tool_executed": "Verktyget kördes framgångsrikt",
+    "tool_failed": "Verktygskörningen misslyckades"
+  },
+  "documents": {
+    "title": "Dokument",
+    "version": "Version {{version}}",
+    "export_pdf": "Exportera till PDF",
+    "export_txt": "Exportera till text",
+    "all_versions": "Alla versioner",
+    "show_history": "Visa historik",
+    "hide_history": "Dölj historik"
+  },
+  "errors": {
+    "network": "Nätverksanslutningsfel",
+    "server": "Serverfel inträffade",
+    "permission": "Åtkomst nekad",
+    "not_found": "Innehåll hittades inte",
+    "invalid_input": "Ogiltig inmatning",
+    "session_expired": "Sessionen har upphört"
+  },
+  "accessibility": {
+    "close_dialog": "Stäng dialog",
+    "open_menu": "Öppna meny",
+    "toggle_theme": "Växla mörkt läge",
+    "screen_reader_content": "Innehåll för skärmläsare",
+    "skip_to_main": "Hoppa till huvudinnehåll"
+  }
+}

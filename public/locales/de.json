@@ -1,0 +1,137 @@
+{
+  "common": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "close": "Schließen",
+    "open": "Öffnen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "search": "Suchen",
+    "settings": "Einstellungen",
+    "help": "Hilfe",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Vorherige",
+    "continue": "Fortfahren",
+    "submit": "Absenden",
+    "download": "Herunterladen",
+    "upload": "Hochladen",
+    "retry": "Wiederholen",
+    "refresh": "Aktualisieren"
+  },
+  "navigation": {
+    "home": "Startseite",
+    "playground": "Der Spielplatz",
+    "dashboard": "Lernzentrum",
+    "forum": "Forum",
+    "games": "Spiele",
+    "about": "Über uns",
+    "test": "Test",
+    "contact": "Kontakt",
+    "profile": "Profil",
+    "logout": "Abmelden",
+    "login": "Anmelden",
+    "begin_journey": "Die Reise beginnen"
+  },
+  "assistant": {
+    "greeting": "Hallo! Ich bin Ihr KI-Assistent mit Sprachfunktionen.",
+    "greeting_time": {
+      "morning": "Guten Morgen, {{name}}!",
+      "afternoon": "Guten Tag, {{name}}!",
+      "evening": "Guten Abend, {{name}}!"
+    },
+    "capabilities": {
+      "voice_input": "Spracheingabe",
+      "text_to_speech": "Text-zu-Sprache",
+      "document_reader": "Dokumentenleser",
+      "chart_creator": "Diagramm-Ersteller",
+      "code_editor": "Code-Editor"
+    },
+    "placeholder": "Fragen Sie mich alles...",
+    "listening": "Höre zu...",
+    "processing": "Verarbeitung...",
+    "thinking": "Denke nach...",
+    "error_generic": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "no_microphone": "Mikrofonzugriff verweigert oder nicht verfügbar",
+    "voice_not_supported": "Sprachfunktionen in diesem Browser nicht unterstützt"
+  },
+  "canvas": {
+    "title": "NeuraBoard Leinwand",
+    "tools": {
+      "pen": "Stift",
+      "eraser": "Radiergummi",
+      "text": "Text",
+      "shapes": "Formen",
+      "clear": "Alles Löschen",
+      "save": "Speichern",
+      "export": "Exportieren"
+    },
+    "colors": {
+      "black": "Schwarz",
+      "red": "Rot",
+      "blue": "Blau",
+      "green": "Grün",
+      "yellow": "Gelb",
+      "purple": "Lila"
+    }
+  },
+  "games": {
+    "select_game": "Spiel Auswählen",
+    "difficulty": {
+      "easy": "Einfach",
+      "medium": "Mittel",
+      "hard": "Schwer"
+    },
+    "score": "Punktzahl: {{score}}",
+    "time": "Zeit: {{time}}",
+    "level": "Level {{level}}",
+    "game_over": "Spiel Beendet!",
+    "try_again": "Erneut Versuchen",
+    "new_game": "Neues Spiel",
+    "pause": "Pausieren",
+    "resume": "Fortsetzen"
+  },
+  "language": {
+    "current": "Aktuelle Sprache",
+    "select": "Sprache Auswählen",
+    "change": "Sprache Ändern",
+    "auto_detect": "Automatisch Erkennen",
+    "detection_failed": "Spracherkennung fehlgeschlagen, verwende Englisch"
+  },
+  "tools": {
+    "web_search": "Web-Suche",
+    "image_generation": "Bilderzeugung",
+    "math_diagrams": "Mathematische Diagramme",
+    "weather": "Wetter",
+    "calculator": "Rechner",
+    "tool_executed": "Tool Erfolgreich Ausgeführt",
+    "tool_failed": "Tool-Ausführung fehlgeschlagen"
+  },
+  "documents": {
+    "title": "Dokument",
+    "version": "Version {{version}}",
+    "export_pdf": "Als PDF Exportieren",
+    "export_txt": "Als Text Exportieren",
+    "all_versions": "Alle Versionen",
+    "show_history": "Verlauf Anzeigen",
+    "hide_history": "Verlauf Ausblenden"
+  },
+  "errors": {
+    "network": "Netzwerkverbindungsfehler",
+    "server": "Serverfehler aufgetreten",
+    "permission": "Berechtigung verweigert",
+    "not_found": "Inhalt nicht gefunden",
+    "invalid_input": "Ungültige Eingabe bereitgestellt",
+    "session_expired": "Sitzung ist abgelaufen"
+  },
+  "accessibility": {
+    "close_dialog": "Dialog schließen",
+    "open_menu": "Menü öffnen",
+    "toggle_theme": "Dunklen Modus umschalten",
+    "screen_reader_content": "Inhalt für Bildschirmleser",
+    "skip_to_main": "Zum Hauptinhalt springen"
+  }
+}

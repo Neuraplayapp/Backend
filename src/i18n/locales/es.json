@@ -1,0 +1,167 @@
+{
+    "common": {
+        "loading": "Cargando...",
+        "error": "Error",
+        "success": "Éxito",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "close": "Cerrar",
+        "open": "Abrir",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "search": "Buscar",
+        "settings": "Configuración",
+        "help": "Ayuda",
+        "back": "Atrás",
+        "next": "Siguiente",
+        "previous": "Anterior",
+        "continue": "Continuar",
+        "submit": "Enviar",
+        "download": "Descargar",
+        "upload": "Subir",
+        "retry": "Reintentar",
+        "refresh": "Actualizar",
+        "new": "NUEVO",
+        "updated": "ACTUALIZADO",
+        "enhanced": "MEJORADO"
+    },
+    "navigation": {
+        "home": "Inicio",
+        "playground": "El Patio de Juegos",
+        "dashboard": "Centro de Aprendizaje",
+        "forum": "Foro",
+        "games": "Juegos",
+        "about": "Acerca de",
+        "test": "Prueba",
+        "contact": "Contacto",
+        "profile": "Perfil",
+        "logout": "Cerrar sesión",
+        "login": "Iniciar sesión",
+        "sign_in": "Entrar",
+        "sign_up": "Registrarse",
+        "begin_journey": "Comenzar el Viaje",
+        "registration_disabled": "Registro Deshabilitado"
+    },
+    "parentHome": {
+        "hero": {
+            "title": "El Viaje de Aprendizaje de su Hijo Comienza Aquí",
+            "titleHighlight": "Desbloquee su Potencial",
+            "subtitle": "Una plataforma impulsada por IA que se adapta al estilo de aprendizaje único de su hijo, desarrollando confianza y habilidades cognitivas a través de educación personalizada basada en neurociencia.",
+            "cta": "Comenzar Prueba Gratis",
+            "learnMore": "Saber Más"
+        },
+        "stats": {
+            "understanding": {
+                "title": "Comprensión Profunda",
+                "value": "95%",
+                "description": "de los padres ven mejoras en el aprendizaje de sus hijos"
+            },
+            "memory": {
+                "title": "Memoria Mejorada",
+                "value": "3x",
+                "description": "retención más rápida a través del aprendizaje personalizado"
+            },
+            "growth": {
+                "title": "Crecimiento Medible",
+                "value": "100%",
+                "description": "de los niños muestran progreso en desarrollo cognitivo"
+            }
+        },
+        "science": {
+            "title": "La Ciencia Detrás de Nuestro Enfoque",
+            "subtitle": "Cada característica está construida sobre principios neuropsicológicos probados"
+        },
+        "features": {
+            "courses": {
+                "title": "Cursos Personalizados",
+                "description": "Cursos generados por IA que se adaptan al ritmo y estilo de aprendizaje de su hijo",
+                "benefit1": "Personalizado para la edad y nivel de su hijo",
+                "benefit2": "Cubre todas las materias: STEM, idiomas y más",
+                "benefit3": "Seguimiento de progreso e informes detallados",
+                "benefit4": "Contenido interactivo y atractivo"
+            },
+            "memory": {
+                "title": "Sistema de Memoria a Largo Plazo",
+                "description": "Nuestra IA recuerda todo lo que su hijo aprende, creando una base de conocimientos personalizada",
+                "benefit1": "Nunca olvida lo que su hijo ha aprendido",
+                "benefit2": "Construye sobre conocimientos previos automáticamente",
+                "benefit3": "Conecta conceptos entre materias",
+                "benefit4": "Adapta la enseñanza basándose en patrones de memoria"
+            }
+        },
+        "tutor": {
+            "title": "El Tutor de IA Personal de su Hijo",
+            "subtitle": "Un tutor que verdaderamente comprende y se adapta",
+            "remembers": {
+                "title": "Recuerda Todo",
+                "description": "Nuestro tutor de IA recuerda cada conversación, cada lección y cada logro. Construye una imagen completa del viaje de aprendizaje de su hijo."
+            },
+            "patient": {
+                "title": "Infinitamente Paciente",
+                "description": "Sin juicios, sin frustración. Su hijo puede hacer preguntas tantas veces como sea necesario, a su propio ritmo, sin ninguna presión."
+            },
+            "celebrates": {
+                "title": "Celebra Cada Victoria",
+                "description": "Cada pequeño logro es reconocido y celebrado, construyendo confianza y motivación para continuar aprendiendo."
+            },
+            "adapts": {
+                "title": "Se Adapta en Tiempo Real",
+                "description": "El tutor ajusta su estilo de enseñanza instantáneamente según cómo responde su hijo, asegurando un aprendizaje óptimo en cada momento."
+            },
+            "quote": "\"Cada niño aprende de manera diferente. Nuestro tutor de IA se adapta a su hijo, no al revés.\""
+        },
+        "safety": {
+            "title": "Seguridad y Protección",
+            "subtitle": "La seguridad de su hijo es nuestra máxima prioridad",
+            "encryption": {
+                "title": "Cifrado de Extremo a Extremo",
+                "description": "Todos los datos están cifrados y seguros. La información de su hijo está protegida con medidas de seguridad líderes en la industria."
+            },
+            "content": {
+                "title": "Moderación de Contenido",
+                "description": "El filtrado de contenido impulsado por IA garantiza que todo el contenido educativo sea apropiado para la edad y seguro para los niños."
+            },
+            "privacy": {
+                "title": "Privacidad Primero",
+                "description": "Nunca compartimos los datos de su hijo con terceros. La privacidad está integrada en todos los aspectos de nuestra plataforma."
+            },
+            "control": {
+                "title": "Controles Parentales",
+                "description": "Tiene control total sobre la experiencia de aprendizaje de su hijo, con configuraciones y herramientas de monitoreo completas."
+            }
+        },
+        "howItWorks": {
+            "title": "Cómo Funciona",
+            "subtitle": "Comenzar es simple y toma solo minutos",
+            "step1": {
+                "title": "Regístrese y Cree un Perfil",
+                "description": "Configure el perfil de aprendizaje de su hijo en minutos",
+                "point1": "Elija la edad e intereses de su hijo",
+                "point2": "Establezca objetivos y preferencias de aprendizaje",
+                "point3": "Comience con una prueba gratuita - no se requiere tarjeta de crédito"
+            },
+            "step2": {
+                "title": "La IA Crea un Plan Personalizado",
+                "description": "Nuestra IA analiza y crea un camino de aprendizaje personalizado",
+                "point1": "La IA evalúa el estilo de aprendizaje de su hijo",
+                "point2": "Genera cursos y actividades personalizadas",
+                "point3": "Adapta el contenido para coincidir con su ritmo"
+            },
+            "step3": {
+                "title": "Aprender y Crecer Juntos",
+                "description": "Vea a su hijo aprender y desarrollarse con información en tiempo real",
+                "point1": "Rastree el progreso con análisis detallados",
+                "point2": "Reciba información y recomendaciones",
+                "point3": "Celebre logros e hitos"
+            }
+        },
+        "cta": {
+            "title": "¿Listo para Transformar el Aprendizaje de su Hijo?",
+            "subtitle": "Únase a miles de familias que confían en NeuraPlay para la educación de sus hijos",
+            "comingSoon": "Disponible en Móvil y Tableta Pronto",
+            "noCard": "No se Requiere Tarjeta de Crédito",
+            "safe": "100% Seguro y Protegido",
+            "cancel": "Cancele en Cualquier Momento"
+        }
+    }
+}

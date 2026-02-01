@@ -1,0 +1,17 @@
+[33mcommit 2ab215e23f397064a1cffc10e8d5684bcb43e0eb[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Sammy <sammy@neuraplay.com>
+Date:   Thu Aug 7 22:27:05 2025 +0500
+
+    Enhance RegularSignUpModal with server integration - Added password fields, error handling, and loading states
+
+[33mcommit 95976defd04eef6ffd3561a9abc9bc55c7fb95dc[m
+Author: Sammy <sammy@neuraplay.com>
+Date:   Thu Aug 7 22:24:25 2025 +0500
+
+    Enhance forum registration with server integration - Added password field, error handling, and loading states
+
+[33mcommit 501f0fcf0a5d1d16919fc3612a58e8a311227dee[m
+Author: Sammy <sammy@neuraplay.com>
+Date:   Thu Aug 7 21:57:39 2025 +0500
+
+    Fix theme text colors in forum registration - Replaced hardcoded text colors with theme-aware utilities for better light/dark mode support

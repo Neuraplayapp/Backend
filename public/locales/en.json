@@ -1,0 +1,259 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "open": "Open",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "settings": "Settings",
+    "help": "Help",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "continue": "Continue",
+    "submit": "Submit",
+    "download": "Download",
+    "upload": "Upload",
+    "retry": "Retry",
+    "refresh": "Refresh"
+  },
+  "navigation": {
+    "home": "Homepage",
+    "playground": "The Playground",
+    "dashboard": "Learning Central",
+    "forum": "Forum",
+    "games": "Games",
+    "about": "About Us",
+    "test": "Test",
+    "contact": "Contact",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Log In",
+    "begin_journey": "Begin the Journey"
+  },
+  "parentHome": {
+    "hero": {
+      "title": "Learn anything. Remember everything.",
+      "titleHighlight": "A tutor that truly understands you.",
+      "subtitle": "Generate personalized courses on any subject. Our platform remembers your progress, notices when understanding fades, and brings back what matters—exactly when you're about to forget it. Not another course library. A genuine learning companion.",
+      "cta": "Start Free Trial (Coming Soon)",
+      "learnMore": "Learn More"
+    },
+    "stats": {
+      "understanding": {
+        "title": "Understands How You Learn",
+        "value": "Deeply Personal",
+        "description": "Discovers your unique learning patterns through real conversations, not standardized assessments"
+      },
+      "memory": {
+        "title": "Never Forgets",
+        "value": "Lasting Knowledge",
+        "description": "Reviews return at the precise moment before forgetting begins—building memory that actually lasts"
+      },
+      "growth": {
+        "title": "Grows With You",
+        "value": "Continuous Adaptation",
+        "description": "Every session builds on the last, creating a learning journey that evolves as you do"
+      }
+    },
+    "science": {
+      "title": "Built on How Memory Actually Works",
+      "subtitle": "Most learning platforms treat every learner the same. We discovered that real learning happens when you understand the rhythm of each mind—when to challenge, when to reinforce, when to let ideas settle."
+    },
+    "features": {
+      "courses": {
+        "title": "Generate Any Course, Instantly",
+        "description": "Want to learn Python? Arabic calligraphy? Quantum physics? Just ask. Our platform generates complete, personalized courses on any subject—built from your actual understanding, not a one-size-fits-all curriculum.",
+        "benefit1": "Any topic, any skill level, any goal",
+        "benefit2": "Content adjusts as your comprehension deepens",
+        "benefit3": "Bite-sized chunks that respect your time",
+        "benefit4": "Multiple approaches to master each concept"
+      },
+      "memory": {
+        "title": "Neural Spaced Repetition",
+        "description": "We've moved beyond outdated flashcard systems. Our approach learns your unique forgetting patterns, bringing back concepts at the moment they're about to fade—turning fragile knowledge into permanent understanding.",
+        "benefit1": "Reviews timed to your personal memory rhythm",
+        "benefit2": "Mistakes become focused learning opportunities",
+        "benefit3": "Strengthens connections across subjects",
+        "benefit4": "Builds confidence through genuine mastery"
+      }
+    },
+    "tutor": {
+      "title": "A Tutor That Truly Knows You",
+      "subtitle": "Not a chatbot. Not a video library. A patient companion who remembers, understands, and grows alongside you.",
+      "remembers": {
+        "title": "Remembers Every Breakthrough",
+        "description": "That moment when the concept finally clicked? When the pattern became clear? Your tutor remembers—and builds on those victories in every future conversation."
+      },
+      "patient": {
+        "title": "Infinitely Patient",
+        "description": "No frustration. No rushing. No making you feel behind. Every question is welcomed, every struggle is supported, every pace is the right pace."
+      },
+      "celebrates": {
+        "title": "Celebrates Real Progress",
+        "description": "Not empty praise for completing exercises—genuine recognition when understanding deepens. You'll feel the difference between hollow encouragement and earned confidence."
+      },
+      "adapts": {
+        "title": "Adapts to Your Energy",
+        "description": "Short on time? Quick focused session. Ready for a deep dive? Let's explore something new. The experience meets you where you are."
+      },
+      "quote": "\"The best teachers don't just deliver information. They notice. They remember. They know when to push and when to pause. That's what we built.\""
+    },
+    "safety": {
+      "title": "Security You Can Trust",
+      "subtitle": "Your learning journey is personal. Every interaction, every piece of data, every moment on our platform is protected by multiple layers of security.",
+      "encryption": {
+        "title": "End-to-End Encryption",
+        "description": "Your learning journey is private. Conversations, progress, and personal information are encrypted and never shared."
+      },
+      "content": {
+        "title": "Quality-Assured Content",
+        "description": "Every response is validated through our content systems, ensuring accurate and helpful information."
+      },
+      "privacy": {
+        "title": "Your Data Stays Yours",
+        "description": "We don't sell data. We don't share it with advertisers. Your information exists only to serve your learning."
+      },
+      "control": {
+        "title": "Full Visibility",
+        "description": "See your complete learning history, track your progress, and understand how your knowledge grows—whenever you want."
+      }
+    },
+    "howItWorks": {
+      "title": "Getting Started is Simple",
+      "subtitle": "Three steps from signup to learning. No complicated setup, no learning curve.",
+      "step1": {
+        "title": "Create Your Profile",
+        "description": "A few questions help us understand your interests, goals, and where you are in your learning journey.",
+        "point1": "Takes just two minutes",
+        "point2": "Personalized experience from day one",
+        "point3": "You control your privacy settings"
+      },
+      "step2": {
+        "title": "Start Learning Anything",
+        "description": "Type any topic. Our platform generates a complete, personalized course built around how you learn best.",
+        "point1": "Any subject—from languages to programming to music",
+        "point2": "Courses generated instantly, tailored to you",
+        "point3": "Voice, text, or visual learning styles"
+      },
+      "step3": {
+        "title": "Watch Knowledge Stick",
+        "description": "Our neural spaced repetition ensures what's learned stays learned. You'll see real understanding, not just completed exercises.",
+        "point1": "Smart reviews prevent forgetting",
+        "point2": "Progress insights you can track",
+        "point3": "Growing mastery over time"
+      }
+    },
+    "cta": {
+      "title": "Ready to Learn Anything and Remember It?",
+      "subtitle": "Join learners who've discovered what happens when technology truly understands how people learn.",
+      "comingSoon": "Coming Soon to Mobile",
+      "noCard": "No Credit Card Required",
+      "safe": "100% Safe & Secure",
+      "cancel": "Cancel Anytime"
+    }
+  },
+  "assistant": {
+    "greeting": "Hi! I'm your AI assistant with voice capabilities.",
+    "greeting_time": {
+      "morning": "Good morning, {{name}}!",
+      "afternoon": "Good afternoon, {{name}}!",
+      "evening": "Good evening, {{name}}!"
+    },
+    "capabilities": {
+      "voice_input": "Voice Input",
+      "text_to_speech": "Text-to-Speech",
+      "document_reader": "Document Reader",
+      "chart_creator": "Chart Creator",
+      "code_editor": "Code Editor"
+    },
+    "placeholder": "Ask me anything...",
+    "listening": "Listening...",
+    "processing": "Processing...",
+    "thinking": "Thinking...",
+    "error_generic": "I encountered an error. Please try again.",
+    "no_microphone": "Microphone access denied or not available",
+    "voice_not_supported": "Voice features not supported in this browser"
+  },
+  "canvas": {
+    "title": "NeuraBoard Canvas",
+    "tools": {
+      "pen": "Pen",
+      "eraser": "Eraser",
+      "text": "Text",
+      "shapes": "Shapes",
+      "clear": "Clear All",
+      "save": "Save",
+      "export": "Export"
+    },
+    "colors": {
+      "black": "Black",
+      "red": "Red",
+      "blue": "Blue",
+      "green": "Green",
+      "yellow": "Yellow",
+      "purple": "Purple"
+    }
+  },
+  "games": {
+    "select_game": "Select a Game",
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "score": "Score: {{score}}",
+    "time": "Time: {{time}}",
+    "level": "Level {{level}}",
+    "game_over": "Game Over!",
+    "try_again": "Try Again",
+    "new_game": "New Game",
+    "pause": "Pause",
+    "resume": "Resume"
+  },
+  "language": {
+    "current": "Current Language",
+    "select": "Select Language",
+    "change": "Change Language",
+    "auto_detect": "Auto-Detect",
+    "detection_failed": "Language detection failed, using English"
+  },
+  "tools": {
+    "web_search": "Web Search",
+    "image_generation": "Image Generation",
+    "math_diagrams": "Math Diagrams",
+    "weather": "Weather",
+    "calculator": "Calculator",
+    "tool_executed": "Tool Executed Successfully",
+    "tool_failed": "Tool execution failed"
+  },
+  "documents": {
+    "title": "Document",
+    "version": "Version {{version}}",
+    "export_pdf": "Export to PDF",
+    "export_txt": "Export to Text",
+    "all_versions": "All Versions",
+    "show_history": "Show History",
+    "hide_history": "Hide History"
+  },
+  "errors": {
+    "network": "Network connection error",
+    "server": "Server error occurred",
+    "permission": "Permission denied",
+    "not_found": "Content not found",
+    "invalid_input": "Invalid input provided",
+    "session_expired": "Session has expired"
+  },
+  "accessibility": {
+    "close_dialog": "Close dialog",
+    "open_menu": "Open menu",
+    "toggle_theme": "Toggle dark mode",
+    "screen_reader_content": "Content for screen readers",
+    "skip_to_main": "Skip to main content"
+  }
+}

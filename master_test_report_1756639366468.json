@@ -1,0 +1,48 @@
+{
+  "summary": {
+    "executionTime": "2025-08-31T11:22:46.467Z",
+    "duration": "6s",
+    "overallSuccess": false,
+    "totalTests": 2,
+    "totalPassed": 0,
+    "totalFailed": 2,
+    "successRate": 0
+  },
+  "canvasSystemTests": {
+    "passed": 0,
+    "failed": 1,
+    "total": 1,
+    "success": false,
+    "error": "Command failed: node test-canvas-systems.cjs"
+  },
+  "imageVisionTests": {
+    "passed": 0,
+    "failed": 1,
+    "total": 1,
+    "success": false,
+    "error": "Command failed: node test-image-vision-systems.cjs"
+  },
+  "errors": [
+    {
+      "test": "canvas",
+      "error": "Command failed: node test-canvas-systems.cjs"
+    },
+    {
+      "test": "image",
+      "error": "Command failed: node test-image-vision-systems.cjs"
+    }
+  ],
+  "recommendations": [
+    "Canvas system requires immediate attention - check server status and database connectivity",
+    "Image/Vision system issues detected - verify API keys and service availability",
+    "Overall success rate below 90% - investigate failing tests and system stability",
+    "Address logged errors before deploying to production"
+  ],
+  "nextSteps": [
+    "1. Review failed tests and investigate root causes",
+    "2. Fix identified issues and re-run tests",
+    "3. Verify fixes don't break other functionality",
+    "4. Update documentation with any changes",
+    "5. Share results with development team"
+  ]
+}

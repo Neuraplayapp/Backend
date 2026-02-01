@@ -1,0 +1,167 @@
+{
+    "common": {
+        "loading": "Laddar...",
+        "error": "Fel",
+        "success": "Framgång",
+        "cancel": "Avbryt",
+        "save": "Spara",
+        "close": "Stäng",
+        "open": "Öppna",
+        "edit": "Redigera",
+        "delete": "Radera",
+        "search": "Sök",
+        "settings": "Inställningar",
+        "help": "Hjälp",
+        "back": "Tillbaka",
+        "next": "Nästa",
+        "previous": "Föregående",
+        "continue": "Fortsätt",
+        "submit": "Skicka",
+        "download": "Ladda ner",
+        "upload": "Ladda upp",
+        "retry": "Försök igen",
+        "refresh": "Uppdatera",
+        "new": "NYTT",
+        "updated": "UPPDATERAT",
+        "enhanced": "FÖRBÄTTRAT"
+    },
+    "navigation": {
+        "home": "Hem",
+        "playground": "Lekplatsen",
+        "dashboard": "Inlärningscentral",
+        "forum": "Forum",
+        "games": "Spel",
+        "about": "Om oss",
+        "test": "Test",
+        "contact": "Kontakt",
+        "profile": "Profil",
+        "logout": "Logga ut",
+        "login": "Logga in",
+        "sign_in": "Logga in",
+        "sign_up": "Registrera",
+        "begin_journey": "Börja Resan",
+        "registration_disabled": "Registrering Inaktiverad"
+    },
+    "parentHome": {
+        "hero": {
+            "title": "Din Inlärningsresa Börjar Här",
+            "titleHighlight": "Lås Upp Din Potential",
+            "subtitle": "En AI-driven pedagogisk AI-lärare som anpassar sig till din unika inlärningsstil och bygger självförtroende och kognitiva färdigheter genom personligt genererad utbildning.",
+            "cta": "Starta Gratis Provperiod",
+            "learnMore": "Läs Mer"
+        },
+        "stats": {
+            "understanding": {
+                "title": "Djup Förståelse",
+                "value": "95%",
+                "description": "av användarna ser förbättringar i sitt lärande"
+            },
+            "memory": {
+                "title": "Förbättrat Minne",
+                "value": "3x",
+                "description": "snabbare retention genom personligt lärande"
+            },
+            "growth": {
+                "title": "Mätbar Tillväxt",
+                "value": "100%",
+                "description": "av användarna visar framsteg i kognitiv utveckling"
+            }
+        },
+        "science": {
+            "title": "Vetenskapen Bakom Vår Metod",
+            "subtitle": "Varje funktion är byggd på beprövade neuropsykologiska principer"
+        },
+        "features": {
+            "courses": {
+                "title": "Personliga Kurser",
+                "description": "AI-genererade kurser som anpassar sig till ditt inlärningstempo och stil",
+                "benefit1": "Anpassad för din nivå",
+                "benefit2": "Täcker alla ämnen: STEM, språk och mer",
+                "benefit3": "Framstegsuppföljning och detaljerade rapporter",
+                "benefit4": "Engagerande, interaktivt innehåll"
+            },
+            "memory": {
+                "title": "Långtidsminnessystem",
+                "description": "Vår AI kommer ihåg allt du lär dig och skapar en personlig kunskapsbas",
+                "benefit1": "Glömmer aldrig vad du har lärt dig",
+                "benefit2": "Bygger automatiskt på tidigare kunskaper",
+                "benefit3": "Kopplar ihop koncept mellan ämnen",
+                "benefit4": "Anpassar undervisningen baserat på minnesmönster"
+            }
+        },
+        "tutor": {
+            "title": "Din Personliga AI-Lärare",
+            "subtitle": "En lärare som verkligen förstår och anpassar sig",
+            "remembers": {
+                "title": "Kommer Ihåg Allt",
+                "description": "Vår AI-lärare kommer ihåg varje samtal, varje lektion och varje prestation. Den bygger en komplett bild av din inlärningsresa."
+            },
+            "patient": {
+                "title": "Oändligt Tålmodig",
+                "description": "Ingen bedömning, ingen frustration. Du kan ställa frågor så många gånger som behövs, i din egen takt, utan något tryck."
+            },
+            "celebrates": {
+                "title": "Firar Varje Vinst",
+                "description": "Varje liten prestation uppmärksammas och firas, vilket bygger självförtroende och motivation för fortsatt lärande."
+            },
+            "adapts": {
+                "title": "Anpassar Sig i Realtid",
+                "description": "Läraren justerar sin undervisningsstil omedelbart baserat på hur du svarar, vilket säkerställer optimalt lärande i varje ögonblick."
+            },
+            "quote": "\"Varje person lär sig olika. Vår AI-lärare anpassar sig till dig, inte tvärtom.\""
+        },
+        "safety": {
+            "title": "Säkerhet och Trygghet",
+            "subtitle": "Din säkerhet är vår högsta prioritet",
+            "encryption": {
+                "title": "End-to-End-Kryptering",
+                "description": "All data är krypterad och säker. Din information skyddas med branschledande säkerhetsåtgärder."
+            },
+            "content": {
+                "title": "Innehållsmoderering",
+                "description": "AI-driven innehållsfiltrering säkerställer att allt utbildningsinnehåll är lämpligt och säkert."
+            },
+            "privacy": {
+                "title": "Integritet Först",
+                "description": "Vi delar aldrig din data med tredje part. Integritet är inbyggt i varje aspekt av vår plattform."
+            },
+            "control": {
+                "title": "Användarkontroller",
+                "description": "Du har full kontroll över din inlärningsupplevelse med omfattande inställningar och verktyg."
+            }
+        },
+        "howItWorks": {
+            "title": "Hur Det Fungerar",
+            "subtitle": "Att komma igång är enkelt och tar bara några minuter",
+            "step1": {
+                "title": "Registrera Dig och Skapa Profil",
+                "description": "Konfigurera din inlärningsprofil på några minuter",
+                "point1": "Välj dina intressen",
+                "point2": "Sätt inlärningsmål och preferenser",
+                "point3": "Börja med en gratis provperiod - inget kreditkort krävs"
+            },
+            "step2": {
+                "title": "AI Skapar Personlig Plan",
+                "description": "Vår AI analyserar och skapar en anpassad inlärningsväg",
+                "point1": "AI bedömer din inlärningsstil",
+                "point2": "Genererar personliga kurser och aktiviteter",
+                "point3": "Anpassar innehåll för att matcha ditt tempo"
+            },
+            "step3": {
+                "title": "Lär och Väx",
+                "description": "Lär dig och utvecklas med realtidsinsikter",
+                "point1": "Följ framsteg med detaljerade analyser",
+                "point2": "Få insikter och rekommendationer",
+                "point3": "Fira prestationer och milstolpar"
+            }
+        },
+        "cta": {
+            "title": "Redo att Transformera Ditt Lärande?",
+            "subtitle": "Gå med tusentals användare som litar på NeuraPlay för sin utbildning",
+            "comingSoon": "Tillgänglig på Mobil och Surfplatta Snart",
+            "noCard": "Inget Kreditkort Krävs",
+            "safe": "100% Säkert och Tryggt",
+            "cancel": "Avsluta När Som Helst"
+        }
+    }
+}

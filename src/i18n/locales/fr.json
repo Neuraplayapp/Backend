@@ -1,0 +1,167 @@
+{
+    "common": {
+        "loading": "Chargement...",
+        "error": "Erreur",
+        "success": "Succès",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "close": "Fermer",
+        "open": "Ouvrir",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "search": "Rechercher",
+        "settings": "Paramètres",
+        "help": "Aide",
+        "back": "Retour",
+        "next": "Suivant",
+        "previous": "Précédent",
+        "continue": "Continuer",
+        "submit": "Soumettre",
+        "download": "Télécharger",
+        "upload": "Téléverser",
+        "retry": "Réessayer",
+        "refresh": "Actualiser",
+        "new": "NOUVEAU",
+        "updated": "MIS À JOUR",
+        "enhanced": "AMÉLIORÉ"
+    },
+    "navigation": {
+        "home": "Accueil",
+        "playground": "Le Terrain de Jeu",
+        "dashboard": "Centre d'Apprentissage",
+        "forum": "Forum",
+        "games": "Jeux",
+        "about": "À propos",
+        "test": "Test",
+        "contact": "Contact",
+        "profile": "Profil",
+        "logout": "Déconnexion",
+        "login": "Connexion",
+        "sign_in": "Se connecter",
+        "sign_up": "S'inscrire",
+        "begin_journey": "Commencer le Voyage",
+        "registration_disabled": "Inscription Désactivée"
+    },
+    "parentHome": {
+        "hero": {
+            "title": "Votre Parcours d'Apprentissage Commence Ici",
+            "titleHighlight": "Libérez Votre Potentiel",
+            "subtitle": "Une plateforme alimentée par l'IA qui s'adapte à votre style d'apprentissage unique, renforçant la confiance et les compétences cognitives grâce à une éducation personnalisée basée sur les neurosciences.",
+            "cta": "Commencer l'Essai Gratuit",
+            "learnMore": "En Savoir Plus"
+        },
+        "stats": {
+            "understanding": {
+                "title": "Compréhension Profonde",
+                "value": "95%",
+                "description": "des utilisateurs constatent une amélioration de leur apprentissage"
+            },
+            "memory": {
+                "title": "Mémoire Améliorée",
+                "value": "3x",
+                "description": "rétention plus rapide grâce à l'apprentissage personnalisé"
+            },
+            "growth": {
+                "title": "Croissance Mesurable",
+                "value": "100%",
+                "description": "des apprenants montrent des progrès dans le développement cognitif"
+            }
+        },
+        "science": {
+            "title": "La Science Derrière Notre Approche",
+            "subtitle": "Chaque fonctionnalité est basée sur des principes neuropsychologiques éprouvés"
+        },
+        "features": {
+            "courses": {
+                "title": "Cours Personnalisés",
+                "description": "Cours générés par IA qui s'adaptent à votre rythme et style d'apprentissage",
+                "benefit1": "Personnalisé pour votre niveau",
+                "benefit2": "Couvre toutes les matières : STEM, langues et plus",
+                "benefit3": "Suivi des progrès et rapports détaillés",
+                "benefit4": "Contenu interactif et engageant"
+            },
+            "memory": {
+                "title": "Système de Mémoire à Long Terme",
+                "description": "Notre IA se souvient de tout ce que vous apprenez, créant une base de connaissances personnalisée",
+                "benefit1": "N'oublie jamais ce que vous avez appris",
+                "benefit2": "S'appuie automatiquement sur les connaissances antérieures",
+                "benefit3": "Relie les concepts entre les matières",
+                "benefit4": "Adapte l'enseignement en fonction des schémas de mémoire"
+            }
+        },
+        "tutor": {
+            "title": "Votre Tuteur IA Personnel",
+            "subtitle": "Un tuteur qui comprend et s'adapte vraiment",
+            "remembers": {
+                "title": "Se Souvient de Tout",
+                "description": "Notre tuteur IA se souvient de chaque conversation, chaque leçon et chaque réussite. Il construit une image complète de votre parcours d'apprentissage."
+            },
+            "patient": {
+                "title": "Infiniment Patient",
+                "description": "Aucun jugement, aucune frustration. Vous pouvez poser des questions autant de fois que nécessaire, à votre propre rythme, sans aucune pression."
+            },
+            "celebrates": {
+                "title": "Célèbre Chaque Victoire",
+                "description": "Chaque petite réussite est reconnue et célébrée, renforçant la confiance et la motivation pour continuer à apprendre."
+            },
+            "adapts": {
+                "title": "S'Adapte en Temps Réel",
+                "description": "Le tuteur ajuste instantanément son style d'enseignement en fonction de vos réponses, garantissant un apprentissage optimal à chaque instant."
+            },
+            "quote": "\"Chaque personne apprend différemment. Notre tuteur IA s'adapte à vous, pas l'inverse.\""
+        },
+        "safety": {
+            "title": "Sécurité et Protection",
+            "subtitle": "Votre sécurité est notre priorité absolue",
+            "encryption": {
+                "title": "Chiffrement de Bout en Bout",
+                "description": "Toutes les données sont chiffrées et sécurisées. Vos informations sont protégées par des mesures de sécurité de pointe."
+            },
+            "content": {
+                "title": "Modération du Contenu",
+                "description": "Le filtrage du contenu alimenté par l'IA garantit que tout le contenu éducatif est approprié et sûr."
+            },
+            "privacy": {
+                "title": "Confidentialité d'Abord",
+                "description": "Nous ne partageons jamais vos données avec des tiers. La confidentialité est intégrée dans tous les aspects de notre plateforme."
+            },
+            "control": {
+                "title": "Contrôles Utilisateur",
+                "description": "Vous avez un contrôle total sur votre expérience d'apprentissage, avec des paramètres et des outils complets."
+            }
+        },
+        "howItWorks": {
+            "title": "Comment Ça Marche",
+            "subtitle": "Commencer est simple et ne prend que quelques minutes",
+            "step1": {
+                "title": "Inscrivez-vous et Créez un Profil",
+                "description": "Configurez votre profil d'apprentissage en quelques minutes",
+                "point1": "Choisissez vos intérêts",
+                "point2": "Définissez les objectifs et les préférences d'apprentissage",
+                "point3": "Commencez avec un essai gratuit - aucune carte de crédit requise"
+            },
+            "step2": {
+                "title": "L'IA Crée un Plan Personnalisé",
+                "description": "Notre IA analyse et crée un parcours d'apprentissage personnalisé",
+                "point1": "L'IA évalue votre style d'apprentissage",
+                "point2": "Génère des cours et des activités personnalisés",
+                "point3": "Adapte le contenu pour correspondre à votre rythme"
+            },
+            "step3": {
+                "title": "Apprendre et Grandir",
+                "description": "Apprenez et développez-vous avec des informations en temps réel",
+                "point1": "Suivez les progrès avec des analyses détaillées",
+                "point2": "Recevez des informations et des recommandations",
+                "point3": "Célébrez les réussites et les étapes importantes"
+            }
+        },
+        "cta": {
+            "title": "Prêt à Transformer Votre Apprentissage?",
+            "subtitle": "Rejoignez des milliers d'apprenants qui font confiance à NeuraPlay pour leur éducation",
+            "comingSoon": "Disponible sur Mobile et Tablette Bientôt",
+            "noCard": "Aucune Carte de Crédit Requise",
+            "safe": "100% Sûr et Sécurisé",
+            "cancel": "Annulez à Tout Moment"
+        }
+    }
+}

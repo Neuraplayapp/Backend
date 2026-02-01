@@ -1,0 +1,366 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close",
+    "open": "Open",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "settings": "Settings",
+    "help": "Help",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "continue": "Continue",
+    "submit": "Submit",
+    "download": "Download",
+    "upload": "Upload",
+    "retry": "Retry",
+    "refresh": "Refresh",
+    "new": "NEW",
+    "updated": "UPDATED",
+    "enhanced": "ENHANCED"
+  },
+  "navigation": {
+    "home": "Homepage",
+    "playground": "The Playground",
+    "dashboard": "Learning Central",
+    "forum": "Forum",
+    "games": "Games",
+    "about": "About Us",
+    "test": "Test",
+    "contact": "Contact",
+    "features": "Features",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up",
+    "begin_journey": "Begin the Journey",
+    "registration_disabled": "Registration Disabled",
+    "get_started": "Get Started"
+  },
+  "home": {
+    "hero": {
+      "title": "You Are a Genius",
+      "subtitle": "unlock your potential - through AI and psychology",
+      "smart_learning": "Smart Learning",
+      "smart_learning_desc": "AI-powered adaptive education",
+      "family_focused": "Family Focused",
+      "family_focused_desc": "Progress tracking for parents",
+      "fun_games": "Fun Games",
+      "fun_games_desc": "Engaging cognitive challenges",
+      "what_is_neuraplay": "What is neuraplay?",
+      "forum": "Forum",
+      "about_us": "About Us"
+    },
+    "features": {
+      "title": "An investment in your future is priceless",
+      "subtitle": "Get the tools you need to succeed in a rapidly evolving world",
+      "new_way_title": "A whole new way to learn",
+      "neuro_title": "Neuro-psychological teaching methods",
+      "neuro_desc": "Every game, story, and challenge is built upon proven neuropsychological principles that target specific cognitive skills. Our platform adapts to your unique learning style, ensuring optimal brain development.",
+      "tailored_title": "Tailor-made for the learner",
+      "tailored_desc": "Our adaptive AI creates personalized learning paths that evolve with your progress. Each experience is carefully crafted to match your cognitive profile and learning pace.",
+      "montessori_title": "The Montessori approach",
+      "montessori_desc": "Inspired by Montessori principles, our platform encourages self-directed learning and discovery. Learners explore concepts at their own pace, building confidence and independence."
+    },
+    "videos": {
+      "title": "Discover Neuraplay",
+      "subtitle": "Embark on a journey where neuroscience meets play. Every game is a step toward unlocking your limitless potential.",
+      "welcome_title": "Welcome to Neuraplay",
+      "welcome_desc": "Step into a world where learning becomes an adventure. Discover how our neuroscience-based approach transforms education.",
+      "experience_title": "The Neuraplay Experience",
+      "experience_desc": "Witness the magic of personalized learning in action. See how our platform adapts to each learner's unique cognitive profile."
+    },
+    "releases": {
+      "title": "New Releases",
+      "subtitle": "Discover our latest games and features designed to enhance cognitive development",
+      "cube_title": "The Cube",
+      "cube_desc": "Advanced 3D Rubik's Cube with real-time cognitive tracking. Targets 22 neuropsychological concepts.",
+      "try_cube": "Try The Cube",
+      "ai_title": "Enhanced AI",
+      "ai_desc": "Upgraded AI assistant with voice capabilities, multi-language support, and personalized learning recommendations.",
+      "meet_synapse": "Meet Synapse",
+      "analytics_title": "Analytics",
+      "analytics_desc": "Comprehensive cognitive development tracking with detailed progress reports and performance analytics.",
+      "view_reports": "View Reports"
+    },
+    "cta": {
+      "title": "Ready to unlock your potential?",
+      "subtitle": "Join thousands of learners who trust Neuraplay for their cognitive development",
+      "start_journey": "Start Full Journey",
+      "join_community": "Join Community",
+      "proven_results": "Proven Results",
+      "active_users": "Join a growing family with more than ever active users!",
+      "science_based": "Science-Based"
+    },
+    "coming_soon": {
+      "title": "Coming Soon",
+      "subtitle": "Exciting new features and experiences on the horizon",
+      "vr_title": "Virtual Reality",
+      "vr_desc": "Immersive 3D learning experiences",
+      "social_title": "Social Learning",
+      "social_desc": "Collaborative problem-solving games",
+      "adaptive_title": "Adaptive AI",
+      "adaptive_desc": "Dynamic difficulty adjustment",
+      "parent_title": "Parent Portal",
+      "parent_desc": "Comprehensive progress monitoring"
+    }
+  },
+  "dashboard": {
+    "title": "Learning Central",
+    "welcome": "Welcome back",
+    "continue_learning": "Continue Learning",
+    "your_progress": "Your Progress",
+    "recent_activity": "Recent Activity",
+    "recommended": "Recommended for You",
+    "achievements": "Achievements",
+    "study_streak": "Study Streak",
+    "modules_completed": "Modules Completed",
+    "time_spent": "Time Spent",
+    "skills_developed": "Skills Developed"
+  },
+  "forum": {
+    "title": "Community Forum",
+    "new_post": "New Post",
+    "discussions": "Discussions",
+    "trending": "Trending",
+    "latest": "Latest",
+    "my_posts": "My Posts",
+    "categories": "Categories",
+    "search_placeholder": "Search discussions..."
+  },
+  "about": {
+    "title": "About Us",
+    "mission": "Our Mission",
+    "team": "Our Team",
+    "story": "Our Story",
+    "contact": "Contact Us"
+  },
+  "assistant": {
+    "greeting": "Hi! I'm your AI assistant with voice capabilities.",
+    "greeting_time": {
+      "morning": "Good morning, {{name}}!",
+      "afternoon": "Good afternoon, {{name}}!",
+      "evening": "Good evening, {{name}}!"
+    },
+    "capabilities": {
+      "voice_input": "Voice Input",
+      "text_to_speech": "Text-to-Speech",
+      "document_reader": "Document Reader",
+      "chart_creator": "Chart Creator",
+      "code_editor": "Code Editor"
+    },
+    "placeholder": "Ask me anything...",
+    "listening": "Listening...",
+    "processing": "Processing...",
+    "thinking": "Thinking...",
+    "error_generic": "I encountered an error. Please try again.",
+    "no_microphone": "Microphone access denied or not available",
+    "voice_not_supported": "Voice features not supported in this browser"
+  },
+  "canvas": {
+    "title": "NeuraBoard Canvas",
+    "tools": {
+      "pen": "Pen",
+      "eraser": "Eraser",
+      "text": "Text",
+      "shapes": "Shapes",
+      "clear": "Clear All",
+      "save": "Save",
+      "export": "Export"
+    },
+    "colors": {
+      "black": "Black",
+      "red": "Red",
+      "blue": "Blue",
+      "green": "Green",
+      "yellow": "Yellow",
+      "purple": "Purple"
+    }
+  },
+  "games": {
+    "select_game": "Select a Game",
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "score": "Score: {{score}}",
+    "time": "Time: {{time}}",
+    "level": "Level {{level}}",
+    "game_over": "Game Over!",
+    "try_again": "Try Again",
+    "new_game": "New Game",
+    "pause": "Pause",
+    "resume": "Resume"
+  },
+  "language": {
+    "current": "Current Language",
+    "select": "Select Language",
+    "change": "Change Language",
+    "auto_detect": "Auto-Detect",
+    "detection_failed": "Language detection failed, using English",
+    "available": "languages available"
+  },
+  "tools": {
+    "web_search": "Web Search",
+    "image_generation": "Image Generation", 
+    "math_diagrams": "Math Diagrams",
+    "weather": "Weather",
+    "calculator": "Calculator",
+    "tool_executed": "Tool Executed Successfully",
+    "tool_failed": "Tool execution failed"
+  },
+  "documents": {
+    "title": "Document",
+    "version": "Version {{version}}",
+    "export_pdf": "Export to PDF",
+    "export_txt": "Export to Text",
+    "all_versions": "All Versions",
+    "show_history": "Show History",
+    "hide_history": "Hide History"
+  },
+  "errors": {
+    "network": "Network connection error",
+    "server": "Server error occurred",
+    "permission": "Permission denied",
+    "not_found": "Content not found",
+    "invalid_input": "Invalid input provided",
+    "session_expired": "Session has expired"
+  },
+  "accessibility": {
+    "close_dialog": "Close dialog",
+    "open_menu": "Open menu",
+    "toggle_theme": "Toggle dark mode",
+    "screen_reader_content": "Content for screen readers",
+    "skip_to_main": "Skip to main content"
+  },
+  "parentHome": {
+    "hero": {
+      "title": "Your Learning Journey Starts Here",
+      "titleHighlight": "Unlock Your Potential",
+      "subtitle": "An AI-powered platform that adapts to your unique learning style, building confidence and cognitive skills through personalized, neuroscience-based education.",
+      "cta": "Start Free Trial",
+      "learnMore": "Learn More"
+    },
+    "stats": {
+      "understanding": {
+        "title": "Deep Understanding",
+        "value": "95%",
+        "description": "of users see improvement in their learning"
+      },
+      "memory": {
+        "title": "Enhanced Memory",
+        "value": "3x",
+        "description": "faster retention through personalized learning"
+      },
+      "growth": {
+        "title": "Measurable Growth",
+        "value": "100%",
+        "description": "of learners show cognitive development progress"
+      }
+    },
+    "science": {
+      "title": "The Science Behind Our Approach",
+      "subtitle": "Every feature is built on proven neuropsychological principles"
+    },
+    "features": {
+      "courses": {
+        "title": "Personalized Courses",
+        "description": "AI-generated courses that adapt to your learning pace and style",
+        "benefit1": "Customized for your level",
+        "benefit2": "Covers all subjects: STEM, languages, and more",
+        "benefit3": "Progress tracking and detailed reports",
+        "benefit4": "Engaging, interactive content"
+      },
+      "memory": {
+        "title": "Long-Term Memory System",
+        "description": "Our AI remembers everything you learn, creating a personalized knowledge base",
+        "benefit1": "Never forgets what you have learned",
+        "benefit2": "Builds on previous knowledge automatically",
+        "benefit3": "Connects concepts across subjects",
+        "benefit4": "Adapts teaching based on memory patterns"
+      }
+    },
+    "tutor": {
+      "title": "Your Personal AI Tutor",
+      "subtitle": "A tutor that truly understands and adapts",
+      "remembers": {
+        "title": "Remembers Everything",
+        "description": "Our AI tutor remembers every conversation, every lesson, and every achievement. It builds a complete picture of your learning journey."
+      },
+      "patient": {
+        "title": "Infinitely Patient",
+        "description": "No judgment, no frustration. You can ask questions as many times as needed, at your own pace, without any pressure."
+      },
+      "celebrates": {
+        "title": "Celebrates Every Win",
+        "description": "Every small achievement is recognized and celebrated, building confidence and motivation for continued learning."
+      },
+      "adapts": {
+        "title": "Adapts in Real-Time",
+        "description": "The tutor adjusts its teaching style instantly based on how you respond, ensuring optimal learning at every moment."
+      },
+      "quote": "\"Every learner is different. Our AI tutor adapts to you, not the other way around.\""
+    },
+    "safety": {
+      "title": "Safety & Security",
+      "subtitle": "Your safety is our top priority",
+      "encryption": {
+        "title": "End-to-End Encryption",
+        "description": "All data is encrypted and secure. Your information is protected with industry-leading security measures."
+      },
+      "content": {
+        "title": "Content Moderation",
+        "description": "AI-powered content filtering ensures all educational content is appropriate and safe."
+      },
+      "privacy": {
+        "title": "Privacy First",
+        "description": "We never share your data with third parties. Privacy is built into every aspect of our platform."
+      },
+      "control": {
+        "title": "User Controls",
+        "description": "You have full control over your learning experience, with comprehensive settings and tools."
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Getting started is simple and takes just minutes",
+      "step1": {
+        "title": "Sign Up & Create Profile",
+        "description": "Set up your learning profile in minutes",
+        "point1": "Choose your interests",
+        "point2": "Set learning goals and preferences",
+        "point3": "Start with a free trial - no credit card required"
+      },
+      "step2": {
+        "title": "AI Creates Personalized Plan",
+        "description": "Our AI analyzes and creates a custom learning path",
+        "point1": "AI assesses your learning style",
+        "point2": "Generates personalized courses and activities",
+        "point3": "Adapts content to match your pace"
+      },
+      "step3": {
+        "title": "Learn & Grow",
+        "description": "Learn and develop with real-time insights",
+        "point1": "Track progress with detailed analytics",
+        "point2": "Receive insights and recommendations",
+        "point3": "Celebrate achievements and milestones"
+      }
+    },
+    "cta": {
+      "title": "Ready to Transform Your Learning?",
+      "subtitle": "Join thousands of learners who trust NeuraPlay for their education",
+      "comingSoon": "Available on Mobile & Tablet Soon",
+      "noCard": "No Credit Card Required",
+      "safe": "100% Safe & Secure",
+      "cancel": "Cancel Anytime"
+    }
+  }
+}

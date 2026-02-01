@@ -1,0 +1,137 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "close": "Fermer",
+    "open": "Ouvrir",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "search": "Rechercher",
+    "settings": "Paramètres",
+    "help": "Aide",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "continue": "Continuer",
+    "submit": "Soumettre",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "retry": "Réessayer",
+    "refresh": "Actualiser"
+  },
+  "navigation": {
+    "home": "Page d'accueil",
+    "playground": "L'aire de jeux",
+    "dashboard": "Centre d'apprentissage",
+    "forum": "Forum",
+    "games": "Jeux",
+    "about": "À propos de nous",
+    "test": "Test",
+    "contact": "Contact",
+    "profile": "Profil",
+    "logout": "Déconnexion",
+    "login": "Connexion",
+    "begin_journey": "Commencer le voyage"
+  },
+  "assistant": {
+    "greeting": "Salut ! Je suis votre assistant IA avec des capacités vocales.",
+    "greeting_time": {
+      "morning": "Bonjour, {{name}} !",
+      "afternoon": "Bon après-midi, {{name}} !",
+      "evening": "Bonsoir, {{name}} !"
+    },
+    "capabilities": {
+      "voice_input": "Entrée Vocale",
+      "text_to_speech": "Synthèse Vocale",
+      "document_reader": "Lecteur de Documents",
+      "chart_creator": "Créateur de Graphiques",
+      "code_editor": "Éditeur de Code"
+    },
+    "placeholder": "Demandez-moi n'importe quoi...",
+    "listening": "Écoute...",
+    "processing": "Traitement...",
+    "thinking": "Réflexion...",
+    "error_generic": "J'ai rencontré une erreur. Veuillez réessayer.",
+    "no_microphone": "Accès au microphone refusé ou non disponible",
+    "voice_not_supported": "Fonctions vocales non prises en charge dans ce navigateur"
+  },
+  "canvas": {
+    "title": "Toile NeuraBoard",
+    "tools": {
+      "pen": "Stylo",
+      "eraser": "Gomme",
+      "text": "Texte",
+      "shapes": "Formes",
+      "clear": "Tout Effacer",
+      "save": "Enregistrer",
+      "export": "Exporter"
+    },
+    "colors": {
+      "black": "Noir",
+      "red": "Rouge",
+      "blue": "Bleu",
+      "green": "Vert",
+      "yellow": "Jaune",
+      "purple": "Violet"
+    }
+  },
+  "games": {
+    "select_game": "Sélectionner un Jeu",
+    "difficulty": {
+      "easy": "Facile",
+      "medium": "Moyen",
+      "hard": "Difficile"
+    },
+    "score": "Score : {{score}}",
+    "time": "Temps : {{time}}",
+    "level": "Niveau {{level}}",
+    "game_over": "Jeu Terminé !",
+    "try_again": "Réessayer",
+    "new_game": "Nouveau Jeu",
+    "pause": "Pause",
+    "resume": "Reprendre"
+  },
+  "language": {
+    "current": "Langue Actuelle",
+    "select": "Sélectionner la Langue",
+    "change": "Changer de Langue",
+    "auto_detect": "Détection Automatique",
+    "detection_failed": "Échec de la détection de langue, utilisation de l'anglais"
+  },
+  "tools": {
+    "web_search": "Recherche Web",
+    "image_generation": "Génération d'Images",
+    "math_diagrams": "Diagrammes Mathématiques",
+    "weather": "Météo",
+    "calculator": "Calculatrice",
+    "tool_executed": "Outil Exécuté avec Succès",
+    "tool_failed": "Échec de l'exécution de l'outil"
+  },
+  "documents": {
+    "title": "Document",
+    "version": "Version {{version}}",
+    "export_pdf": "Exporter en PDF",
+    "export_txt": "Exporter en Texte",
+    "all_versions": "Toutes les Versions",
+    "show_history": "Afficher l'Historique",
+    "hide_history": "Masquer l'Historique"
+  },
+  "errors": {
+    "network": "Erreur de connexion réseau",
+    "server": "Erreur serveur survenue",
+    "permission": "Permission refusée",
+    "not_found": "Contenu non trouvé",
+    "invalid_input": "Entrée invalide fournie",
+    "session_expired": "La session a expiré"
+  },
+  "accessibility": {
+    "close_dialog": "Fermer la boîte de dialogue",
+    "open_menu": "Ouvrir le menu",
+    "toggle_theme": "Basculer le mode sombre",
+    "screen_reader_content": "Contenu pour les lecteurs d'écran",
+    "skip_to_main": "Aller au contenu principal"
+  }
+}

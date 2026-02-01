@@ -1,0 +1,257 @@
+.parallax {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  z-index: 30;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+/* Ensure SVG elements are properly positioned */
+.parallax g {
+  opacity: 0;
+}
+
+.parallax g#scene1 {
+  opacity: 1;
+}
+
+.left-margin-container,
+.right-margin-container {
+  position: fixed;
+  top: 0;
+  width: 16rem; /* Corresponds to w-64 in tailwind */
+  height: 100vh;
+  z-index: 100; /* Much higher z-index to ensure visibility */
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow: hidden; /* Ensure SVGs don't overflow */
+  background: transparent; /* Remove debug background */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.left-margin-container {
+  left: 0;
+}
+
+.right-margin-container {
+  right: 0;
+}
+
+/* SVG Scene Containers */
+.svg-scene {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* opacity: 0; */ /* REMOVED - Let JavaScript control visibility */
+  transition: opacity 0.3s ease;
+  z-index: 51; /* Ensure scenes are above containers */
+  box-sizing: border-box; /* Include padding in width calculation */
+  overflow: hidden; /* Ensure content doesn't overflow */
+}
+
+/* SVG Elements */
+.svg-element {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s ease;
+  z-index: 52; /* Ensure elements are above scenes */
+  min-height: 300px; /* Increased minimum height */
+  max-width: 100%;
+  max-height: 100%;
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Elongate mountain elements vertically - MUCH TALLER */
+.dawn-hill {
+  height: 300% !important; /* Make mountains 3x taller to cover whole margin */
+  transform: scaleY(3); /* Stretch vertically 3x */
+  transform-origin: bottom center; /* Scale from bottom */
+}
+
+.dawn-cloud {
+  height: 200% !important; /* Make clouds 2x taller */
+  transform: scaleY(2); /* Stretch vertically 2x */
+  transform-origin: center center; /* Scale from center */
+}
+
+/* SVG Content */
+.svg-content {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+  min-height: 150px; /* Ensure minimum height for SVG content */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Elongate mountain SVG content - MUCH TALLER */
+.dawn-hill .svg-content {
+  height: 300% !important; /* Make mountain SVGs 3x taller */
+  transform: scaleY(3); /* Stretch vertically 3x */
+  transform-origin: bottom center; /* Scale from bottom */
+}
+
+.dawn-cloud .svg-content {
+  height: 200% !important; /* Make cloud SVGs 2x taller */
+  transform: scaleY(2); /* Stretch vertically 2x */
+  transform-origin: center center; /* Scale from center */
+}
+
+/* Dawn Mountain Scene - Using actual SVG elements */
+.dawn-bg {
+  background: linear-gradient(180deg, #618ce6 0%, #4270cc 12%, #335eb5 24%, #153b88 59%, #04215c 100%);
+  opacity: 0.8;
+}
+
+.dawn-hill {
+  /* Split for left side */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.dawn-cloud {
+  /* Split for left side */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Study Scene */
+.study-bg {
+  background: linear-gradient(180deg, #f0f8ff 0%, #e6f3ff 100%);
+  opacity: 0.9;
+}
+
+.boy-studying {
+  /* No split needed for boy studying */
+}
+
+/* Classroom Scene */
+.classroom-bg {
+  background: linear-gradient(180deg, #f5f5f5 0%, #e8e8e8 100%);
+  opacity: 0.9;
+}
+
+.hill {
+  /* No split needed for hill */
+}
+
+/* Garden Scene */
+.garden-bg {
+  background: linear-gradient(180deg, #e8f5e8 0%, #d4f0d4 100%);
+  opacity: 0.9;
+}
+
+.garden {
+  /* No split needed for garden */
+}
+
+/* Park Scene */
+.park-bg {
+  background: linear-gradient(180deg, #f0f8ff 0%, #e6f3ff 100%);
+  opacity: 0.9;
+}
+
+.park-tree {
+  /* Split for left side */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.park-bench {
+  /* Split for left side */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.park-people {
+  /* Split for left side */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* House Scene */
+.house-bg {
+  background: linear-gradient(180deg, #f8f8f8 0%, #f0f0f0 100%);
+  opacity: 0.9;
+}
+
+.house {
+  /* No split needed for house */
+}
+
+/* Chalkboard Scene */
+.chalkboard-bg {
+  background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+  opacity: 0.9;
+}
+
+.chalkboard {
+  /* No split needed for chalkboard */
+}
+
+/* Sparrow Scene */
+.sparrow-bg {
+  background: linear-gradient(180deg, #87ceeb 0%, #98d8e8 100%);
+  opacity: 0.9;
+}
+
+.sparrow {
+  /* No split needed for sparrow */
+}
+
+/* Right side splits */
+.right-margin-container .dawn-hill {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Full width for right side */
+}
+
+.right-margin-container .dawn-cloud {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Full width for right side */
+}
+
+.right-margin-container .park-tree {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Full width for right side */
+}
+
+.right-margin-container .park-bench {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Full width for right side */
+}
+
+.right-margin-container .park-people {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Full width for right side */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .left-margin-container,
+  .right-margin-container {
+    width: 12rem;
+  }
+}
+
+/* Additional constraints to ensure SVGs stay within margins */
+.left-margin-container .svg-element,
+.right-margin-container .svg-element {
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+.left-margin-container .svg-content,
+.right-margin-container .svg-content {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Animation states */
+.svg-element.animate-in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.svg-element.animate-out {
+  opacity: 0;
+  transform: translateY(-50vh) scale(0.8);
+} 

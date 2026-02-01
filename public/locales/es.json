@@ -1,0 +1,259 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "close": "Cerrar",
+    "open": "Abrir",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "search": "Buscar",
+    "settings": "Configuración",
+    "help": "Ayuda",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "continue": "Continuar",
+    "submit": "Enviar",
+    "download": "Descargar",
+    "upload": "Subir",
+    "retry": "Reintentar",
+    "refresh": "Actualizar"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "playground": "Zona de Juegos",
+    "dashboard": "Centro de Aprendizaje",
+    "forum": "Foro",
+    "games": "Juegos",
+    "about": "Sobre Nosotros",
+    "test": "Prueba",
+    "contact": "Contacto",
+    "profile": "Perfil",
+    "logout": "Cerrar Sesión",
+    "login": "Iniciar Sesión",
+    "begin_journey": "Comienza el Viaje"
+  },
+  "parentHome": {
+    "hero": {
+      "title": "Cada niño aprende de manera diferente.",
+      "titleHighlight": "Finalmente construimos algo que lo entiende.",
+      "subtitle": "Un tutor que recuerda cada conversación, nota cuando la comprensión se desvanece y trae de vuelta lo importante—exactamente cuando tu hijo está a punto de olvidarlo. No es otra aplicación. Es un verdadero compañero de aprendizaje.",
+      "cta": "Prueba Gratuita (Próximamente)",
+      "learnMore": "Saber Más"
+    },
+    "stats": {
+      "understanding": {
+        "title": "Conoce Cómo Piensan",
+        "value": "Profundamente Personal",
+        "description": "Descubre los patrones únicos de aprendizaje de tu hijo a través de conversaciones reales, no pruebas estandarizadas"
+      },
+      "memory": {
+        "title": "Nunca Olvida",
+        "value": "Conocimiento Duradero",
+        "description": "Los repasos regresan en el momento preciso antes de que comience el olvido—construyendo memoria que realmente perdura"
+      },
+      "growth": {
+        "title": "Crece Con Ellos",
+        "value": "Adaptación Continua",
+        "description": "Cada sesión se construye sobre la anterior, creando un viaje de aprendizaje que evoluciona como tu hijo"
+      }
+    },
+    "science": {
+      "title": "Construido Sobre Cómo Funciona Realmente la Memoria",
+      "subtitle": "La mayoría de las plataformas de aprendizaje tratan a todos los niños igual. Descubrimos que el aprendizaje real ocurre cuando entiendes el ritmo de cada mente—cuándo desafiar, cuándo reforzar, cuándo dejar que las ideas se asienten."
+    },
+    "features": {
+      "courses": {
+        "title": "Cursos Que Se Adaptan en Tiempo Real",
+        "description": "Observa a tu hijo interactuar con material que nunca es demasiado difícil ni demasiado fácil. Cada lección se construye desde su comprensión real—no un currículo diseñado para el estudiante promedio que no existe.",
+        "benefit1": "El contenido se ajusta según la comprensión profundiza o vacila",
+        "benefit2": "Fragmentos pequeños que respetan la capacidad de atención",
+        "benefit3": "Dificultad que desafía sin abrumar",
+        "benefit4": "Múltiples formas de entender el mismo concepto"
+      },
+      "memory": {
+        "title": "Repetición Espaciada Neural",
+        "description": "Hemos superado los sistemas obsoletos de tarjetas. Nuestro enfoque aprende los patrones únicos de olvido de tu hijo, trayendo de vuelta conceptos en el momento en que están a punto de desvanecerse—convirtiendo conocimiento frágil en comprensión permanente.",
+        "benefit1": "Repasos sincronizados con el ritmo de memoria de tu hijo",
+        "benefit2": "Los errores se convierten en oportunidades de aprendizaje enfocado",
+        "benefit3": "Fortalece conexiones entre materias",
+        "benefit4": "Construye confianza a través del dominio genuino"
+      }
+    },
+    "tutor": {
+      "title": "Un Tutor Que Realmente Conoce a Tu Hijo",
+      "subtitle": "No es un chatbot. No es una biblioteca de videos. Un compañero paciente que recuerda, entiende y crece junto a tu hijo.",
+      "remembers": {
+        "title": "Recuerda Cada Avance",
+        "description": "¿Ese momento cuando las fracciones finalmente hicieron clic? ¿Cuando el patrón de ortografía se volvió claro? El tutor de tu hijo recuerda—y construye sobre esas victorias en cada conversación futura."
+      },
+      "patient": {
+        "title": "Infinitamente Paciente",
+        "description": "Sin frustración. Sin prisas. Sin hacer que tu hijo se sienta atrasado. Cada pregunta es bienvenida, cada dificultad es apoyada, cada ritmo es el ritmo correcto."
+      },
+      "celebrates": {
+        "title": "Celebra el Progreso Real",
+        "description": "No elogios vacíos por hacer clic en botones—reconocimiento genuino cuando la comprensión se profundiza. Tu hijo sentirá la diferencia entre aliento hueco y confianza ganada."
+      },
+      "adapts": {
+        "title": "Se Adapta a la Energía y el Ánimo",
+        "description": "¿Cansado después de la escuela? Sesión breve y enfocada. ¿Lleno de curiosidad el sábado por la mañana? Exploremos algo nuevo. La experiencia encuentra a tu hijo donde está."
+      },
+      "quote": "\"Los mejores maestros no solo entregan información. Notan. Recuerdan. Saben cuándo presionar y cuándo pausar. Eso es lo que construimos.\""
+    },
+    "safety": {
+      "title": "Seguridad en la Que Puedes Confiar",
+      "subtitle": "Entendemos—nada importa más que mantener a tu hijo seguro. Cada interacción, cada dato, cada momento en nuestra plataforma está protegido por múltiples capas de seguridad.",
+      "encryption": {
+        "title": "Cifrado de Extremo a Extremo",
+        "description": "El viaje de aprendizaje de tu hijo es privado. Las conversaciones, el progreso y la información personal están cifrados y nunca se comparten."
+      },
+      "content": {
+        "title": "Contenido Apropiado para la Edad",
+        "description": "Cada respuesta se filtra a través de sistemas de seguridad diseñados específicamente para jóvenes estudiantes. Sin excepciones."
+      },
+      "privacy": {
+        "title": "Tus Datos Son Tuyos",
+        "description": "No vendemos datos. No los compartimos con anunciantes. La información de tu hijo existe solo para servir a su aprendizaje."
+      },
+      "control": {
+        "title": "Visibilidad Parental",
+        "description": "Ve lo que tu hijo está aprendiendo, cómo está progresando y cómo está participando—cuando quieras."
+      }
+    },
+    "howItWorks": {
+      "title": "Comenzar es Simple",
+      "subtitle": "Tres pasos desde el registro hasta el aprendizaje. Sin configuración complicada, sin curva de aprendizaje para los padres.",
+      "step1": {
+        "title": "Crea Tu Perfil",
+        "description": "Algunas preguntas nos ayudan a entender la edad, intereses y dónde está tu hijo en su viaje de aprendizaje.",
+        "point1": "Toma solo dos minutos",
+        "point2": "Experiencia apropiada para la edad desde el primer día",
+        "point3": "Tú controlas la configuración de privacidad"
+      },
+      "step2": {
+        "title": "Comienza a Aprender",
+        "description": "Tu hijo puede explorar cualquier tema que le interese. Nuestro tutor descubre cómo piensa mejor a través de conversación natural.",
+        "point1": "Elige cualquier tema o sigue intereses",
+        "point2": "Cursos personalizados generados instantáneamente",
+        "point3": "Estilos de aprendizaje por voz, texto o visual"
+      },
+      "step3": {
+        "title": "Observa Cómo el Conocimiento Perdura",
+        "description": "Nuestra repetición espaciada neural asegura que lo aprendido permanezca aprendido. Verás comprensión real, no solo ejercicios completados.",
+        "point1": "Repasos inteligentes previenen el olvido",
+        "point2": "Información de progreso para padres",
+        "point3": "Dominio creciente con el tiempo"
+      }
+    },
+    "cta": {
+      "title": "¿Listo Para Ver Aprendizaje Que Realmente Perdura?",
+      "subtitle": "Únete a familias que han descubierto lo que sucede cuando la tecnología realmente entiende cómo aprenden los niños.",
+      "comingSoon": "Próximamente en Móvil",
+      "noCard": "Sin Tarjeta de Crédito",
+      "safe": "100% Seguro y Protegido",
+      "cancel": "Cancela Cuando Quieras"
+    }
+  },
+  "assistant": {
+    "greeting": "¡Hola! Soy tu asistente de IA con capacidades de voz.",
+    "greeting_time": {
+      "morning": "¡Buenos días, {{name}}!",
+      "afternoon": "¡Buenas tardes, {{name}}!",
+      "evening": "¡Buenas noches, {{name}}!"
+    },
+    "capabilities": {
+      "voice_input": "Entrada de Voz",
+      "text_to_speech": "Texto a Voz",
+      "document_reader": "Lector de Documentos",
+      "chart_creator": "Creador de Gráficos",
+      "code_editor": "Editor de Código"
+    },
+    "placeholder": "Pregúntame lo que quieras...",
+    "listening": "Escuchando...",
+    "processing": "Procesando...",
+    "thinking": "Pensando...",
+    "error_generic": "Encontré un error. Por favor, intenta de nuevo.",
+    "no_microphone": "Acceso al micrófono denegado o no disponible",
+    "voice_not_supported": "Funciones de voz no compatibles en este navegador"
+  },
+  "canvas": {
+    "title": "Lienzo NeuraBoard",
+    "tools": {
+      "pen": "Bolígrafo",
+      "eraser": "Borrador",
+      "text": "Texto",
+      "shapes": "Formas",
+      "clear": "Borrar Todo",
+      "save": "Guardar",
+      "export": "Exportar"
+    },
+    "colors": {
+      "black": "Negro",
+      "red": "Rojo",
+      "blue": "Azul",
+      "green": "Verde",
+      "yellow": "Amarillo",
+      "purple": "Púrpura"
+    }
+  },
+  "games": {
+    "select_game": "Selecciona un Juego",
+    "difficulty": {
+      "easy": "Fácil",
+      "medium": "Medio",
+      "hard": "Difícil"
+    },
+    "score": "Puntuación: {{score}}",
+    "time": "Tiempo: {{time}}",
+    "level": "Nivel {{level}}",
+    "game_over": "¡Fin del Juego!",
+    "try_again": "Intentar de Nuevo",
+    "new_game": "Nuevo Juego",
+    "pause": "Pausar",
+    "resume": "Continuar"
+  },
+  "language": {
+    "current": "Idioma Actual",
+    "select": "Seleccionar Idioma",
+    "change": "Cambiar Idioma",
+    "auto_detect": "Detección Automática",
+    "detection_failed": "La detección de idioma falló, usando Inglés"
+  },
+  "tools": {
+    "web_search": "Búsqueda Web",
+    "image_generation": "Generación de Imágenes",
+    "math_diagrams": "Diagramas Matemáticos",
+    "weather": "Clima",
+    "calculator": "Calculadora",
+    "tool_executed": "Herramienta Ejecutada Exitosamente",
+    "tool_failed": "La ejecución de la herramienta falló"
+  },
+  "documents": {
+    "title": "Documento",
+    "version": "Versión {{version}}",
+    "export_pdf": "Exportar a PDF",
+    "export_txt": "Exportar a Texto",
+    "all_versions": "Todas las Versiones",
+    "show_history": "Mostrar Historial",
+    "hide_history": "Ocultar Historial"
+  },
+  "errors": {
+    "network": "Error de conexión de red",
+    "server": "Ocurrió un error del servidor",
+    "permission": "Permiso denegado",
+    "not_found": "Contenido no encontrado",
+    "invalid_input": "Entrada inválida proporcionada",
+    "session_expired": "La sesión ha expirado"
+  },
+  "accessibility": {
+    "close_dialog": "Cerrar diálogo",
+    "open_menu": "Abrir menú",
+    "toggle_theme": "Cambiar modo oscuro",
+    "screen_reader_content": "Contenido para lectores de pantalla",
+    "skip_to_main": "Saltar al contenido principal"
+  }
+}

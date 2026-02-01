@@ -1,0 +1,50 @@
+[33m424e8f4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Fix: Canvas mode no longer triggers agent orchestration errors
+[33mb0d827f[m Add IterationsPanel component for canvas iterations database persistence
+[33m26d24d5[m Fix NeuraBoard activation: Charts and lengthy text now trigger canvas mode
+[33m94a8b2e[m Fix sentence boundaries: Prevent mid-word cuts in AI responses
+[33m08415e6[m Clean formatting: Purple bullets + checkmarks, remove surplus symbols
+[33m859020b[m Educational Coder Tool: Basic explanations, flowcharts, and math help
+[33me89419b[m  STATE-OF-THE-ART: Advanced Text Formatting & Structure
+[33m3ffe50d[m  CRITICAL FIX: Canvas Board Integration + Socratic Layer Activation
+[33maea7bff[m Remove fallback system - Clean error handling without local responses
+[33m7a8b027[m[33m ([m[1;31morigin/cursor/fix-elvenlabs-integration-and-tts-d6f0[m[33m)[m Update ElevenLabs TTS handling and TypeScript version
+[33m10ef873[m  URGENT FIX: Add robust 502 fallback handling - Intelligent local responses when Render backend is down
+[33md82e306[m  STATE-OF-THE-ART: Complete intent-driven response control system
+[33m81fcc34[m Add memory endpoints and Render routing - Fix cross-chat memory persistence
+[33m181a3a2[m  Completely eliminate Redis connection errors
+[33m47dbc39[m  Fix NeuraBoard canvas sizing - fill entire area
+[33me3782d6[m  Fix Redis connection errors for Render deployment
+[33m6a03a53[m  State-of-the-Art AI Assistant Implementation
+[33m0db6706[m Add database and Redis configuration to render.yaml
+[33m4d3e86c[m  Production Dependencies & Final Deployment
+[33m0afa622[m  Comprehensive Production README
+[33mc39b6b0[m  Production-Ready Architecture: Complete AI Agent System
+[33mced27fd[m Initial commit
+[33mc164302[m Major REVERT
+[33m1ada6f5[m Major REVERT
+[33m7a461ad[m[33m ([m[1;32mbackup-pre-restore-20250809-223711[m[33m)[m feat: Add development environment setup with Render backend
+[33maba309f[m fix: Update postcss.config.js to use CommonJS syntax
+[33mb8815c9[m fix: Update package.json and post-build script for CommonJS compatibility, fix memory leaks
+[33m3fc8e7d[m fix: Remove all ScribbleModule references, fix image memory leaks, improve tool cleanup
+[33m0ba7eab[m feat: Remove ScribbleModule, install Zustand and Konva packages, update AI assistant theme-aware styling
+[33mc4e6093[m Remove Scribbleboard frontend (files, references, tool events); replace AssistantSurface with no-op; strip Dashboard board; neutralize scribble_* client tools
+[33m658bc2c[m Update components and services with latest improvements
+[33mf955af5[m Fix: Update AssistantSurface import to use ScribbleboardV2
+[33mf68e35a[m MAJOR REDESIGN: Remove obsolete code, fix Einstein bug with ScribbleboardV2, clean AIAssistant
+[33m3ea1f9e[m Update project files
+[33mbfc571b[m Add comprehensive Einstein debugging and blocking system
+[33me21bfd6[m CRITICAL FIX: Comprehensive state management overhaul - timeout protection, emergency reset, loading state fixes, conversation clearing improvements
+[33mcdf89fb[m CRITICAL FIX: Eliminate infinite rendering loop in parseRichContent - prevent repeated image dispatching with tracking system
+[33m669a682[m SMART COMPACT MODE: Intelligent content snippets with slide-up animation, truncated content, expand button, and quick actions
+[33m65d5907[m CRITICAL FIX: Remove legacy createChartsFromIntent causing image spam - Budget data now uses proper create_chart tool
+[33mb1bc7d5[m CRITICAL FIX: Separate canvas vs chat content - canvas tools stay in canvas, only brief confirmations in chat
+[33m83932fe[m MAJOR SCRIBBLEBOARD FIXES: Interactive charts not images, Einstein persistence eliminated, 66/33 layout, AI tool integration
+[33m161e032[m fix: clean up syntax errors and remove temporary files
+[33m92665f7[m fix: resolve persistent Einstein portrait message issue
+[33maada851[m  MODERN UX: Glassmorphism + Sophisticated Animations
+[33m9e77f81[m  MAJOR: Canvas-Chat Integration Like Gemini/Claude
+[33mb5543fc[m  FIX: Remove Stuck Markdown Images from Chat
+[33m8836e17[m  COMPLETE VISUAL SEPARATION: Chat-Canvas Integration Fixed
+[33m8b98804[m feat(ui): viewport-only compact anchoring; fullscreen vertical 66/33 canvas/chat; disable backdrop-close; high z-index; static ToolExecutor import with fallback chart dispatch; open canvas + resize tick before tool exec; sizing/min-h for canvas
+[33mde9e1d5[m fix(ui): bottom-right anchored compact panel with high z-index and no backdrop-close; prevent click-to-hide; fullscreen overlay guarded; keep assistant as only exit point
+[33m02c2ead[m fix(ui): stabilise compact anchoring with selector + RAF; suppress fallback router redirects to avoid unintended nav; logs unchanged

@@ -1,0 +1,10 @@
+/* Hero section gradient styles */
+
+.dark-hero-gradient {
+  background: linear-gradient(to bottom, #0f0f23 0%, #1a1a2e 60%, #1a1a2e 100%);
+}
+
+.light-hero-gradient {
+  background: linear-gradient(to bottom, #faf5ff 0%, #f3e8ff 60%, #f3e8ff 100%);
+}
+

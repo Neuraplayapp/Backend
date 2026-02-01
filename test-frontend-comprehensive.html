@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuraPlay Frontend Comprehensive Test Suite</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .test-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .test-card h3 {
+            margin-top: 0;
+            color: #FFD700;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 10px;
+        }
+        
+        .test-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .status-pending {
+            background: #ffa500;
+            color: white;
+        }
+        
+        .status-running {
+            background: #007bff;
+            color: white;
+        }
+        
+        .status-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .status-error {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .test-button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .test-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        .test-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .test-results {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .global-controls {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+        
+        .run-all-button {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .run-all-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+        
+        .overall-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .media-test {
+            margin: 10px 0;
+        }
+        
+        .media-test video, .media-test audio, .media-test img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .metrics {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 NeuraPlay Frontend Test Suite</h1>
+        <p>Comprehensive testing for all frontend functionality connecting to dev backend (port 3001)</p>
+        <div id="connectionStatus">🔍 Checking backend connection...</div>
+    </div>
+
+    <div class="global-controls">
+        <button class="run-all-button" onclick="runAllTests()">🚀 Run All Tests</button>
+        <button class="test-button" onclick="checkBackendHealth()">🏥 Check Backend Health</button>
+        <button class="test-button" onclick="clearAllResults()">🧹 Clear Results</button>
+        
+        <div class="overall-status" id="overallStatus">
+            <span id="overallText">Ready to test</span>
+            <div class="metrics" id="globalMetrics" style="display:none;">
+                <div class="metric-item">
+                    <span>Tests Passed:</span>
+                    <span id="testsPassedCount">0</span>
+                </div>
+                <div class="metric-item">
+                    <span>Tests Failed:</span>
+                    <span id="testsFailedCount">0</span>
+                </div>
+                <div class="metric-item">
+                    <span>Total Time:</span>
+                    <span id="totalTime">0ms</span>
+                </div>
+                <div class="metric-item">
+                    <span>Backend Response:</span>
+                    <span id="backendResponseTime">Unknown</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-grid">
+        <!-- Voice Recording Test -->
+        <div class="test-card">
+            <h3>🎙️ Voice Recording Test 
+                <span class="test-status status-pending" id="voice-status">PENDING</span>
+            </h3>
+            <p>Tests microphone access, recording, and transcription via AssemblyAI</p>
+            <button class="test-button" onclick="testVoiceRecording()">Test Voice Recording</button>
+            <button class="test-button" onclick="testAssemblyAIWebhook()">Test AssemblyAI</button>
+            
+            <div class="media-test">
+                <div id="voiceControls" style="display:none;">
+                    <button id="startRecord" class="test-button">🔴 Start Recording</button>
+                    <button id="stopRecord" class="test-button" disabled>⏹️ Stop Recording</button>
+                    <audio id="audioPlayback" controls style="display:none;"></audio>
+                </div>
+            </div>
+            
+            <div class="test-results" id="voice-results">
+                Click "Test Voice Recording" to start testing microphone and transcription...
+            </div>
+        </div>
+
+        <!-- ElevenLabs WebSocket Test -->
+        <div class="test-card">
+            <h3>🔊 ElevenLabs TTS & WebSocket 
+                <span class="test-status status-pending" id="elevenlabs-status">PENDING</span>
+            </h3>
+            <p>Tests ElevenLabs text-to-speech and WebSocket functionality for Teachers Room</p>
+            <button class="test-button" onclick="testElevenLabsTTS()">Test TTS</button>
+            <button class="test-button" onclick="testElevenLabsWebSocket()">Test WebSocket</button>
+            
+            <div class="media-test">
+                <audio id="ttsAudio" controls style="display:none;"></audio>
+                <div id="websocketStatus"></div>
+            </div>
+            
+            <div class="test-results" id="elevenlabs-results">
+                Click "Test TTS" to test ElevenLabs text-to-speech integration...
+            </div>
+        </div>
+
+        <!-- Memory Storage & Retrieval Test -->
+        <div class="test-card">
+            <h3>🧠 Memory System Test 
+                <span class="test-status status-pending" id="memory-status">PENDING</span>
+            </h3>
+            <p>Tests memory storage, retrieval, and vector search functionality</p>
+            <button class="test-button" onclick="testMemoryStorage()">Test Storage</button>
+            <button class="test-button" onclick="testMemoryRetrieval()">Test Retrieval</button>
+            <button class="test-button" onclick="testVectorSearch()">Test Vector Search</button>
+            
+            <div class="test-results" id="memory-results">
+                Click "Test Storage" to start testing memory functionality...
+            </div>
+        </div>
+
+        <!-- Canvas Functionality Test -->
+        <div class="test-card">
+            <h3>🎨 Canvas Workspace Test 
+                <span class="test-status status-pending" id="canvas-status">PENDING</span>
+            </h3>
+            <p>Tests canvas document creation, chart generation, and interactive elements</p>
+            <button class="test-button" onclick="testCanvasDocument()">Test Document</button>
+            <button class="test-button" onclick="testCanvasChart()">Test Chart</button>
+            <button class="test-button" onclick="testCanvasCode()">Test Code</button>
+            
+            <div class="test-results" id="canvas-results">
+                Click "Test Document" to start testing canvas functionality...
+            </div>
+        </div>
+
+        <!-- Web Search Test -->
+        <div class="test-card">
+            <h3>🔍 Web Search Test 
+                <span class="test-status status-pending" id="websearch-status">PENDING</span>
+            </h3>
+            <p>Tests web search functionality via Serper API and semantic search</p>
+            <button class="test-button" onclick="testWebSearch()">Test Web Search</button>
+            <button class="test-button" onclick="testSemanticSearch()">Test Semantic Search</button>
+            
+            <div class="test-results" id="websearch-results">
+                Click "Test Web Search" to start testing search functionality...
+            </div>
+        </div>
+
+        <!-- Vision Service Test -->
+        <div class="test-card">
+            <h3>👁️ Vision Service Test 
+                <span class="test-status status-pending" id="vision-status">PENDING</span>
+            </h3>
+            <p>Tests image upload, description, and vision-based document analysis</p>
+            <button class="test-button" onclick="testVisionDescription()">Test Description</button>
+            <button class="test-button" onclick="testVisionDocument()">Test Document OCR</button>
+            
+            <div class="media-test">
+                <input type="file" id="imageUpload" accept="image/*" style="display:none;">
+                <button class="test-button" onclick="document.getElementById('imageUpload').click()">📷 Upload Image</button>
+                <img id="uploadedImage" style="display:none; max-width: 200px;">
+            </div>
+            
+            <div class="test-results" id="vision-results">
+                Click "Test Description" or upload an image to start testing...
+            </div>
+        </div>
+
+        <!-- Vector Search + Vision Integration Test -->
+        <div class="test-card">
+            <h3>🔍👁️ Vector Search + Vision 
+                <span class="test-status status-pending" id="vectorvision-status">PENDING</span>
+            </h3>
+            <p>Tests integration between vector search and vision service for document analysis</p>
+            <button class="test-button" onclick="testVectorVisionIntegration()">Test Integration</button>
+            <button class="test-button" onclick="testDocumentEmbedding()">Test Doc Embedding</button>
+            
+            <div class="test-results" id="vectorvision-results">
+                Click "Test Integration" to start testing vector search + vision...
+            </div>
+        </div>
+
+        <!-- Image Generation Test -->
+        <div class="test-card">
+            <h3>🎨 Image Generation Test 
+                <span class="test-status status-pending" id="imagegeneration-status">PENDING</span>
+            </h3>
+            <p>Tests AI image generation via Fireworks/TogetherAI integration</p>
+            <button class="test-button" onclick="testImageGeneration()">Test Generation</button>
+            <button class="test-button" onclick="testImageStyles()">Test Styles</button>
+            
+            <div class="media-test">
+                <img id="generatedImage" style="display:none; max-width: 200px;">
+            </div>
+            
+            <div class="test-results" id="imagegeneration-results">
+                Click "Test Generation" to start testing AI image generation...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global test state
+        let testResults = {};
+        let testStartTime = Date.now();
+        let backendResponseTime = 'Unknown';
+
+        // Configuration
+        const API_BASE = 'http://localhost:3001';
+        const WS_URL = 'ws://localhost:3001';
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            checkBackendHealth();
+            setupImageUpload();
+        });
+
+        // Backend health check
+        async function checkBackendHealth() {
+            const startTime = Date.now();
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const responseTime = Date.now() - startTime;
+                backendResponseTime = `${responseTime}ms`;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('connectionStatus').innerHTML = 
+                        `✅ Backend connected (${responseTime}ms) - Status: ${data.status}`;
+                    document.getElementById('backendResponseTime').textContent = backendResponseTime;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                document.getElementById('connectionStatus').innerHTML = 
+                    `❌ Backend connection failed: ${error.message}`;
+                backendResponseTime = 'Failed';
+                document.getElementById('backendResponseTime').textContent = backendResponseTime;
+            }
+        }
+
+        // Helper functions
+        function updateTestStatus(testId, status, message) {
+            const statusElement = document.getElementById(`${testId}-status`);
+            const resultsElement = document.getElementById(`${testId}-results`);
+            
+            statusElement.className = `test-status status-${status}`;
+            statusElement.textContent = status.toUpperCase();
+            
+            const timestamp = new Date().toLocaleTimeString();
+            resultsElement.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            resultsElement.scrollTop = resultsElement.scrollHeight;
+            
+            testResults[testId] = { status, message, timestamp };
+            updateOverallStatus();
+        }
+
+        function updateOverallStatus() {
+            const passed = Object.values(testResults).filter(r => r.status === 'success').length;
+            const failed = Object.values(testResults).filter(r => r.status === 'error').length;
+            const total = Object.keys(testResults).length;
+            
+            document.getElementById('testsPassedCount').textContent = passed;
+            document.getElementById('testsFailedCount').textContent = failed;
+            document.getElementById('totalTime').textContent = `${Date.now() - testStartTime}ms`;
+            document.getElementById('globalMetrics').style.display = 'block';
+            
+            if (failed > 0) {
+                document.getElementById('overallText').textContent = `⚠️ ${failed} test(s) failed`;
+            } else if (passed > 0) {
+                document.getElementById('overallText').textContent = `✅ All ${passed} test(s) passed`;
+            }
+        }
+
+        // Test implementations
+        async function testVoiceRecording() {
+            updateTestStatus('voice', 'running', 'Starting voice recording test...');
+            
+            try {
+                // Test microphone access
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                updateTestStatus('voice', 'running', '✅ Microphone access granted');
+                
+                // Setup media recorder
+                const mediaRecorder = new MediaRecorder(stream);
+                const audioChunks = [];
+                
+                document.getElementById('voiceControls').style.display = 'block';
+                
+                const startBtn = document.getElementById('startRecord');
+                const stopBtn = document.getElementById('stopRecord');
+                const audioPlayback = document.getElementById('audioPlayback');
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+                
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioPlayback.src = audioUrl;
+                    audioPlayback.style.display = 'block';
+                    
+                    updateTestStatus('voice', 'running', '🎵 Audio recorded, testing transcription...');
+                    
+                    // Test transcription
+                    await testTranscription(audioBlob);
+                };
+                
+                startBtn.onclick = () => {
+                    audioChunks.length = 0;
+                    mediaRecorder.start();
+                    startBtn.disabled = true;
+                    stopBtn.disabled = false;
+                    updateTestStatus('voice', 'running', '🔴 Recording started...');
+                };
+                
+                stopBtn.onclick = () => {
+                    mediaRecorder.stop();
+                    startBtn.disabled = false;
+                    stopBtn.disabled = true;
+                    stream.getTracks().forEach(track => track.stop());
+                };
+                
+                updateTestStatus('voice', 'success', '✅ Voice recording setup complete. Try recording!');
+                
+            } catch (error) {
+                updateTestStatus('voice', 'error', `❌ Voice recording failed: ${error.message}`);
+            }
+        }
+
+        async function testTranscription(audioBlob) {
+            try {
+                const base64Audio = await blobToBase64(audioBlob);
+                
+                const response = await fetch(`${API_BASE}/api/assemblyai-transcribe`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        audio: base64Audio,
+                        audioType: 'audio/wav'
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('voice', 'success', `✅ Transcription: "${result.text || 'No text detected'}"`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('voice', 'error', `❌ Transcription failed: ${error.message}`);
+            }
+        }
+
+        async function testAssemblyAIWebhook() {
+            updateTestStatus('voice', 'running', 'Testing AssemblyAI webhook...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/assemblyai-transcribe`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        audio: 'test_audio_data',
+                        audioType: 'audio/wav'
+                    })
+                });
+                
+                if (response.ok) {
+                    updateTestStatus('voice', 'success', '✅ AssemblyAI webhook test completed');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('voice', 'error', `❌ AssemblyAI webhook test failed: ${error.message}`);
+            }
+        }
+
+        async function testElevenLabsTTS() {
+            updateTestStatus('elevenlabs', 'running', 'Testing ElevenLabs TTS...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/elevenlabs-tts`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: 'Hello, this is a test of the ElevenLabs text-to-speech system.',
+                        voice_id: 'pNInz6obpgDQGcFmaJgB' // Adam voice
+                    })
+                });
+                
+                if (response.ok) {
+                    const audioBlob = await response.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audioElement = document.getElementById('ttsAudio');
+                    audioElement.src = audioUrl;
+                    audioElement.style.display = 'block';
+                    
+                    updateTestStatus('elevenlabs', 'success', '✅ ElevenLabs TTS working - audio generated');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('elevenlabs', 'error', `❌ ElevenLabs TTS failed: ${error.message}`);
+            }
+        }
+
+        async function testElevenLabsWebSocket() {
+            updateTestStatus('elevenlabs', 'running', 'Testing ElevenLabs WebSocket...');
+            
+            try {
+                const ws = new WebSocket(WS_URL);
+                
+                ws.onopen = () => {
+                    updateTestStatus('elevenlabs', 'running', '🔗 WebSocket connected, testing...');
+                    ws.send(JSON.stringify({
+                        type: 'elevenlabs_test',
+                        text: 'WebSocket test message'
+                    }));
+                };
+                
+                ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    updateTestStatus('elevenlabs', 'success', `✅ WebSocket working: ${data.type || 'response received'}`);
+                    ws.close();
+                };
+                
+                ws.onerror = (error) => {
+                    updateTestStatus('elevenlabs', 'error', `❌ WebSocket error: ${error.message}`);
+                };
+                
+                setTimeout(() => {
+                    if (ws.readyState === WebSocket.CONNECTING) {
+                        ws.close();
+                        updateTestStatus('elevenlabs', 'error', '❌ WebSocket connection timeout');
+                    }
+                }, 5000);
+                
+            } catch (error) {
+                updateTestStatus('elevenlabs', 'error', `❌ WebSocket test failed: ${error.message}`);
+            }
+        }
+
+        async function testMemoryStorage() {
+            updateTestStatus('memory', 'running', 'Testing memory storage...');
+            
+            try {
+                const testData = {
+                    action: 'store',
+                    userId: 'frontend_test_user',
+                    key: 'test_memory_key',
+                    value: 'This is a test memory from the frontend test suite'
+                };
+                
+                const response = await fetch(`${API_BASE}/api/memory`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('memory', 'success', `✅ Memory stored: ${result.message}`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('memory', 'error', `❌ Memory storage failed: ${error.message}`);
+            }
+        }
+
+        async function testMemoryRetrieval() {
+            updateTestStatus('memory', 'running', 'Testing memory retrieval...');
+            
+            try {
+                const testData = {
+                    action: 'search',
+                    userId: 'frontend_test_user',
+                    query: 'test_memory_key'
+                };
+                
+                const response = await fetch(`${API_BASE}/api/memory`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.memories && result.memories.length > 0) {
+                        updateTestStatus('memory', 'success', `✅ Memory retrieved: ${result.memories[0].content}`);
+                    } else {
+                        updateTestStatus('memory', 'error', '❌ No memories found');
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('memory', 'error', `❌ Memory retrieval failed: ${error.message}`);
+            }
+        }
+
+        async function testVectorSearch() {
+            updateTestStatus('memory', 'running', 'Testing vector search...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_type: 'chat',
+                        input_data: {
+                            messages: [
+                                { role: 'user', content: 'search for test memory' }
+                            ]
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('memory', 'success', `✅ Vector search completed: ${Array.isArray(result) ? result.length : 'response received'} results`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('memory', 'error', `❌ Vector search failed: ${error.message}`);
+            }
+        }
+
+        async function testCanvasDocument() {
+            updateTestStatus('canvas', 'running', 'Testing canvas document creation...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_type: 'chat',
+                        input_data: {
+                            messages: [
+                                { role: 'user', content: 'create a document about AI testing' }
+                            ]
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('canvas', 'success', `✅ Canvas document test completed`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('canvas', 'error', `❌ Canvas document test failed: ${error.message}`);
+            }
+        }
+
+        async function testCanvasChart() {
+            updateTestStatus('canvas', 'running', 'Testing canvas chart creation...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_type: 'chat',
+                        input_data: {
+                            messages: [
+                                { role: 'user', content: 'create a bar chart showing test results data' }
+                            ]
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('canvas', 'success', `✅ Canvas chart test completed`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('canvas', 'error', `❌ Canvas chart test failed: ${error.message}`);
+            }
+        }
+
+        async function testCanvasCode() {
+            updateTestStatus('canvas', 'running', 'Testing canvas code creation...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_type: 'chat',
+                        input_data: {
+                            messages: [
+                                { role: 'user', content: 'write a JavaScript function to test API endpoints' }
+                            ]
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('canvas', 'success', `✅ Canvas code test completed`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('canvas', 'error', `❌ Canvas code test failed: ${error.message}`);
+            }
+        }
+
+        async function testWebSearch() {
+            updateTestStatus('websearch', 'running', 'Testing web search...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_type: 'web_search',
+                        input_data: {
+                            query: 'artificial intelligence testing',
+                            num: 5
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('websearch', 'success', `✅ Web search completed: ${result.data?.length || 'results received'}`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('websearch', 'error', `❌ Web search failed: ${error.message}`);
+            }
+        }
+
+        async function testSemanticSearch() {
+            updateTestStatus('websearch', 'running', 'Testing semantic search...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_type: 'chat',
+                        input_data: {
+                            messages: [
+                                { role: 'user', content: 'find information about machine learning' }
+                            ]
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('websearch', 'success', `✅ Semantic search completed`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('websearch', 'error', `❌ Semantic search failed: ${error.message}`);
+            }
+        }
+
+        async function testVisionDescription() {
+            updateTestStatus('vision', 'running', 'Testing vision service...');
+            
+            try {
+                // Test with a sample image
+                const response = await fetch(`${API_BASE}/api`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_type: 'vision',
+                        input_data: {
+                            image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+                            prompt: 'Describe this image'
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('vision', 'success', `✅ Vision service working`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('vision', 'error', `❌ Vision service failed: ${error.message}`);
+            }
+        }
+
+        async function testVisionDocument() {
+            updateTestStatus('vision', 'running', 'Testing vision document OCR...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_type: 'vision',
+                        input_data: {
+                            image: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+                            prompt: 'Extract text from this document'
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('vision', 'success', `✅ Document OCR working`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('vision', 'error', `❌ Document OCR failed: ${error.message}`);
+            }
+        }
+
+        async function testVectorVisionIntegration() {
+            updateTestStatus('vectorvision', 'running', 'Testing vector search + vision integration...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_type: 'chat',
+                        input_data: {
+                            messages: [
+                                { role: 'user', content: 'analyze this image and search for related documents' }
+                            ]
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('vectorvision', 'success', `✅ Vector search + vision integration working`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('vectorvision', 'error', `❌ Integration test failed: ${error.message}`);
+            }
+        }
+
+        async function testDocumentEmbedding() {
+            updateTestStatus('vectorvision', 'running', 'Testing document embedding...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_type: 'embeddings',
+                        input_data: {
+                            input: 'This is a test document for embedding generation',
+                            model: 'text-embedding-3-small'
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    updateTestStatus('vectorvision', 'success', `✅ Document embedding working: ${result.data?.data?.[0]?.embedding?.length || 'unknown'} dimensions`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('vectorvision', 'error', `❌ Document embedding failed: ${error.message}`);
+            }
+        }
+
+        async function testImageGeneration() {
+            updateTestStatus('imagegeneration', 'running', 'Testing AI image generation...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        task_type: 'image',
+                        input_data: {
+                            prompt: 'A beautiful sunset over mountains, digital art style'
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.image_url) {
+                        const imgElement = document.getElementById('generatedImage');
+                        imgElement.src = result.image_url;
+                        imgElement.style.display = 'block';
+                        updateTestStatus('imagegeneration', 'success', `✅ Image generated successfully`);
+                    } else {
+                        updateTestStatus('imagegeneration', 'error', `❌ No image URL in response`);
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                updateTestStatus('imagegeneration', 'error', `❌ Image generation failed: ${error.message}`);
+            }
+        }
+
+        async function testImageStyles() {
+            updateTestStatus('imagegeneration', 'running', 'Testing different image styles...');
+            
+            try {
+                const styles = ['realistic', 'cartoon', 'abstract'];
+                for (const style of styles) {
+                    const response = await fetch(`${API_BASE}/api`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            task_type: 'image',
+                            input_data: {
+                                prompt: `A cat in ${style} style`
+                            }
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Style ${style} failed: HTTP ${response.status}`);
+                    }
+                }
+                updateTestStatus('imagegeneration', 'success', `✅ All image styles working`);
+            } catch (error) {
+                updateTestStatus('imagegeneration', 'error', `❌ Image styles test failed: ${error.message}`);
+            }
+        }
+
+        // Utility functions
+        function setupImageUpload() {
+            const imageUpload = document.getElementById('imageUpload');
+            const uploadedImage = document.getElementById('uploadedImage');
+            
+            imageUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedImage.src = e.target.result;
+                        uploadedImage.style.display = 'block';
+                        updateTestStatus('vision', 'running', `📷 Image uploaded: ${file.name}`);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function blobToBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        function clearAllResults() {
+            testResults = {};
+            const resultDivs = document.querySelectorAll('.test-results');
+            resultDivs.forEach(div => {
+                div.innerHTML = 'Results cleared...';
+            });
+            
+            const statusElements = document.querySelectorAll('.test-status');
+            statusElements.forEach(el => {
+                el.className = 'test-status status-pending';
+                el.textContent = 'PENDING';
+            });
+            
+            document.getElementById('globalMetrics').style.display = 'none';
+            document.getElementById('overallText').textContent = 'Ready to test';
+            testStartTime = Date.now();
+        }
+
+        async function runAllTests() {
+            updateTestStatus('test-suite', 'running', 'Starting comprehensive test suite...');
+            testStartTime = Date.now();
+            
+            const tests = [
+                testVoiceRecording,
+                testElevenLabsTTS,
+                testMemoryStorage,
+                testCanvasDocument,
+                testWebSearch,
+                testVisionDescription,
+                testVectorVisionIntegration,
+                testImageGeneration
+            ];
+            
+            let completed = 0;
+            for (const test of tests) {
+                try {
+                    await test();
+                    completed++;
+                } catch (error) {
+                    console.error('Test failed:', error);
+                }
+                
+                // Small delay between tests
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            
+            const totalTime = Date.now() - testStartTime;
+            document.getElementById('overallText').textContent = 
+                `🚀 Test suite completed: ${completed}/${tests.length} tests (${totalTime}ms)`;
+        }
+    </script>
+</body>
+</html>
+

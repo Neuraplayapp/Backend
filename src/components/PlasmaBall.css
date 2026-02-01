@@ -1,0 +1,74 @@
+.plasma-ball-container {
+  position: relative;
+  border-radius: 50%;
+  overflow: visible;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+  background: transparent;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+
+.plasma-ball-container:hover {
+  transform: scale(1.05);
+  border: none !important;
+  outline: none !important;
+}
+
+.plasma-ball-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  border-radius: 50%;
+  pointer-events: none;
+  background: transparent;
+  border: none !important;
+  outline: none !important;
+}
+
+/* Bottom left positioning */
+.plasma-ball-bottom-left {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 50;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .plasma-ball-bottom-left {
+    bottom: 1rem;
+    left: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .plasma-ball-bottom-left {
+    bottom: 0.5rem;
+    left: 0.5rem;
+  }
+}
+
+
+
+/* Enhanced glow effect animation */
+@keyframes plasmaGlow {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(139, 92, 246, 0.6),
+      0 0 40px rgba(139, 92, 246, 0.3),
+      0 0 60px rgba(88, 28, 135, 0.4),
+      0 0 80px rgba(88, 28, 135, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px rgba(139, 92, 246, 0.8),
+      0 0 60px rgba(139, 92, 246, 0.5),
+      0 0 90px rgba(88, 28, 135, 0.6),
+      0 0 120px rgba(88, 28, 135, 0.3);
+  }
+} 

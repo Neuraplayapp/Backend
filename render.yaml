@@ -1,0 +1,68 @@
+services:
+  - type: web
+    name: neuraplay-ai-platform
+    env: node
+    buildCommand: npm install && npm run build:render
+    startCommand: npm run start:render
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: RENDER
+        value: true
+      - key: VITE_PLATFORM
+        value: render
+      - key: VITE_ABLY_API_KEY
+        sync: false
+      - key: VITE_ELEVENLABS_API_KEY
+        sync: false
+      - key: VITE_ASSEMBLYAI_API_KEY
+        sync: false
+      - key: Neuraplay
+        sync: false
+      - key: ASSEMBLYAI_API_KEY
+        sync: false
+      - key: ASSEMBLY_API_KEY
+        sync: false
+      - key: hf_token
+        sync: false
+      - key: ELEVENLABS_AGENT_ID
+        value: agent_2201k13zjq5nf9faywz14701hyhb
+      - key: Serper_api
+        sync: false
+      - key: together_token
+        sync: false
+      - key: VITE_API_BASE
+        sync: false
+      - key: VITE_BRIDGE_SERVICE_URL
+        sync: false
+      - key: SMTP_USER
+        value: noreply@neuraplay.biz
+      - key: SMTP_APP_PASSWORD
+        sync: false # Use Google App Password here
+      # Database Configuration
+      - key: RENDER_POSTGRES_URL
+        fromDatabase:
+          name: neuraplay-postgres
+          property: connectionString
+      - key: DATABASE_URL
+        fromDatabase:
+          name: neuraplay-postgres
+          property: connectionString
+      # Redis Configuration  
+      - key: REDIS_URL
+        sync: false # Set this in Render dashboard
+      - key: REDIS_HOST
+        sync: false # Optional: redis-11699.c16.us-east-1-2.ec2.redns.redis-cloud.com
+      - key: REDIS_PORT
+        sync: false # Optional: 11699
+      - key: REDIS_PASSWORD
+        sync: false # Optional: 9sLmSd2xfwNQR4ahq73HIwQz8eAOUevo
+      - key: REDIS_USER
+        sync: false # Optional: default
+    healthCheckPath: /
+    autoDeploy: true
+
+databases:
+  - name: neuraplay-postgres
+    databaseName: neuraplay
+    user: neuraplay_user 

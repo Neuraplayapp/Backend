@@ -1,0 +1,137 @@
+warning: in the working copy of 'routes/unified-route.cjs', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/routes/unified-route.cjs b/routes/unified-route.cjs[m
+[1mindex 67daafb..5609429 100644[m
+[1m--- a/routes/unified-route.cjs[m
+[1m+++ b/routes/unified-route.cjs[m
+[36m@@ -5,11 +5,14 @@[m [mconst router = express.Router();[m
+ // For Node.js versions without native fetch[m
+ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));[m
+ [m
+[32m+[m[32m// Render backend URL - where all API calls are routed for production security[m
+[32m+[m[32mconst RENDER_BACKEND_URL = 'https://neuraplay.onrender.com';[m
+[32m+[m
+ // Import modules inside routes to prevent module loading failures[m
+ // const { handleImageGeneration } = require('../services/imageGeneration.cjs');[m
+ [m
+ // DEBUG: Add comprehensive logging to unified-route.cjs[m
+[31m-router.use('*', (req, res, next) => {[m
+[32m+[m[32mrouter.use((req, res, next) => {[m
+   console.log(`🔍 UNIFIED-ROUTE DEBUG: ${req.method} ${req.originalUrl}`);[m
+   console.log(`🔍 Route matched in unified-route.cjs: ${req.path} (mounted at /api/unified-route)`);[m
+   console.log(`🔍 Available routes in unified-route: [POST /, GET /debug]`);[m
+[36m@@ -50,12 +53,82 @@[m [mrouter.post('/', async (req, res) => {[m
+   }[m
+ });[m
+ [m
+[32m+[m[32m// DEVELOPMENT FALLBACK: Provides mock responses when using demo API keys[m
+[32m+[m[32masync function handleDemoFireworksResponse(endpoint, data, res) {[m
+[32m+[m[32m  switch (endpoint) {[m
+[32m+[m[32m    case 'llm-completion':[m
+[32m+[m[32m      // Mock LLM response for chat completions[m
+[32m+[m[32m      const mockResponse = {[m
+[32m+[m[32m        choices: [{[m
+[32m+[m[32m          message: {[m
+[32m+[m[32m            role: 'assistant',[m
+[32m+[m[32m            content: `This is a demo response for development. Your message was: "${data.messages?.slice(-1)[0]?.content || 'No message'}"`,[m
+[32m+[m[32m            tool_calls: data.messages?.some(m => m.content?.includes('canvas') || m.content?.includes('image') || m.content?.includes('chart')) ? [{[m
+[32m+[m[32m              id: 'demo_tool_call',[m
+[32m+[m[32m              type: 'function',[m
+[32m+[m[32m              function: {[m
+[32m+[m[32m                name: 'canvas-document-creation',[m
+[32m+[m[32m                arguments: JSON.stringify({[m
+[32m+[m[32m                  content: `# Demo Canvas Document\n\nThis is a demo response for development mode. The system detected your request and created this placeholder content.\n\n**Your request:** ${data.messages?.slice(-1)[0]?.content || 'Canvas request'}\n\n**Status:** Development mode - using fallback responses.`,[m
+[32m+[m[32m                  mode: 'create'[m
+[32m+[m[32m                })[m
+[32m+[m[32m              }[m
+[32m+[m[32m            }] : undefined[m
+[32m+[m[32m          },[m
+[32m+[m[32m          finish_reason: 'stop'[m
+[32m+[m[32m        }],[m
+[32m+[m[32m        model: data.model || 'demo-model',[m
+[32m+[m[32m        usage: { prompt_tokens: 10, completion_tokens: 25, total_tokens: 35 }[m
+[32m+[m[32m      };[m
+[32m+[m[32m      return res.json(mockResponse);[m
+[32m+[m
+[32m+[m[32m    case 'vision':[m
+[32m+[m[32m      // Mock vision analysis response[m
+[32m+[m[32m      const visionResponse = {[m
+[32m+[m[32m        choices: [{[m
+[32m+[m[32m          message: {[m
+[32m+[m[32m            role: 'assistant',[m
+[32m+[m[32m            content: 'This is a demo vision analysis response. In development mode, I cannot actually analyze images, but this simulates the expected response format for testing purposes.'[m
+[32m+[m[32m          },[m
+[32m+[m[32m          finish_reason: 'stop'[m
+[32m+[m[32m        }],[m
+[32m+[m[32m        model: 'demo-vision-model',[m
+[32m+[m[32m        usage: { prompt_tokens: 15, completion_tokens: 30, total_tokens: 45 }[m
+[32m+[m[32m      };[m
+[32m+[m[32m      return res.json(visionResponse);[m
+[32m+[m
+[32m+[m[32m    case 'image-generation':[m
+[32m+[m[32m      // Mock image generation response[m
+[32m+[m[32m      const imageResponse = {[m
+[32m+[m[32m        success: true,[m
+[32m+[m[32m        images: [{[m
+[32m+[m[32m          url: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0iIzM0OTVmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+RGVtbyBJbWFnZTwvdGV4dD48L3N2Zz4=',[m
+[32m+[m[32m          revised_prompt: `Demo image for: ${data.prompt || 'development testing'}`[m
+[32m+[m[32m        }],[m
+[32m+[m[32m        metadata: { model: 'demo-image-model', mode: 'development' }[m
+[32m+[m[32m      };[m
+[32m+[m[32m      return res.json(imageResponse);[m
+[32m+[m
+[32m+[m[32m    default:[m
+[32m+[m[32m      return res.status(400).json({ error: `Demo mode: Unsupported endpoint ${endpoint}` });[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[32m+[m
+ async function handleFireworksRequest(endpoint, data, res) {[m
+   const apiKey = process.env.Neuraplay || process.env.FIREWORKS_API_KEY || process.env.VITE_FIREWORKS_API_KEY;[m
+   if (!apiKey) {[m
+     return res.status(500).json({ error: 'Fireworks API key not configured' });[m
+   }[m
+ [m
+[32m+[m[32m  // FORCE RENDER BACKEND: Always route through Render backend in development[m
+[32m+[m[32m  // User explicitly wants all API calls to go through Render, not use local keys[m
+[32m+[m[32m  const isDevelopment = process.env.NODE_ENV === 'development';[m
+[32m+[m[41m  [m
+[32m+[m[32m  if (isDevelopment) {[m
+[32m+[m[32m    console.log('🔀 Development mode: Routing all requests through Render backend for endpoint:', endpoint);[m
+[32m+[m[32m    // Skip demo mode - always use Render backend for security and consistency[m
+[32m+[m[32m  }[m
+[32m+[m
+   switch (endpoint) {[m
+     case 'image-generation':[m
+       try {[m
+[36m@@ -135,69 +208,106 @@[m [masync function handleFireworksRequest(endpoint, data, res) {[m
+ [m
+     case 'llm-completion':[m
+       try {[m
+[31m-        const { messages, model = 'accounts/fireworks/models/gpt-oss-120b', options = {} } = data;[m
+[32m+[m[32m        console.log('🔀 Forwarding llm-completion to Render backend');[m
+[32m+[m[41m        [m
+[32m+[m[32m        // PROPER FIX: Let JSON.stringify handle all escaping - don't manually sanitize[m
+[32m+[m[32m        const cleanMessages = (data.messages || []).map(msg => ({[m
+[32m+[m[32m          role: String(msg.role || 'user').trim(),[m
+[32m+[m[32m          content: String(msg.content || '').trim()[m
+[32m+[m[32m        }));[m
+ [m
+[31m-        if (!Array.isArray(messages) || messages.length === 0) {[m
+[31m-          return res.status(400).json({ error: 'messages array required' });[m
+[32m+[m[32m        const requestPayload = {[m
+[32m+[m[32m          task_type: 'chat',[m
+[32m+[m[32m          input_data: {[m
+[32m+[m[32m            messages: cleanMessages,[m
+[32m+[m[32m            max_tokens: Number(data.max_tokens) || 1000,[m
+[32m+[m[32m            temperature: Number(data.temperature) || 0.7,[m
+[32m+[m[32m            model: data.model || 'accounts/fireworks/models/gpt-oss-120b'[m
+[32m+[m[32m          }[m
+[32m+[m[32m        };[m
+[32m+[m
+[32m+[m[32m        // VALIDATE JSON SERIALIZATION: Test before sending to catch issues early[m
+[32m+[m[32m        let serializedPayload;[m
+[32m+[m[32m        try {[m
+[32m+[m[32m          serializedPayload = JSON.stringify(requestPayload);[m
+[32m+[m[32m          console.log('🔍 LOCAL DEBUG - JSON payload successfully created:');[m
+[32m+[m[32m          console.log('   📏 Size:', serializedPayload.length, 'bytes');[m
+[32m+[m[32m          console.log('   📝 First 200 chars:', serializedPayload.substring(0, 200));[m
+[32m+[m[32m          console.log('   📝 Las

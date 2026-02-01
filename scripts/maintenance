@@ -1,0 +1,33 @@
+// Emergency conversation cleanup script
+// Run this in browser console (F12) to clear corrupted conversation data
+
+console.log('🧹 Starting emergency conversation cleanup...');
+
+// Clear all conversation-related localStorage
+const keysToRemove = [
+  'neuraplay_conversations',
+  'neuraplay-conversations', 
+  'conversations',
+  'neuraplay_active_conversation',
+  'neuraplay_session'
+];
+
+keysToRemove.forEach(key => {
+  if (localStorage.getItem(key)) {
+    localStorage.removeItem(key);
+    console.log(`✅ Cleared: ${key}`);
+  }
+});
+
+// Clear all localStorage items that start with 'conv_' or 'chat_'
+Object.keys(localStorage).forEach(key => {
+  if (key.startsWith('conv_') || key.startsWith('chat_') || key.startsWith('neuraplay')) {
+    localStorage.removeItem(key);
+    console.log(`✅ Cleared: ${key}`);
+  }
+});
+
+console.log('🔄 Reloading page to apply changes...');
+
+// Force reload to reinitialize everything
+window.location.reload(true);

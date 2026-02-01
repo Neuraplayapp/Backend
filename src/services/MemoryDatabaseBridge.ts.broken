@@ -1,0 +1,859 @@
+// Memory System Database Bridge
+// Connects the enhanced memory system with existing database infrastructure
+
+import { databaseManager } from './DatabaseManager';
+import { npuDatabaseIntegration } from './NPUDatabaseIntegration';
+import { apiService } from './APIService';
+
+export interface MemoryData {
+  id?: string;
+  userId: string;
+  memoryKey: string;
+  content: string;
+  context: any;
+  category: string;
+  tags: string[];
+  importanceScore: number;
+  accessCount: number;
+  timestamp: string;
+  metadata?: any;
+}
+
+export interface CognitiveProgression {
+  userId: string;
+  domain: string;
+  subdomain?: string;
+  masteryLevel: string;
+  emotionalState: string;
+  progressionData: any;
+  timestamp: string;
+}
+
+/**
+ * Bridge between enhanced memory system and existing database
+ */
+export class MemoryDatabaseBridge {
+  private static instance: MemoryDatabaseBridge;
+  private memoryCache: Map<string, MemoryData[]> = new Map();
+  private cacheTimeout = 300000; // 5 minutes
+  
+  // Local fallback storage when database is unavailable
+  private localMemoryStore: Map<string, { value: string; metadata: any; timestamp: Date }> = new Map();
+  
+  static getInstance(): MemoryDatabaseBridge {
+    if (!MemoryDatabaseBridge.instance) {
+      MemoryDatabaseBridge.instance = new MemoryDatabaseBridge();
+      // 🔧 CACHE INVALIDATION: Clear any stale cache on initialization
+      MemoryDatabaseBridge.instance.memoryCache.clear();
+      console.log('🧹 MemoryDatabaseBridge: Cache cleared on initialization');
+    }
+    return MemoryDatabaseBridge.instance;
+  }
+
+  /**
+   * 🔧 FORCE CACHE REFRESH
+   * Clear all cached memory data to ensure fresh lookups
+   */
+  clearCache(): void {
+    this.memoryCache.clear();
+    console.log('🧹 MemoryDatabaseBridge: Cache manually cleared');
+  }
+
+  /**
+   * Store memory using new memory API endpoint
+   */
+  async storeMemory(data: {
+    userId: string;
+    key: string;
+    value: string;
+    metadata?: any;
+  }): Promise<{ success: boolean; data?: any; error?: string }> {
+    try {
+      console.log('🧠 MemoryBridge: Storing memory via API', { userId: data.userId, key: data.key });
+      
+      // Categorize the memory based on key patterns
+      const category = this.categorizeMemory(data.key, data.value);
+      
+      // Use the new memory API endpoint
+      const response = await apiService.makeRequest({
+        endpoint: '/api/memory',
+        method: 'POST',
+        data: {
+          action: 'store',
+          userId: data.userId,
+          key: data.key,
+          value: data.value,
+          context: {
+            category,
+            source: data.metadata?.source || 'user_interaction'
+          },
+          metadata: data.metadata
+        }
+      });
+
+      if (response.success) {
+        // Clear cache for this user
+        this.memoryCache.delete(data.userId);
+        console.log('✅ Memory stored successfully via API');
+        return response;
+      } else {
+        console.error('❌ API returned error:', response.error);
+        return response;
+      }
+      
+    } catch (error) {
+      console.error('❌ Failed to store memory via API:', error);
+      
+      // Use local fallback storage
+      console.log('📦 Using local fallback storage for memory');
+      const storageKey = `${data.userId}_${data.key}`;
+      this.localMemoryStore.set(storageKey, {
+        value: data.value,
+        metadata: data.metadata || {},
+        timestamp: new Date()
+      });
+      
+      // Also cache it
+      const cacheKey = `${data.userId}_stored`;
+      if (!this.memoryCache.has(cacheKey)) {
+        this.memoryCache.set(cacheKey, []);
+      }
+      this.memoryCache.get(cacheKey)!.push({
+        id: storageKey,
+        userId: data.userId,
+        memoryKey: data.key || storageKey,
+        content: data.value,
+        context: data.metadata?.context || {},
+        category: data.metadata?.category || 'general',
+        tags: data.metadata?.tags || [],
+        importanceScore: data.metadata?.importance || 0.5,
+        accessCount: 0,
+        timestamp: new Date().toISOString(),
+        metadata: data.metadata || {}
+      });
+      
+      return { 
+        success: true, 
+        data: { key: data.key, value: data.value }
+      };
+    }
+  }
+
+  /**
+   * Retrieve a specific memory by key
+   */
+  async retrieveMemory(data: {
+    userId: string;
+    key: string;
+  }): Promise<{ success: boolean; memory?: any; error?: string }> {
+    try {
+      console.log('🔍 MemoryBridge: Retrieving memory by key', { userId: data.userId, key: data.key });
+      
+      // Check local storage first
+      const localKey = `${data.userId}_${data.key}`;
+      if (this.localMemoryStore.has(localKey)) {
+        const memory = this.localMemoryStore.get(localKey);
+        if (!memory) {
+          console.log(`Memory not found in local store: ${localKey}`);
+          return { success: false, error: 'Memory not found in local storage' };
+        }
+        return { 
+          success: true, 
+          memory: {
+            key: data.key,
+            content: memory.value,
+            value: memory.value,
+            metadata: memory.metadata,
+            timestamp: memory.timestamp
+          }
+        };
+      }
+
+      // Use the new memory API endpoint with retrieve action
+      const response = await apiService.makeRequest({
+        endpoint: '/api/memory',
+        method: 'POST',
+        data: {
+          action: 'retrieve',
+          userId: data.userId,
+          key: data.key
+        }
+      });
+
+      if (response.success && response.data && response.data.length > 0) {
+        const memory = response.data[0];
+        return { 
+          success: true, 
+          memory: {
+            key: memory.key || data.key,
+            content: memory.content || memory.value,
+            value: memory.content || memory.value,
+            metadata: memory.metadata || {},
+            timestamp: memory.timestamp
+          }
+        };
+      } else {
+        return { success: false, error: 'Memory not found' };
+      }
+      
+    } catch (error) {
+      console.error('❌ Failed to retrieve memory via API:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
+   * Search memories using new memory API endpoint
+   */
+  async searchMemories(data: {
+    userId: string;
+    query: string;
+    limit?: number;
+  }): Promise<{ success: boolean; memories?: any[]; error?: string }> {
+    try {
+      // CRITICAL: Validate userId parameter to prevent 400 errors
+      if (!data.userId || data.userId === 'undefined' || data.userId === 'null') {
+        console.warn('⚠️ MemoryBridge: Missing or invalid userId, skipping search');
+        return { success: true, memories: [] };
+      }
+      
+      console.log('🔍 MemoryBridge: Searching memories via API', { userId: data.userId, query: data.query });
+      
+      // 🔧 CACHE INVALIDATION FIX: Skip cache for critical memory operations
+      const cacheKey = `${data.userId}_${data.query}`;
+      const isCriticalMemoryQuery = !data.query || data.query === '' || 
+                                   data.query.toLowerCase().includes('name') ||
+                                   data.query.toLowerCase().includes('sammy');
+      
+      if (!isCriticalMemoryQuery && this.memoryCache.has(cacheKey)) {
+        console.log('📦 Returning cached memories');
+        return { success: true, memories: this.memoryCache.get(cacheKey) };
+      }
+      
+      if (isCriticalMemoryQuery) {
+        console.log('🔄 Cache bypass for critical memory query:', data.query || 'ALL MEMORIES');
+      }
+
+      // 🚀 FIXED VECTOR SEARCH: Now searches correct table (user_memories)
+      let memories: any[] = [];
+      let searchMethod = 'api_fallback';
+      let response: any = null;
+
+      // 🛡️ TRY VECTOR SEARCH FIRST (now fixed to use user_memories table)
+      try {
+        const { serviceContainer } = await import('./ServiceContainer');
+        
+        // Wait for ServiceContainer to be ready and check if vectorSearchService is available
+        await serviceContainer.waitForReady();
+        
+        // Check if vectorSearchService is properly registered
+        const availableServices = Array.from(serviceContainer['services'].keys());
+        if (!availableServices.includes('vectorSearchService')) {
+          throw new Error('VectorSearchService not available in ServiceContainer');
+        }
+        
+        const vectorSearchService = serviceContainer.get('vectorSearchService');
+        
+        // Verify vectorSearchService is properly initialized
+        if (!vectorSearchService || typeof (vectorSearchService as any).semanticSearch !== 'function') {
+          throw new Error('VectorSearchService not properly initialized');
+        }
+        
+        console.log('🧠 MemoryBridge: Using FIXED VectorSearchService (now searches user_memories table)');
+        
+        // Only attempt vector search if query has content
+        if (data.query && data.query.trim().length > 0) {
+          const vectorResults = await (vectorSearchService as any).semanticSearch(
+            data.query.trim(),
+            undefined, // auto-generate embedding
+            data.userId,
+            data.limit || 20,
+            0.3 // Lower threshold for better matching with simple text similarity
+          );
+          
+          // Transform vector results to memory format
+          memories = vectorResults.map((result: any) => ({
+            id: result.id,
+            memory_key: result.metadata?.memory_key || result.id,
+            content: result.content,
+            similarity: result.similarity,
+            metadata: result.metadata || {},
+            access_count: result.metadata?.access_count || 0,
+            created_at: result.metadata?.created_at,
+            updated_at: result.metadata?.updated_at
+          }));
+          
+          searchMethod = 'frontend_vector_search';
+          console.log(`🎯 Frontend VectorSearch found ${memories.length} memories`);
+        } else {
+          // For empty queries, skip vector search and use API
+          throw new Error('Empty query - using API fallback for empty/all memory queries');
+        }
+        
+      } catch (vectorError: any) {
+        console.warn('⚠️ VectorSearch failed, using API fallback:', vectorError.message || vectorError);
+        
+        // 🚀 HNSW backend vector search service (now PRIMARY method)
+        try {
+          console.log('🚀 MemoryBridge: Using HNSW backend as primary search method');
+          response = await apiService.makeRequest({
+            endpoint: '/api/memory',
+            method: 'POST',
+            data: {
+              action: 'vector_search',
+              userId: data.userId,
+              query: data.query,
+              limit: data.limit || 20,
+              similarityThreshold: 0.3,
+              componentTypes: ['chat_knowledge', 'general', 'memory']
+            }
+          });
+          
+          searchMethod = 'hnsw_backend_vector';
+          
+          if (response.success) {
+            // Handle response parsing
+            const backendData = response.data || {};
+            memories = backendData.memories || response.memories || [];
+            
+            // If HNSW returns 0 results, throw error to trigger direct search fallback
+            if (memories.length === 0) {
+              throw new Error('HNSW returned 0 results - using direct search fallback');
+            }
+          }
+        } catch (hnswError: any) {
+          console.warn('⚠️ HNSW backend vector search failed, using direct search fallback:', hnswError?.message || hnswError);
+          
+          // Final fallback to direct database search
+          try {
+            response = await apiService.makeRequest({
+              endpoint: '/api/memory',
+              method: 'POST',
+              data: {
+                action: 'search',
+                userId: data.userId,
+                query: data.query,
+                limit: data.limit || 20
+              }
+            });
+            
+            searchMethod = 'direct_search_fallback';
+            
+            if (response.success) {
+              const backendData = response.data || {};
+              memories = backendData.memories || response.memories || [];
+            }
+          } catch (directSearchError) {
+            console.error('❌ All search methods failed (frontend vector, HNSW backend, direct search):', directSearchError);
+            return { success: false, error: 'All memory search methods failed' };
+          }
+        }
+      }
+
+      // Process successful results from any search method
+      if (memories.length > 0 || searchMethod.includes('vector')) {
+        
+        // Ensure memories is an array
+        const memoryArray = Array.isArray(memories) ? memories : [];
+        
+        console.log('🔍 MemoryBridge: Response structure debug:', {
+          searchMethod,
+          memoriesCount: memoryArray.length,
+          firstMemorySnippet: memoryArray.length > 0 ? 
+            `${memoryArray[0].memory_key}: ${memoryArray[0].content?.substring(0, 20)}...` : 
+            'none'
+        });
+        
+        // Cache results (only if not critical query)
+        if (!isCriticalMemoryQuery) {
+          this.memoryCache.set(cacheKey, memoryArray);
+          setTimeout(() => this.memoryCache.delete(cacheKey), this.cacheTimeout);
+        }
+
+        console.log(`✅ Found ${memoryArray.length} memories via ${searchMethod}`);
+        return { success: true, memories: memoryArray };
+      } else {
+        console.error('❌ API search returned error:', response.error);
+        return response;
+      }
+      
+    } catch (error) {
+      console.error('❌ Failed to search memories via API:', error);
+      
+      // Use local fallback storage
+      console.log('📦 Searching local fallback storage');
+      const results: any[] = [];
+      
+      // Search in local memory store
+      for (const [key, memory] of this.localMemoryStore.entries()) {
+        if (key.startsWith(`${data.userId}_`)) {
+          const memKey = key.replace(`${data.userId}_`, '');
+          const queryLower = data.query.toLowerCase();
+          
+          // Check if query matches key or value
+          if (memKey.toLowerCase().includes(queryLower) || 
+              memory.value.toLowerCase().includes(queryLower)) {
+            results.push({
+              key: memKey,
+              content: memory.value,
+              value: memory.value,
+              metadata: memory.metadata,
+              timestamp: memory.timestamp
+            });
+          }
+        }
+      }
+      
+      // Also search in cache
+      const cacheKey = `${data.userId}_stored`;
+      if (this.memoryCache.has(cacheKey)) {
+        const cachedMemories = this.memoryCache.get(cacheKey)!;
+        for (const mem of cachedMemories) {
+          if (mem.content.toLowerCase().includes(data.query.toLowerCase())) {
+            // Avoid duplicates
+            if (!results.some(r => r.content === mem.content)) {
+              results.push({
+                key: mem.id,
+                content: mem.content,
+                value: mem.content,
+                metadata: mem.progressionData,
+                timestamp: new Date(mem.timestamp)
+              });
+            }
+          }
+        }
+      }
+      
+      // Limit results
+      const limitedResults = results.slice(0, data.limit || 20);
+      
+      console.log(`📦 Found ${limitedResults.length} memories in local storage`);
+      return { 
+        success: true, 
+        memories: limitedResults,
+        fallback: true 
+      };
+    }
+  }
+
+  /**
+   * Update memory
+   */
+  async updateMemory(data: {
+    userId: string;
+    key: string;
+    value: string;
+    metadata?: any;
+  }): Promise<{ success: boolean; error?: string }> {
+    try {
+      console.log('🔄 MemoryBridge: Updating memory', { userId: data.userId, key: data.key });
+      
+      // First, try to find existing memory
+      const existing = await databaseManager.executeQuery({
+        action: 'get',
+        collection: 'user_memories',
+        key: data.userId,
+        filters: { memory_key: data.key }
+      });
+
+      if (existing && existing.length > 0) {
+        const memory = existing[0];
+        memory.content = data.value;
+        memory.context = { ...memory.context, ...data.metadata };
+        memory.updated_at = new Date().toISOString();
+        memory.access_count = (memory.access_count || 0) + 1;
+
+        await databaseManager.executeQuery({
+          action: 'save',
+          collection: 'user_memories',
+          data: memory
+        });
+
+        // Clear cache
+        this.memoryCache.delete(data.userId);
+        
+        console.log('✅ Memory updated successfully');
+        return { success: true };
+      } else {
+        // Create new if doesn't exist
+        return await this.storeMemory(data);
+      }
+      
+    } catch (error) {
+      console.error('❌ Failed to update memory:', error);
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      };
+    }
+  }
+
+  /**
+   * Delete memory
+   */
+  async deleteMemory(data: {
+    userId: string;
+    key: string;
+  }): Promise<{ success: boolean; error?: string }> {
+    try {
+      console.log('🗑️ MemoryBridge: Deleting memory', { userId: data.userId, key: data.key });
+      
+      await databaseManager.executeQuery({
+        action: 'delete',
+        collection: 'user_memories',
+        key: data.key
+      });
+
+      // Clear cache
+      this.memoryCache.delete(data.userId);
+      
+      console.log('✅ Memory deleted successfully');
+      return { success: true };
+      
+    } catch (error) {
+      console.error('❌ Failed to delete memory:', error);
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      };
+    }
+  }
+
+  /**
+   * Store cognitive progression in dedicated table
+   */
+  private async storeCognitiveProgression(
+    userId: string,
+    key: string,
+    value: string,
+    metadata: any
+  ): Promise<void> {
+    try {
+      const domain = metadata?.domain || this.extractDomain(key, value);
+      const emotionalState = metadata?.emotionalState || 'neutral';
+      const masteryLevel = metadata?.masteryLevel || this.inferMasteryLevel(value);
+      
+      const progressionData = {
+        id: `prog_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+        user_id: userId,
+        domain,
+        subdomain: metadata?.subdomain,
+        mastery_level: masteryLevel,
+        emotional_state: emotionalState,
+        progression_data: {
+          key,
+          value,
+          context: metadata,
+          timestamp: new Date().toISOString()
+        },
+        last_interaction: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      await databaseManager.executeQuery({
+        action: 'save',
+        collection: 'cognitive_domain_progression',
+        data: progressionData
+      });
+
+      console.log('✅ Cognitive progression stored');
+      
+    } catch (error) {
+      console.error('⚠️ Failed to store cognitive progression:', error);
+    }
+  }
+
+  /**
+   * Update cross-chat knowledge
+   */
+  private async updateCrossChatKnowledge(
+    userId: string,
+    key: string,
+    value: string,
+    category: string,
+    tags: string[]
+  ): Promise<void> {
+    try {
+      const knowledgeData = {
+        id: `know_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+        userId,
+        sourceSessionId: 'memory_system',
+        knowledgeType: this.mapCategoryToKnowledgeType(category),
+        content: value,
+        context: { key, category },
+        relevanceScore: 0.8,
+        usageCount: 1,
+        lastAccessed: new Date().toISOString(),
+        tags
+      };
+
+      await npuDatabaseIntegration.saveCrossChatKnowledge(knowledgeData);
+      
+      console.log('✅ Cross-chat knowledge updated');
+      
+    } catch (error) {
+      console.error('⚠️ Failed to update cross-chat knowledge:', error);
+    }
+  }
+
+  /**
+   * Get user's learning context from new memory API endpoint
+   */
+  async getUserLearningContext(userId: string, domain?: string): Promise<any> {
+    try {
+      console.log('🎯 MemoryBridge: Getting learning context via API', { userId, domain });
+      
+      // Use the new memory API endpoint
+      const response = await apiService.makeRequest({
+        endpoint: '/api/memory',
+        method: 'POST',
+        data: {
+          action: 'get_learning_context',
+          userId,
+          context: { domain }
+        }
+      });
+
+      if (response.success) {
+        console.log('✅ Learning context retrieved via API');
+        return response.context || {
+          progression: [],
+          patterns: [],
+          memories: [],
+          hasHistory: false
+        };
+      } else {
+        console.error('❌ API learning context returned error:', response.error);
+        return {
+          progression: [],
+          patterns: [],
+          memories: [],
+          hasHistory: false
+        };
+      }
+      
+    } catch (error) {
+      console.error('❌ Failed to get learning context via API:', error);
+      return {
+        progression: [],
+        patterns: [],
+        memories: [],
+        hasHistory: false
+      };
+    }
+  }
+
+  /**
+   * Log NPU analysis with memory integration
+   */
+  async logNPUAnalysisWithMemory(analysis: any): Promise<void> {
+    try {
+      // Log to NPU database
+      await npuDatabaseIntegration.logNPUAnalysis(analysis);
+
+      // Extract and store cognitive insights as memories
+      const insights = analysis.layer4_confusion?.cognitiveInsights || [];
+      for (const insight of insights) {
+        await this.storeMemory({
+          userId: analysis.userId,
+          key: `insight_${Date.now()}`,
+          value: insight,
+          metadata: {
+            source: 'npu_analysis',
+            domain: analysis.layer4_confusion?.domainContext,
+            emotionalState: analysis.layer4_confusion?.emotionalState,
+            sessionId: analysis.sessionId
+          }
+        });
+      }
+      
+    } catch (error) {
+      console.error('❌ Failed to log NPU analysis with memory:', error);
+    }
+  }
+
+  // === HELPER METHODS ===
+
+  private categorizeMemory(key: string, value: string): string {
+    const keyLower = key.toLowerCase();
+    const valueLower = value.toLowerCase();
+    
+    if (keyLower.includes('name')) return 'name';
+    if (keyLower.includes('preference') || valueLower.includes('like') || valueLower.includes('prefer')) return 'preference';
+    if (keyLower.includes('emotion') || keyLower.includes('feeling')) return 'emotion';
+    if (keyLower.includes('event') || keyLower.includes('birthday') || keyLower.includes('anniversary')) return 'event';
+    if (keyLower.includes('location') || keyLower.includes('place')) return 'location';
+    if (keyLower.includes('relationship') || keyLower.includes('family') || keyLower.includes('friend')) return 'relationship';
+    if (keyLower.includes('cognitive') || keyLower.includes('insight')) return 'cognitive_insight';
+    if (keyLower.includes('learning') || keyLower.includes('mastered') || keyLower.includes('struggle')) return 'learning';
+    
+    return 'general';
+  }
+
+  private extractTags(key: string, value: string, category: string): string[] {
+    const tags = [category];
+    const combined = `${key} ${value}`.toLowerCase();
+    
+    // Extract domain tags
+    if (combined.includes('math')) tags.push('math');
+    if (combined.includes('science')) tags.push('science');
+    if (combined.includes('programming') || combined.includes('code')) tags.push('programming');
+    if (combined.includes('language') || combined.includes('writing')) tags.push('language');
+    
+    // Extract emotion tags
+    const emotions = ['happy', 'sad', 'anxious', 'excited', 'frustrated', 'confident'];
+    emotions.forEach(emotion => {
+      if (combined.includes(emotion)) tags.push(emotion);
+    });
+    
+    // Extract temporal tags
+    if (combined.includes('today')) tags.push('today');
+    if (combined.includes('yesterday')) tags.push('yesterday');
+    if (combined.includes('tomorrow')) tags.push('future');
+    
+    return [...new Set(tags)]; // Remove duplicates
+  }
+
+  private calculateImportance(key: string, value: string, category: string): number {
+    let importance = 0.5; // Base importance
+    
+    // Category-based importance
+    const categoryWeights: Record<string, number> = {
+      'name': 0.9,
+      'event': 0.8,
+      'cognitive_insight': 0.85,
+      'learning': 0.8,
+      'preference': 0.7,
+      'emotion': 0.75,
+      'relationship': 0.85,
+      'location': 0.6,
+      'general': 0.5
+    };
+    
+    importance = categoryWeights[category] || 0.5;
+    
+    // Adjust based on content length (longer = potentially more important)
+    if (value.length > 100) importance += 0.1;
+    if (value.length > 200) importance += 0.1;
+    
+    // Cap at 1.0
+    return Math.min(1.0, importance);
+  }
+
+  private extractDomain(key: string, value: string): string {
+    const combined = `${key} ${value}`.toLowerCase();
+    
+    if (combined.includes('math') || combined.includes('equation') || combined.includes('calculate')) return 'math';
+    if (combined.includes('science') || combined.includes('physics') || combined.includes('chemistry')) return 'science';
+    if (combined.includes('code') || combined.includes('programming') || combined.includes('javascript')) return 'programming';
+    if (combined.includes('language') || combined.includes('writing') || combined.includes('essay')) return 'language';
+    if (combined.includes('history') || combined.includes('historical')) return 'history';
+    
+    return 'general';
+  }
+
+  private inferMasteryLevel(value: string): string {
+    const valueLower = value.toLowerCase();
+    
+    if (valueLower.includes('mastered') || valueLower.includes('understand') || valueLower.includes('got it')) {
+      return 'understanding';
+    }
+    if (valueLower.includes('confused') || valueLower.includes("don't understand")) {
+      return 'confused';
+    }
+    if (valueLower.includes('struggling') || valueLower.includes('difficult')) {
+      return 'struggling';
+    }
+    if (valueLower.includes('exploring') || valueLower.includes('learning')) {
+      return 'exploring';
+    }
+    
+    return 'learning';
+  }
+
+  private mapCategoryToKnowledgeType(category: string): 'fact' | 'preference' | 'skill' | 'interest' | 'goal' {
+    const mapping: Record<string, 'fact' | 'preference' | 'skill' | 'interest' | 'goal'> = {
+      'name': 'fact',
+      'preference': 'preference',
+      'learning': 'skill',
+      'cognitive_insight': 'skill',
+      'emotion': 'preference',
+      'event': 'fact',
+      'location': 'fact',
+      'relationship': 'fact',
+      'general': 'fact'
+    };
+    
+    return mapping[category] || 'fact';
+  }
+
+  private combineAndRankMemories(
+    dbMemories: any[],
+    crossChatKnowledge: any[],
+    query: string
+  ): any[] {
+    // Combine both sources
+    const allMemories = [
+      ...dbMemories,
+      ...crossChatKnowledge.map(k => ({
+        memory_key: k.id,
+        content: k.content,
+        context: k.context,
+        relevance_score: k.relevanceScore,
+        source: 'cross_chat'
+      }))
+    ];
+    
+    // Score and rank by relevance
+    const queryLower = query.toLowerCase();
+    const queryTerms = queryLower.split(' ');
+    
+    const scoredMemories = allMemories.map(memory => {
+      let score = 0;
+      const content = (memory.content || '').toLowerCase();
+      const key = (memory.memory_key || '').toLowerCase();
+      
+      // Exact match bonus
+      if (content.includes(queryLower)) score += 3;
+      if (key.includes(queryLower)) score += 2;
+      
+      // Term matching
+      queryTerms.forEach(term => {
+        if (content.includes(term)) score += 1;
+        if (key.includes(term)) score += 0.5;
+      });
+      
+      // Importance and access count bonus
+      score += (memory.importance_score || 0) * 2;
+      score += Math.min((memory.access_count || 0) * 0.1, 1);
+      
+      // Recency bonus (if timestamp available)
+      if (memory.created_at || memory.timestamp) {
+        const age = Date.now() - new Date(memory.created_at || memory.timestamp).getTime();
+        const daysSinceCreation = age / (1000 * 60 * 60 * 24);
+        if (daysSinceCreation < 1) score += 2;
+        else if (daysSinceCreation < 7) score += 1;
+      }
+      
+      return { ...memory, relevance_score: score };
+    });
+    
+    // Sort by relevance score
+    scoredMemories.sort((a, b) => b.relevance_score - a.relevance_score);
+    
+    return scoredMemories;
+  }
+
+  private async incrementAccessCount(memoryId: string): Promise<void> {
+    try {
+      // This would need a specific database update query
+      console.log(`📊 Incrementing access count for memory: ${memoryId}`);
+    } catch (error) {
+      console.error('⚠️ Failed to increment access count:', error);
+    }
+  }
+}
+
+// Export singleton
+export const memoryDatabaseBridge = MemoryDatabaseBridge.getInstance();

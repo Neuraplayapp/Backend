@@ -1,0 +1,217 @@
+/* PlaygroundModalReveal.css */
+
+/* Ensure smooth animations */
+.playground-modal-reveal {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+/* Fallback animations when GSAP is not available */
+.playground-modal-reveal.fallback {
+  animation: modalReveal 0.6s ease-out;
+}
+
+@keyframes modalReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(50px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
+}
+
+.playground-modal-image.fallback {
+  animation: imageReveal 0.8s ease-out 0.2s both;
+}
+
+@keyframes imageReveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.2) translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.playground-action-card.fallback {
+  animation: cardReveal 0.6s ease-out 0.8s both;
+}
+
+@keyframes cardReveal {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Backdrop blur enhancement */
+.playground-modal-backdrop {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Modal container styling */
+.playground-modal-container {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(147, 51, 234, 0.95), rgba(15, 23, 42, 0.95));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  min-height: 400px;
+  position: relative;
+  z-index: 10000;
+}
+
+/* Action cards styling with proper z-index */
+.playground-action-card {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  position: relative;
+  z-index: 10001;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.playground-action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  z-index: 10002;
+}
+
+/* Image frame styling */
+.playground-modal-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px 24px 0 0;
+  z-index: 10000;
+}
+
+.playground-modal-image img {
+  transition: transform 0.3s ease;
+}
+
+.playground-modal-image:hover img {
+  transform: scale(1.05);
+}
+
+/* Action cards styling */
+.playground-action-card {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.playground-action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Title letter animation */
+.title-letter {
+  display: inline-block;
+  transform-origin: center;
+}
+
+/* Skills tags styling */
+.playground-skill-tag {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.playground-skill-tag:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Overlay content styling */
+.playground-overlay-content {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(147, 51, 234, 0.95), rgba(15, 23, 42, 0.95));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 9999;
+}
+
+/* Progress bars */
+.playground-progress-bar {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.playground-progress-fill {
+  background: linear-gradient(90deg, #60a5fa, #a855f7);
+  transition: width 0.6s ease;
+}
+
+/* Close button enhancement */
+.playground-close-button {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10003;
+}
+
+.playground-close-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .playground-modal-container {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+  
+  .playground-modal-image {
+    height: 200px;
+  }
+}
+
+/* Animation keyframes for additional effects */
+@keyframes playgroundGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(147, 51, 234, 0.6);
+  }
+}
+
+.playground-glow-effect {
+  animation: playgroundGlow 2s ease-in-out infinite;
+}
+
+/* Scrollbar styling for overlay content */
+.playground-overlay-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.playground-overlay-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.playground-overlay-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.playground-overlay-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+} 

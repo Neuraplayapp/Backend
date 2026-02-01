@@ -1,0 +1,201 @@
+[1mdiff --git a/Dockerfile.debug b/Dockerfile.debug[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1e14bc6[m
+[1m--- /dev/null[m
+[1m+++ b/Dockerfile.debug[m
+[36m@@ -0,0 +1,28 @@[m
+[32m+[m[32m# Debug Dockerfile - simulates Render's exact environment[m
+[32m+[m[32mFROM node:18[m
+[32m+[m
+[32m+[m[32m# Set exact working directory like Render[m
+[32m+[m[32mWORKDIR /opt/render/project/src[m
+[32m+[m
+[32m+[m[32m# Copy package files[m
+[32m+[m[32mCOPY package*.json ./[m
+[32m+[m
+[32m+[m[32m# Install dependencies like Render[m
+[32m+[m[32mRUN npm ci --production[m
+[32m+[m
+[32m+[m[32m# Copy source code[m
+[32m+[m[32mCOPY . .[m
+[32m+[m
+[32m+[m[32m# Build like Render does[m
+[32m+[m[32mRUN npm run build:render[m
+[32m+[m
+[32m+[m[32m# Set Render-like environment[m
+[32m+[m[32mENV NODE_ENV=production[m
+[32m+[m[32mENV PORT=3000[m
+[32m+[m[32mENV RENDER=true[m
+[32m+[m
+[32m+[m[32m# Expose port[m
+[32m+[m[32mEXPOSE 3000[m
+[32m+[m
+[32m+[m[32m# Start exactly like Render[m
+[32m+[m[32mCMD ["npm", "run", "start:render"][m
+[1mdiff --git a/debug-render-local.js b/debug-render-local.js[m
+[1mnew file mode 100644[m
+[1mindex 0000000..25a61bf[m
+[1m--- /dev/null[m
+[1m+++ b/debug-render-local.js[m
+[36m@@ -0,0 +1,34 @@[m
+[32m+[m[32m// Debug Render deployment locally with exact same environment[m
+[32m+[m[32m// Run with: node debug-render-local.js[m
+[32m+[m
+[32m+[m[32m// Set exact Render environment variables[m
+[32m+[m[32mprocess.env.NODE_ENV = 'production';[m
+[32m+[m[32mprocess.env.PORT = process.env.PORT || '3000';[m
+[32m+[m[32mprocess.env.RENDER = 'true';[m
+[32m+[m
+[32m+[m[32m// Load production env if it exists[m
+[32m+[m[32mtry {[m
+[32m+[m[32m  const fs = require('fs');[m
+[32m+[m[32m  if (fs.existsSync('production.env')) {[m
+[32m+[m[32m    require('dotenv').config({ path: 'production.env' });[m
+[32m+[m[32m    console.log('✅ Loaded production.env');[m
+[32m+[m[32m  }[m
+[32m+[m[32m} catch (error) {[m
+[32m+[m[32m  console.log('⚠️ No production.env found, using system env');[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m// Simulate Render paths[m
+[32m+[m[32mprocess.env.RENDER_EXTERNAL_URL = process.env.RENDER_EXTERNAL_URL || 'http://localhost:3000';[m
+[32m+[m
+[32m+[m[32mconsole.log('🚀 Starting Render simulation...');[m
+[32m+[m[32mconsole.log('📍 Environment:', process.env.NODE_ENV);[m
+[32m+[m[32mconsole.log('📍 Port:', process.env.PORT);[m
+[32m+[m[32mconsole.log('📍 Render mode:', process.env.RENDER);[m
+[32m+[m
+[32m+[m[32m// Start the exact same way Render does[m
+[32m+[m[32mtry {[m
+[32m+[m[32m  require('./server-new.cjs');[m
+[32m+[m[32m} catch (error) {[m
+[32m+[m[32m  console.error('💥 Render simulation failed:', error);[m
+[32m+[m[32m  console.error('Stack trace:', error.stack);[m
+[32m+[m[32m}[m
+[1mdiff --git a/development.env b/development.env[m
+[1mnew file mode 100644[m
+[1mindex 0000000..bc0eff6[m
+[1m--- /dev/null[m
+[1m+++ b/development.env[m
+[36m@@ -0,0 +1,85 @@[m
+[32m+[m[32m# NeuraPlay AI Platform - Development Environment Configuration[m
+[32m+[m[32m# This file contains environment variables for local development[m
+[32m+[m
+[32m+[m[32m# ===== PLATFORM CONFIGURATION =====[m
+[32m+[m[32mNODE_ENV=development[m
+[32m+[m[32mPORT=3001[m
+[32m+[m[32mRENDER=false[m
+[32m+[m[32mVITE_PLATFORM=local[m
+[32m+[m
+[32m+[m[32m# ===== AI SERVICES - DEMO KEYS =====[m
+[32m+[m[32m# Fireworks AI - Primary LLM and Image Generation[m
+[32m+[m[32mVITE_FIREWORKS_API_KEY=demo-fireworks-key[m
+[32m+[m[32mFIREWORKS_API_KEY=demo-fireworks-key[m
+[32m+[m[32mNeuraplay=demo-local-development-key[m
+[32m+[m
+[32m+[m[32m# ElevenLabs - Text-to-Speech[m
+[32m+[m[32mVITE_ELEVENLABS_API_KEY=demo-elevenlabs-key[m
+[32m+[m[32mELEVENLABS_API_KEY=demo-elevenlabs-key[m
+[32m+[m[32mELEVENLABS_AGENT_ID=agent_2201k13zjq5nf9faywz14701hyhb[m
+[32m+[m
+[32m+[m[32m# AssemblyAI - Speech-to-Text[m
+[32m+[m[32mVITE_ASSEMBLYAI_API_KEY=demo-assemblyai-key[m
+[32m+[m[32mASSEMBLYAI_API_KEY=demo-assemblyai-key[m
+[32m+[m
+[32m+[m[32m# Serper - Web Search[m
+[32m+[m[32mVITE_SERPER_API_KEY=demo-serper-key[m
+[32m+[m[32mSerper_api=demo-serper-key[m
+[32m+[m
+[32m+[m[32m# OpenWeather - Weather Data[m
+[32m+[m[32mOPENWEATHER_API_KEY=demo-openweather-key[m
+[32m+[m
+[32m+[m[32m# ===== DATABASE CONFIGURATION =====[m
+[32m+[m[32m# PostgreSQL - Primary Database (Local)[m
+[32m+[m[32mDATABASE_URL=postgresql://postgres:1332@127.0.0.1:5432/neuraplay[m
+[32m+[m[32mPOSTGRES_HOST=127.0.0.1[m
+[32m+[m[32mPOSTGRES_PORT=5432[m
+[32m+[m[32mPOSTGRES_USER=postgres[m
+[32m+[m[32mPOSTGRES_PASSWORD=1332[m
+[32m+[m[32mPOSTGRES_DATABASE=neuraplay[m
+[32m+[m[32mPOSTGRES_SSL=false[m
+[32m+[m
+[32m+[m[32m# Redis - Cache and Session Storage (DISABLED for development)[m
+[32m+[m[32mREDIS_DISABLED=true[m
+[32m+[m[32mDISABLE_REDIS=true[m
+[32m+[m
+[32m+[m[32m# Vector Database (PostgreSQL with pgvector extension)[m
+[32m+[m[32mVECTOR_DB_URL=postgresql://postgres:1332@127.0.0.1:5432/neuraplay[m
+[32m+[m[32mVECTOR_DB_DIMENSION=1536[m
+[32m+[m[32mVECTOR_DB_TABLE=embeddings[m
+[32m+[m
+[32m+[m[32m# ===== SECURITY CONFIGURATION =====[m
+[32m+[m[32m# JWT and Session Security[m
+[32m+[m[32mJWT_SECRET=dev-jwt-secret-key-for-local-development-only[m
+[32m+[m[32mSESSION_SECRET=dev-session-secret-key-for-local-development-only[m
+[32m+[m[32mENCRYPTION_KEY=dev-encryption-key-32-chars-long[m
+[32m+[m
+[32m+[m[32m# CORS and API Security[m
+[32m+[m[32mALLOWED_ORIGINS=http://localhost:5173,http://localhost:3001[m
+[32m+[m[32mAPI_RATE_LIMIT=10000[m
+[32m+[m[32mAPI_WINDOW_MS=900000[m
+[32m+[m
+[32m+[m[32m# ===== DEVELOPMENT CONFIGURATION =====[m
+[32m+[m[32mLEGACY_ROUTES=true[m
+[32m+[m[32mLOG_LEVEL=info[m
+[32m+[m[32mLOG_FILE=logs/app.log[m
+[32m+[m
+[32m+[m[32m# API Endpoints[m
+[32m+[m[32mVITE_API_BASE=http://localhost:3001[m
+[32m+[m[32mVITE_WS_URL=ws://localhost:3001[m
+[32m+[m[32mVITE_BRIDGE_SERVICE_URL=ws://localhost:3001[m
+[32m+[m
+[32m+[m[32m# Real-time Communication[m
+[32m+[m[32mVITE_ABLY_API_KEY=demo-ably-key[m
+[32m+[m[32mABLY_API_KEY=demo-ably-key[m
+[32m+[m
+[32m+[m[32m# Performance Configuration[m
+[32m+[m[32mMAX_MEMORY_MB=512[m
+[32m+[m[32mMAX_CPU_PERCENT=80[m
+[32m+[m[32mMAX_REQUEST_SIZE=10mb[m
+[32m+[m[32mMAX_FILE_SIZE=50mb[m
+[32m+[m
+[32m+[m[32m# Cache Configuration[m
+[32m+[m[32mCACHE_TTL_SECONDS=3600[m
+[32m+[m[32mCACHE_MAX_SIZE_MB=100[m
+[32m+[m[32mCACHE_COMPRESSION=true[m
+[1mdiff --git a/package-lock.json b/package-lock.json[m
+[1mindex 046e86f..357974a 100644[m
+[1m--- a/package-lock.json[m
+[1m+++ b/package-lock.json[m
+[36m@@ -26,6 +26,7 @@[m
+         "@elevenlabs/react": "^0.4.5",[m
+         "@observablehq/inspector": "^5.0.1",[m
+         "@observablehq/runtime": "^6.0.0",[m
+[32m+[m[32m        "@sentry/node": "^7.86.0",[m
+         "@types/bcrypt": "^6.0.0",[m
+         "@types/bull": "^3.15.9",[m
+         "@types/compression": "^1.8.1",[m
+[36m@@ -55,12 +56,18 @@[m
+         "chart.js": "^4.5.0",[m
+         "chartjs-adapter-date-fns": "^3.0.0",[m
+         "compression": "^1.7.4",[m
+[32m+[m[32m        "connect-redis": "^7.1.0",[m
+[32m+[m[32m        "cookie-parser": "^1.4.6",[m
+         "cors": "^2.8.5",[m
+[32m+[m[32m        "crypto-js": "^4.2.0",[m
+         "d3": "^7.9.0",[m
+         "dotenv": "^17.2.1",[m
+         "eslint": "^8.56.0",[m
+         "eslint-plugin-react": "^7.33.2",[m
+         "express": "^4.18.2",[m
+[32m+[m[32m        "express-rate-limit": "^7.1.5",[m
+[32m+[m[32m        "express-session": "^1.17.3",[m
+[32m+[m[32m        "express-slow-down": "^2.0.1",[m
+         "express-validator": "^7.0.1",[m
+         "framer-motion": "^12.23.12",[m
+         "groq-sdk": "^0.30.0",[m
+[36m@@ -68,16 +75,21 @@[m
+         "helmet": "^7.1.0",[m
+         "howler": "^2.2.4",[m
+         "idb": "^8.0.0",[m
+[32m+[m[32m        "ioredi

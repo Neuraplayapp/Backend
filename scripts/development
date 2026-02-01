@@ -1,0 +1,58 @@
+# NeuraPlay Local Development Startup Script
+# This script starts the development environment with demo API keys
+# No real API keys needed - everything works with fallback responses
+
+Write-Host "🚀 Starting NeuraPlay Local Development Environment..." -ForegroundColor Cyan
+Write-Host "✅ No API keys required - using demo responses" -ForegroundColor Green
+
+# Load environment variables from development.env file
+Write-Host "📄 Loading environment variables from development.env..." -ForegroundColor Yellow
+if (Test-Path "development.env") {
+    Get-Content "development.env" | Where-Object { $_ -match "^[^#].*=" } | ForEach-Object {
+        $name, $value = $_.Split('=', 2)
+        [Environment]::SetEnvironmentVariable($name, $value, 'Process')
+        Write-Host "   $name = $value" -ForegroundColor DarkGray
+    }
+} else {
+    Write-Host "⚠️ development.env file not found, using fallback values" -ForegroundColor Yellow
+    # Fallback environment variables
+    $env:DATABASE_URL = "postgresql://postgres:1332@127.0.0.1:5432/neuraplay"
+    $env:REDIS_DISABLED = "true"
+    $env:NODE_ENV = "development"
+    $env:LEGACY_ROUTES = "true"
+    $env:PORT = "3001"
+    $env:Neuraplay = "demo-local-development-key"
+    $env:VITE_ELEVENLABS_API_KEY = "demo-elevenlabs-key"
+    $env:VITE_ASSEMBLYAI_API_KEY = "demo-assemblyai-key"
+}
+
+Write-Host ""
+Write-Host "🔧 Environment configured:" -ForegroundColor Yellow
+Write-Host "   Backend: http://localhost:3001" -ForegroundColor White
+Write-Host "   Frontend: http://localhost:5173" -ForegroundColor White
+Write-Host "   Database: Local PostgreSQL" -ForegroundColor White
+Write-Host "   Cache: Redis Cloud" -ForegroundColor White
+Write-Host ""
+
+Write-Host "Starting backend server..." -ForegroundColor Cyan
+Start-Process PowerShell -ArgumentList "-NoExit", "-Command", "node server-new.cjs"
+
+Start-Sleep -Seconds 3
+
+Write-Host "Starting frontend dev server..." -ForegroundColor Cyan
+Start-Process PowerShell -ArgumentList "-NoExit", "-Command", "npm run dev"
+
+Start-Sleep -Seconds 2
+
+Write-Host ""
+Write-Host "✅ NeuraPlay development environment started!" -ForegroundColor Green
+Write-Host "🌐 Open http://localhost:5173 in your browser" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "ℹ️  Features available in demo mode:" -ForegroundColor Blue
+Write-Host "   ✅ AI Chat (with demo responses)" -ForegroundColor Green
+Write-Host "   ✅ Educational Games" -ForegroundColor Green
+Write-Host "   ✅ Navigation & Settings" -ForegroundColor Green
+Write-Host "   ✅ Database Operations" -ForegroundColor Green
+Write-Host "   ✅ UI Components & Themes" -ForegroundColor Green
+Write-Host ""
+Write-Host "For production AI features, set real API keys in your Render deployment" -ForegroundColor Yellow
