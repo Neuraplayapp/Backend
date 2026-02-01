@@ -266,6 +266,34 @@ npm run build
 npm run dev
 ```
 
+## ⚠️ IMPORTANT NOTES FOR DEVELOPERS
+
+### Course Page (Navbar)
+The **Course Generator page** accessible via the navbar (`/courses`) is **just an experimental UI concept** - NOT the main implementation. The actual course generation system uses:
+- `CourseTypeDetector` for LLM-based classification
+- `CourseStructureComposer` for card sequencing  
+- `DynamicCourseBuilder` for content generation
+- `CourseStorageService` for persistence
+
+Developers should focus on integrating these backend services rather than the standalone UI page.
+
+### ElevenLabs WebSocket Integration (BROKEN)
+The ElevenLabs real-time voice WebSocket integration **does not work as intended** and needs fixing:
+- Location: `src/services/WebSocketService.ts`, `src/components/VoiceConversationWidget.tsx`
+- Issue: WebSocket connection handling, voice streaming, and session management
+- The agent-based conversation flow needs to be properly connected to the chat context
+
+### PDF Parsing & Vision Service (NEEDS WORK)
+The Vision service for PDF parsing needs implementation:
+- **Model**: Should use `GPT-oss-120b` (Fireworks) for document understanding
+- **Integration**: Must work seamlessly with Canvas for document import
+- **Flow**: PDF → Parse → Vision Analysis → Canvas Document Creation
+- Location: `src/services/VisionService.ts`, `src/services/VisionCanvasBridge.ts`
+
+Current state: Basic implementation exists but PDF-to-Canvas flow is incomplete.
+
+---
+
 ## 📋 TODO / Intended Features
 
 ### Course Generation Enhancements
