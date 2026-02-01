@@ -239,31 +239,65 @@ User Query → Embed → pgvector HNSW Search → Ranked Results → Context Inj
 | `CourseStorageService` | Database persistence, lazy loading |
 | `DynamicCourseBuilder` | Content generation |
 
-## 🚀 Development Setup
+## 🚀 Deployment & Infrastructure
+
+### Render Backend (Production)
+
+**All services run through Render's backend infrastructure:**
+
+- **Web Service**: Node.js server handling API routes
+- **Database**: PostgreSQL with pgvector extension
+- **Static Assets**: Served via Render's CDN
+- **WebSockets**: Real-time communication (needs work)
+
+Configuration: `render.yaml`
+
+```yaml
+# Render deployment configuration
+services:
+  - type: web
+    name: neuraplay-backend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: node server.cjs
+```
+
+### API Routes (Backend)
+
+All API calls go through `/api/unified-route`:
+- LLM completions (Fireworks, OpenAI)
+- Vector search (pgvector)
+- Memory operations
+- Course storage
+- User authentication
+
+Location: `routes/unified-route.cjs`, `server.cjs`
 
 ### Environment Variables
 
 ```bash
-# Required
+# Required (Render Environment)
 VITE_ELEVENLABS_API_KEY=sk_...
 VITE_FIREWORKS_API_KEY=...
-DATABASE_URL=postgresql://...
+DATABASE_URL=postgresql://...  # Render PostgreSQL
+OPENAI_API_KEY=...
 
 # Optional
 VITE_OPENAI_API_KEY=...
 ```
 
-### Build
+### Local Development
 
 ```bash
 npm install
-npm run build
+npm run dev        # Frontend dev server
+node server.cjs    # Backend server (separate terminal)
 ```
 
-### Run Development
+### Build
 
 ```bash
-npm run dev
+npm run build      # Builds frontend to /dist
 ```
 
 ## ⚠️ IMPORTANT NOTES FOR DEVELOPERS
