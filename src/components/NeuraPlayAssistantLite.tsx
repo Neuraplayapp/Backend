@@ -2242,8 +2242,8 @@ console.log(greeting);
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Desktop Input - Only show when in desktop mode */}
-            {responsive.isDesktop && (
+            {/* Desktop Input - Only show when in desktop or tablet mode */}
+            {(responsive.isDesktop || responsive.isTablet) && (
             <div className={`p-4 ${isDarkMode ? '' : 'border-t border-gray-200'}`}>
               {/* File preview area */}
               {uploadedFiles.length > 0 && (
