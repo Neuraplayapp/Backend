@@ -274,7 +274,7 @@ if (dbUrl) {
         require: true,
         ca: false
       } : false,
-      max: 20, // Maximum number of clients in pool
+      max: 50, // Maximum number of clients in pool
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 2000,
     });

@@ -3,13 +3,44 @@ const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
 
+// Simple in-memory cache for LLM responses
+const responseCache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function getCacheKey(data) {
+  // Create cache key from messages and key parameters
+  const messages = data.messages?.slice(-2) || []; // Last 2 messages
+  const keyData = {
+    messages: messages.map(m => ({ role: m.role, content: m.content?.substring(0, 100) })),
+    model: data.model,
+    max_tokens: data.max_tokens
+  };
+  return JSON.stringify(keyData);
+}
+
+function getCachedResponse(cacheKey) {
+  const cached = responseCache.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.response;
+  }
+  responseCache.delete(cacheKey);
+  return null;
+}
+
+function setCachedResponse(cacheKey, response) {
+  responseCache.set(cacheKey, {
+    response,
+    timestamp: Date.now()
+  });
+}
+
 // For Node.js versions without native fetch
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 // 🔐 SECURITY: Rate limiting for LLM endpoints (expensive API calls)
 const llmRateLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute window
-  max: 150, // 150 LLM calls per minute per IP (increased for course generation)
+  max: 500, // 150 LLM calls per minute per IP (increased for course generation)
   message: {
     success: false,
     error: 'Too many LLM requests. Please wait before trying again.',
@@ -100,30 +131,61 @@ router.post('/', async (req, res) => {
 // DEVELOPMENT FALLBACK: Provides mock responses when using demo API keys
 async function handleDemoFireworksResponse(endpoint, data, res) {
   switch (endpoint) {
+
     case 'llm-completion':
-      // Mock LLM response for chat completions
+      try {
+        console.log('🔍 llm-completion - data.model:', data.model);
+        console.log('🔍 llm-completion - messages count:', data.messages?.length);
+
+        // --- Check cache first ---
+        const cacheKey = getCacheKey(data);
+        const cachedResponse = getCachedResponse(cacheKey);
+        if (cachedResponse) {
+          console.log('✅ Returning cached response');
+          return res.json(cachedResponse);
+        }
+
+      } catch (err) {
+        console.error('⚠️ Error checking cache:', err);
+        // Continue even if caching fails
+      }
+
+      // --- Mock LLM response for chat completions ---
+      const completion = `This is a demo response for development. Your message was: "${data.messages?.slice(-1)[0]?.content || 'No message'}"`;
+
       const mockResponse = {
         choices: [{
           message: {
             role: 'assistant',
-            content: `This is a demo response for development. Your message was: "${data.messages?.slice(-1)[0]?.content || 'No message'}"`,
-            tool_calls: data.messages?.some(m => m.content?.includes('canvas') || m.content?.includes('image') || m.content?.includes('chart')) ? [{
-              id: 'demo_tool_call',
-              type: 'function',
-              function: {
-                name: 'canvas-document-creation',
-                arguments: JSON.stringify({
-                  content: `# Demo Canvas Document\n\nThis is a demo response for development mode. The system detected your request and created this placeholder content.\n\n**Your request:** ${data.messages?.slice(-1)[0]?.content || 'Canvas request'}\n\n**Status:** Development mode - using fallback responses.`,
-                  mode: 'create'
-                })
-              }
-            }] : undefined
+            content: completion,
+            tool_calls: data.messages?.some(m => m.content?.includes('canvas') || m.content?.includes('image') || m.content?.includes('chart'))
+              ? [{
+                  id: 'demo_tool_call',
+                  type: 'function',
+                  function: {
+                    name: 'canvas-document-creation',
+                    arguments: JSON.stringify({
+                      content: `# Demo Canvas Document\n\nThis is a demo response for development mode. The system detected your request and created this placeholder content.\n\n**Your request:** ${data.messages?.slice(-1)[0]?.content || 'Canvas request'}\n\n**Status:** Development mode - using fallback responses.`,
+                      mode: 'create'
+                    })
+                  }
+                }]
+              : undefined
           },
           finish_reason: 'stop'
         }],
         model: data.model || 'demo-model',
         usage: { prompt_tokens: 10, completion_tokens: 25, total_tokens: 35 }
       };
+
+      // --- Set cache ---
+      try {
+        const cacheKey = getCacheKey(data);
+        setCachedResponse(cacheKey, mockResponse);
+      } catch (err) {
+        console.error('⚠️ Error setting cache:', err);
+      }
+
       return res.json(mockResponse);
 
     case 'vision':
@@ -142,7 +204,6 @@ async function handleDemoFireworksResponse(endpoint, data, res) {
       return res.json(visionResponse);
 
     case 'image-generation':
-      // Mock image generation response
       const imageResponse = {
         success: true,
         images: [{
@@ -430,7 +491,15 @@ async function handleFireworksRequest(endpoint, data, res) {
       try {
         console.log('🔍 llm-completion - data.model:', data.model);
         console.log('🔍 llm-completion - messages count:', data.messages?.length);
-        
+
+        // Check cache first for faster responses
+        const cacheKey = getCacheKey(data);
+        const cachedResponse = getCachedResponse(cacheKey);
+        if (cachedResponse) {
+          console.log('⚡ Returning cached LLM response');
+          return res.json(cachedResponse);
+        }
+
         // PROPER FIX: Sanitize content to remove invalid Unicode surrogates that break JSON
         // This fixes "lone leading surrogate in hex escape" errors from Fireworks API
         const cleanMessages = (data.messages || []).map(msg => ({
@@ -439,8 +508,10 @@ async function handleFireworksRequest(endpoint, data, res) {
         }));
 
         // ENVIRONMENT-AWARE ROUTING: Local dev forwards to Render, Render handles directly
-        if (isLocalDevelopment) {
+        if (isLocalDevelopment && apiKey) {
           // LOCAL DEVELOPMENT: Forward to Render backend
+          console.log('LOCAL DEV: Handling llm-completion directly')
+        } else if (islocalDevelopment) {
           console.log('🔀 LOCAL DEV: Forwarding llm-completion to Render backend');
           
           // CRITICAL FIX: Use unified route format for forwarding
@@ -725,13 +796,18 @@ async function handleFireworksRequest(endpoint, data, res) {
             }
           }
           
-          return res.json({
+          const responseData = {
             success: true,
             data: [{
               generated_text: completion,
               tool_results: []
             }]
-          });
+          };
+
+          // Cache the successful response
+          setCachedResponse(cacheKey, responseData);
+
+          return res.json(responseData);
         }
         
       } catch (err) {
