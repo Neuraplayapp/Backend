@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import { 
   ChevronDown, ChevronRight, Plus, Trash2, BookOpen, Send, Loader2,
@@ -66,8 +67,8 @@ const DEFAULT_FOLDER = 'Uncategorized';
 const detectCourseType = async (subject: string): Promise<Course['courseType']> => {
   try {
     // Try to use the existing CourseTypeDetector for LLM-powered classification
-    const { courseTypeDetector } = await import('../services/CourseTypeDetector');
-    const result = await courseTypeDetector.classifyCourseType(subject);
+    const { CourseTypeDetector } = await import('../services/CourseTypeDetector');
+    const result = await CourseTypeDetector.classifyWithLLM(subject);
     const typeMap: Record<string, Course['courseType']> = {
       'language': 'language',
       'soft_skills': 'skill',
@@ -84,7 +85,7 @@ const detectCourseType = async (subject: string): Promise<Course['courseType']> 
     const skillPatterns = ['soft skill', 'communication', 'leadership', 'teamwork', 'emotional intelligence', 'coaching', 'psychology', 'mindfulness', 'productivity', 'time management'];
     const creativePatterns = ['art', 'music', 'design', 'writing', 'creative', 'photography', 'film', 'animation'];
     const professionalPatterns = ['business', 'marketing', 'finance', 'management', 'sales', 'negotiation', 'project management'];
-    
+
     if (languagePatterns.some(p => lower.includes(p))) return 'language';
     if (skillPatterns.some(p => lower.includes(p))) return 'skill';
     if (creativePatterns.some(p => lower.includes(p))) return 'creative';
@@ -108,6 +109,7 @@ const getModuleIcon = (iconName: string) => {
 
 const CourseGeneratorPage: React.FC = () => {
   const { isDarkMode } = useTheme();
+  const { courseName } = useParams<{ courseName: string }>();
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [prompt, setPrompt] = useState('');
@@ -123,6 +125,129 @@ const CourseGeneratorPage: React.FC = () => {
   const [showFolderMenu, setShowFolderMenu] = useState<string | null>(null);
   const [inlineQuizzes, setInlineQuizzes] = useState<Record<string, InlineQuizState>>({});
   const [generationProgress, setGenerationProgress] = useState<string>('');
+
+  // Auto-generate course if courseName is provided in URL
+  useEffect(() => {
+    if (courseName && !isGenerating && !selectedCourse) {
+      // Convert URL slug to readable course name
+      const courseTitle = courseName
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+
+      setPrompt(courseTitle);
+      // Trigger course generation after state update
+      setTimeout(() => {
+        const generateFromURL = async () => {
+          if (!courseTitle.trim() || isGenerating) return;
+
+          setIsGenerating(true);
+          const subject = courseTitle.trim();
+
+          try {
+            setGenerationProgress('Analyzing subject...');
+            const courseType = await detectCourseType(subject);
+            setGenerationProgress('Preparing curriculum...');
+            const { UnifiedAPIRouter } = await import('../services/UnifiedAPIRouter');
+            const router = UnifiedAPIRouter.getInstance();
+
+            // Build appropriate prompt based on course type
+            let systemPrompt = `You are an enthusiastic, encouraging teacher who makes learning fun and accessible. 
+You believe every student can succeed with the right guidance. Use warm, supportive language.
+Generate a comprehensive course structure in JSON format.`;
+
+            let userPrompt = '';
+
+            if (courseType === 'language') {
+              userPrompt = 'Create a complete language learning course for: ' + subject + '\n\nGenerate EXACTLY this JSON structure (no markdown, just JSON):\n{\n  "modules": [\n    {\n      "title": "Module title",\n      "description": "Brief encouraging description",\n      "icon": "language",\n      "lessons": [\n        {\n          "title": "Lesson title",\n          "content": "Detailed lesson content (2-3 paragraphs)",\n          "keyPoints": ["Key point 1", "Key point 2", "Key point 3"],\n          "examples": ["Example 1 with translation", "Example 2 with translation"],\n          "quiz": [\n            {\n              "type": "multiple_choice",\n              "question": "What does X mean?",\n              "options": ["Option A", "Option B", "Option C", "Option D"],\n              "correctIndex": 0,\n              "explanation": "Why this is correct"\n            },\n            {\n              "type": "true_false",\n              "question": "Statement to evaluate?",\n              "correctAnswer": true,\n              "explanation": "Why true/false"\n            },\n            {\n              "type": "fill_blank",\n              "question": "Complete: The ___ is correct.",\n              "correctAnswer": "answer",\n              "explanation": "The answer fits because..."\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}\n\nCreate exactly 6 modules:\n1. "Alphabet & Pronunciation" - Complete alphabet with phonetic guides, pronunciation tips\n2. "Essential Vocabulary" - 50+ core words organized by category (greetings, numbers, colors, family, food)\n3. "Grammar Foundations" - Sentence structure, verb conjugations, noun/adjective agreement\n4. "Everyday Conversations" - Real dialogues for common situations (shopping, restaurant, directions)\n5. "Reading & Writing" - Text comprehension, writing exercises, cultural context\n6. "Advanced Communication" - Complex sentences, idioms, formal/informal registers\n\nEach module should have 3-4 lessons with detailed content, examples with translations, and 2-3 quiz questions per lesson.';
+            } else if (courseType === 'skill' || courseType === 'professional') {
+              userPrompt = 'Create a comprehensive soft skills/professional development course for: ' + subject + '\n\nGenerate EXACTLY this JSON structure (no markdown, just JSON):\n{\n  "modules": [\n    {\n      "title": "Module title",\n      "description": "Encouraging description",\n      "icon": "brain",\n      "lessons": [\n        {\n          "title": "Lesson title",\n          "content": "Detailed content with real-world examples",\n          "keyPoints": ["Actionable point 1", "Actionable point 2"],\n          "examples": ["Real scenario 1", "Real scenario 2"],\n          "quiz": [\n            {\n              "type": "multiple_choice",\n              "question": "In this scenario, what\'s the best approach?",\n              "options": ["Response A", "Response B", "Response C", "Response D"],\n              "correctIndex": 0,\n              "explanation": "Why this works best"\n            },\n            {\n              "type": "true_false",\n              "question": "This behavior is considered best practice.",\n              "correctAnswer": true,\n              "explanation": "Because..."\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}\n\nCreate exactly 6 modules:\n1. "Understanding the Fundamentals" - Core concepts, psychology, why this matters\n2. "Self-Assessment & Awareness" - Identify strengths, areas for growth, personal style\n3. "Core Techniques & Strategies" - Practical methods, frameworks, step-by-step approaches\n4. "Real-World Application" - Case studies, scenarios, practice exercises\n5. "Overcoming Challenges" - Common obstacles, troubleshooting, resilience building\n6. "Mastery & Continuous Growth" - Advanced techniques, habit formation, ongoing development\n\nEach module: 3-4 lessons, practical examples, scenario-based quizzes.';
+            } else {
+              userPrompt = 'Create a comprehensive educational course for: ' + subject + '\n\nGenerate EXACTLY this JSON structure (no markdown, just JSON):\n{\n  "modules": [\n    {\n      "title": "Module title",\n      "description": "Encouraging description",\n      "icon": "graduation",\n      "lessons": [\n        {\n          "title": "Lesson title",\n          "content": "In-depth educational content",\n          "keyPoints": ["Key concept 1", "Key concept 2"],\n          "examples": ["Illustrative example 1", "Illustrative example 2"],\n          "quiz": [\n            {\n              "type": "multiple_choice",\n              "question": "Conceptual question?",\n              "options": ["Option A", "Option B", "Option C", "Option D"],\n              "correctIndex": 0,\n              "explanation": "Why this is correct"\n            },\n            {\n              "type": "fill_blank",\n              "question": "The key principle is called ___.",\n              "correctAnswer": "term",\n              "explanation": "This term means..."\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}\n\nCreate exactly 6 modules:\n1. "Introduction & Foundations" - What it is, why it matters, historical context\n2. "Core Principles" - Fundamental concepts, theories, frameworks\n3. "Key Techniques & Methods" - How things work, processes, methodologies\n4. "Practical Applications" - Real-world uses, hands-on examples, case studies\n5. "Advanced Concepts" - Deeper exploration, cutting-edge developments\n6. "Synthesis & Mastery" - Connecting ideas, projects, continued learning paths\n\nEach module: 3-4 lessons with thorough content, examples, and 2-3 quiz questions.';
+            }
+
+            setGenerationProgress('Generating course content...');
+
+            const response = await router.routeAPICall('llm', 'chat-completion', {
+              model: 'gpt-4o-mini',
+              messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: userPrompt }
+              ],
+              temperature: 0.7,
+              max_tokens: 4000
+            });
+
+            let modules: Module[] = [];
+
+            if (response?.choices?.[0]?.message?.content) {
+              try {
+                setGenerationProgress('Processing curriculum...');
+                const content = response.choices[0].message.content;
+                const jsonMatch = content.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                  const parsed = JSON.parse(jsonMatch[0]);
+                  if (parsed.modules && Array.isArray(parsed.modules)) {
+                    modules = parsed.modules.map((m: any, mi: number) => ({
+                      id: `mod-${Date.now()}-${mi}`,
+                      title: m.title || `Module ${mi + 1}`,
+                      description: m.description || '',
+                      icon: m.icon || 'graduation',
+                      lessons: (m.lessons || []).map((l: any, li: number) => ({
+                        id: `les-${Date.now()}-${mi}-${li}`,
+                        title: l.title || `Lesson ${li + 1}`,
+                        content: l.content || '',
+                        keyPoints: l.keyPoints || [],
+                        examples: l.examples || [],
+                        quiz: (l.quiz || []).map((q: any, qi: number) => ({
+                          id: `quiz-${Date.now()}-${mi}-${li}-${qi}`,
+                          type: (q.type || 'multiple_choice') as QuestionType,
+                          question: q.question || '',
+                          options: q.options,
+                          correctIndex: q.correctIndex,
+                          correctAnswer: q.correctAnswer,
+                          explanation: q.explanation || ''
+                        }))
+                      }))
+                    }));
+                  }
+                }
+              } catch (parseErr) {
+                console.warn('JSON parse failed:', parseErr);
+              }
+            }
+
+            // Fallback if AI fails
+            if (modules.length === 0) {
+              modules = generateFallbackModules(subject, courseType);
+            }
+
+            const newCourse: Course = {
+              id: `course-${Date.now()}`,
+              subject,
+              courseType,
+              folder: DEFAULT_FOLDER,
+              createdAt: new Date(),
+              modules
+            };
+
+            setCourses(prev => [newCourse, ...prev]);
+            setSelectedCourse(newCourse);
+            setPrompt('');
+            setExpandedModules({ [modules[0]?.id]: true });
+            setExpandedFolders(prev => ({ ...prev, [DEFAULT_FOLDER]: true }));
+            setGenerationProgress('');
+          } catch (error) {
+            console.error('Failed to generate course:', error);
+            setGenerationProgress('');
+          } finally {
+            setIsGenerating(false);
+          }
+        };
+        generateFromURL();
+      }, 100);
+    }
+  }, [courseName, isGenerating, selectedCourse]);
 
   // Generate course with AI
   const generateCourse = useCallback(async () => {
