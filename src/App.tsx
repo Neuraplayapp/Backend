@@ -64,6 +64,7 @@ function App() {
         <Route path="/features" element={<div className="p-8 text-center">Feature Page - Coming Soon</div>} />
         <Route path="/assistant-lite" element={<NeuraPlayAssistantLitePage />} />
         <Route path="/courses" element={<CourseGeneratorPage />} />
+        <Route path="/courses/:courseName" element={<CourseGeneratorPage />} />
       </Route>
       {/* Mobile route - fullscreen, no layout */}
       <Route path="/mobile" element={<MobileShell />} />
