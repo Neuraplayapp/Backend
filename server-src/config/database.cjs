@@ -69,107 +69,94 @@ class DatabaseManager {
         this.queryBuilder = null;
         return;
       }
-
-      // Determine SSL requirements based on connection URL
+  
       const connectionString = process.env.RENDER_POSTGRES_URL || process.env.DATABASE_URL;
-      const needsSSL = connectionString && (
-        connectionString.includes('render.com') || 
-        connectionString.includes('heroku') || 
-        connectionString.includes('.com/') ||
-        process.env.POSTGRES_SSL === 'true'
-      );
-
+      const needsSSL = process.env.POSTGRES_SSL === 'true' || process.env.NODE_ENV === 'production';
+  
+      // Initialize PostgreSQL pool
       this.postgres = new Pool({
-        connectionString: connectionString,
+        connectionString,
         ssl: needsSSL ? { rejectUnauthorized: false } : false,
         max: 20,
         idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 2000,
+        connectionTimeoutMillis: 1000,
       });
-
+  
+      // Test PostgreSQL connection
+      const client = await this.postgres.connect();
+      await client.query('SELECT NOW()'); // simple query to verify
+      client.release();
+  
+      console.log('📊 PostgreSQL (Warm Layer) connected');
+  
+      // Initialize Knex query builder using the same connection
       this.queryBuilder = knex({
         client: 'pg',
         connection: {
-          connectionString: connectionString,
+          connectionString,
           ssl: needsSSL ? { rejectUnauthorized: false } : false,
         },
-        pool: {
-          min: 2,
-          max: 20
-        }
+        pool: { min: 0, max: 5 },
       });
-
-      // Test connection
-      const client = await this.postgres.connect();
-      await client.query('SELECT NOW()');
-      client.release();
-
-      console.log('📊 PostgreSQL (Warm Layer) connected');
     } catch (error) {
       console.error('❌ PostgreSQL connection failed:', error);
       throw error;
     }
-  }
-
+  }  
   async initializeRedis() {
     try {
-      // Check if Redis is explicitly disabled
+      // Explicitly disable Redis
       if (process.env.REDIS_DISABLED === 'true' || process.env.DISABLE_REDIS === 'true') {
         console.log('⚠️ Redis explicitly disabled, using in-memory cache');
         this.redis = new Map();
         return;
       }
-      
+  
       const redisUrl = process.env.REDIS_URL || process.env.UPSTASH_REDIS_URL || 'redis://localhost:6379';
-      
-      // Don't try Redis in development unless explicitly set
+  
+      // Skip Redis in dev if not configured
       if (!process.env.REDIS_URL && !process.env.UPSTASH_REDIS_URL && process.env.NODE_ENV === 'development') {
         console.log('⚠️ Redis not configured for development, using in-memory cache');
         this.redis = new Map();
         return;
       }
-      
-      this.redis = Redis.createClient({
+  
+      // Create Redis client
+      const client = Redis.createClient({
         url: redisUrl,
         socket: {
           connectTimeout: 3000,
           reconnectStrategy: (retries) => {
-            if (retries > 3) return false; // Stop reconnecting after 3 attempts
+            if (retries > 3) return new Error('Max retries reached'); // Stop after 3 retries
             return Math.min(retries * 1000, 3000);
-          }
-        }
+          },
+        },
       });
-
-      this.redis.on('error', (err) => {
-        if (err.code === 'ECONNREFUSED') {
-          console.warn('⚠️ Redis unavailable, falling back to in-memory cache');
-          this.redis = new Map();
-        } else {
-          console.error('Redis Client Error:', err);
-        }
+  
+      // Attach error logging
+      client.on('error', (err) => {
+        console.error('Redis Client Error:', err);
       });
-
-      this.redis.on('connect', () => {
+  
+      client.on('connect', () => {
         console.log('🔥 Redis (Hot Layer) connected');
       });
-
-      // Add timeout to connection attempt
-      const connectPromise = this.redis.connect();
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Connection timeout')), 5000)
-      );
-      
-      await Promise.race([connectPromise, timeoutPromise]);
-
-      // Test Redis
-      await this.redis.set('health_check', 'ok', { EX: 60 });
-      
+  
+      // Connect with timeout
+      await Promise.race([
+        client.connect(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Redis connection timeout')), 5000)),
+      ]);
+  
+      // Test connection
+      await client.set('health_check', 'ok', { EX: 60 });
+  
+      this.redis = client;
     } catch (error) {
-      console.warn('⚠️ Redis not available, using in-memory cache fallback:', error.message);
-      // Fallback to in-memory cache
+      console.warn('⚠️ Redis unavailable, falling back to in-memory cache:', error.message);
       this.redis = new Map();
     }
-  }
+  }  
 
   async initializeVectorDB() {
     try {
@@ -382,10 +369,45 @@ class DatabaseManager {
   }
 
   async close() {
-    if (this.postgres) await this.postgres.end();
-    if (this.redis && typeof this.redis.quit === 'function') await this.redis.quit();
-    if (this.queryBuilder) await this.queryBuilder.destroy();
-  }
+    // Close PostgreSQL pool
+    if (this.postgres) {
+      try {
+        await this.postgres.end();
+        console.log('📊 PostgreSQL connection closed');
+      } catch (err) {
+        console.error('❌ Error closing PostgreSQL:', err);
+      }
+    }
+  
+    // Close Redis client
+    if (this.redis) {
+      if (this.redis instanceof Map) {
+        // In-memory fallback, nothing to close
+        console.log('🔥 Redis fallback (Map) cleared');
+        this.redis.clear();
+      } else if (typeof this.redis.quit === 'function') {
+        try {
+          await this.redis.quit();
+          console.log('🔥 Redis connection closed');
+        } catch (err) {
+          console.error('❌ Error closing Redis:', err);
+        }
+      }
+    }
+  
+    // Destroy Knex query builder
+    if (this.queryBuilder) {
+      try {
+        await this.queryBuilder.destroy();
+        console.log('📦 Knex query builder destroyed');
+      } catch (err) {
+        console.error('❌ Error destroying query builder:', err);
+      }
+    }
+  
+    this.initialized = false;
+    console.log('✅ All database connections closed');
+  }  
 }
 
 module.exports = new DatabaseManager();
