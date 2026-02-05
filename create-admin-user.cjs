@@ -23,9 +23,16 @@ if (fs.existsSync(envPath)) {
 }
 
 // Initialize PostgreSQL connection
+const dbUrl = process.env.RENDER_POSTGRES_URL || process.env.DATABASE_URL;
+const needsSSL = dbUrl && (
+  dbUrl.includes('render.com') ||
+  dbUrl.includes('heroku') ||
+  process.env.NODE_ENV === 'production' ||
+  process.env.POSTGRES_SSL === 'true'
+);
 const pool = new Pool({
-  connectionString: process.env.RENDER_POSTGRES_URL || process.env.DATABASE_URL,
-  ssl: (process.env.NODE_ENV === 'production' || process.env.POSTGRES_SSL === 'true') ? { rejectUnauthorized: false } : false,
+  connectionString: dbUrl,
+  ssl: needsSSL ? { rejectUnauthorized: false } : false,
 });
 
 async function createAdminUser() {

@@ -141,9 +141,15 @@ router.post('/login', async (req, res) => {
     // 🖼️ LOAD SAVED AVATAR: Check user_profiles table for persisted avatar
     try {
       const { Pool } = require('pg');
+      const dbUrl = process.env.RENDER_POSTGRES_URL || process.env.DATABASE_URL;
+      const needsSSL = dbUrl && (
+        dbUrl.includes('render.com') ||
+        dbUrl.includes('heroku') ||
+        process.env.NODE_ENV === 'production'
+      );
       const pool = new Pool({
-        connectionString: process.env.DATABASE_URL,
-        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+        connectionString: dbUrl,
+        ssl: needsSSL ? { rejectUnauthorized: false } : false
       });
       
       const avatarResult = await pool.query(
