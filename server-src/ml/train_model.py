@@ -14,6 +14,12 @@ from sklearn.model_selection import train_test_split
 import psycopg2
 from datetime import datetime
 import pickle
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+print("DB URL:", os.environ.get("DATABASE_URL"))
 
 # Database connection
 def get_db_connection():
