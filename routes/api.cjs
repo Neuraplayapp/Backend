@@ -1144,10 +1144,86 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Image generation endpoint - direct route for frontend compatibility
+router.post('/image/generate', async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    console.log('🖼️ Direct image generation request:', prompt);
+
+    if (!prompt) {
+      return res.status(400).json({ error: 'Prompt is required' });
+    }
+
+    // Try Fireworks first, then fallback to TogetherAI
+    const fireworksKey = process.env.Neuraplay || process.env.FIREWORKS_API_KEY || process.env.VITE_FIREWORKS_API_KEY;
+    const togetherKey = process.env.together_token || process.env.TOGETHER_API_KEY || process.env.VITE_TOGETHER_API_KEY;
+
+    if (fireworksKey && !fireworksKey.includes('demo')) {
+      try {
+        const imageResult = await handleImageGeneration({ prompt }, fireworksKey);
+        return res.json(imageResult);
+      } catch (fireworksError) {
+        console.warn('🖼️ Fireworks image generation failed, trying TogetherAI:', fireworksError.message);
+      }
+    }
+
+    if (togetherKey && !togetherKey.includes('demo')) {
+      try {
+        console.log('🖼️ Using TogetherAI for image generation');
+        const response = await fetch('https://api.together.xyz/v1/images/generations', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${togetherKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'black-forest-labs/FLUX.1-schnell-Free',
+            prompt: `Create a beautiful, high-quality image: ${prompt}. Style: vibrant colors, detailed, professional.`,
+            width: 512,
+            height: 512,
+            steps: 4,
+            n: 1
+          })
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          const imageUrl = result.data?.[0]?.url;
+
+          if (imageUrl) {
+            // Download the image and convert to base64
+            const imageResponse = await fetch(imageUrl);
+            const imageBuffer = await imageResponse.buffer();
+            const base64Image = imageBuffer.toString('base64');
+            const dataUrl = `data:image/png;base64,${base64Image}`;
+
+            return res.json({
+              data: base64Image,
+              contentType: 'image/png',
+              image_url: dataUrl
+            });
+          }
+        }
+      } catch (togetherError) {
+        console.warn('🖼️ TogetherAI image generation failed:', togetherError.message);
+      }
+    }
+
+    // Fallback response
+    return res.status(500).json({
+      error: 'Image generation failed: No valid API keys available for Fireworks or TogetherAI'
+    });
+
+  } catch (error) {
+    console.error('Image generation error:', error);
+    return res.status(500).json({ error: `Image generation failed: ${error.message}` });
+  }
+});
+
 // Health check endpoint
 router.get('/health', (req, res) => {
-  res.json({ 
-    status: 'healthy', 
+  res.json({
+    status: 'healthy',
     timestamp: new Date().toISOString(),
     database: 'connected'
   });

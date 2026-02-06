@@ -1,7 +1,17 @@
 // NeuraPlay AI Platform - State-of-the-Art Enterprise Server
 // Modular microservices orchestrator with enterprise-grade features
 
+// Load environment configuration and set defaults
+
+require('dotenv').config();
+// try {
+//   require('dotenv').config();
+// } catch (error) {
+//   console.log('💡 Tip: Install dotenv for local .env file support: npm install dotenv');
+// }
 console.log('🚀 Starting NeuraPlay Server...');
+
+console.log('🔥 Fireworks API Key:', process.env.Neuraplay);
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
@@ -16,13 +26,6 @@ process.on('uncaughtException', (error) => {
   // Don't exit, just log for debugging
   // process.exit(1);
 });
-
-// Load environment configuration and set defaults
-try {
-  require('dotenv').config();
-} catch (error) {
-  console.log('💡 Tip: Install dotenv for local .env file support: npm install dotenv');
-}
 
 // Load development environment if in development mode
 if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {

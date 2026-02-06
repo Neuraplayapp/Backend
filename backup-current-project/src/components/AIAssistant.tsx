@@ -92,7 +92,10 @@ const AIAssistant: React.FC = () => {
                 .filter(msg => !msg.image) // Exclude image messages from history
                 .slice(-8); // Keep last 8 messages (4 exchanges) for better context
             
-            const messagesForAPI = [];
+                const messagesForAPI: {
+                    role: 'user' | 'assistant';
+                    content: string;
+                }[] = [];                
             
             // Add conversation history
             for (let i = 0; i < conversationHistory.length; i += 2) {
