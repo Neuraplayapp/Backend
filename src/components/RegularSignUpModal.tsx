@@ -361,6 +361,7 @@ const RegularSignUpModal: React.FC<RegularSignUpModalProps> = ({
   
   <button
   type="submit"
+  onClick={handleSubmit}
   disabled={
     isLoading ||
     !formData.role ||
