@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const databaseService = require('../services/database.cjs');
 const emailService = require('../services/email.cjs');
+const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
 
 // Security configuration
@@ -369,7 +370,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(userData.password, SALT_ROUNDS);
     
     // Prepare user data for database
-    const userId = userData.id || Date.now().toString();
+    const userId = userData.id || uuidv4();
     const defaultProfile = userData.profile || {
       avatar: '/assets/images/Mascot.png',
       rank: 'New Learner',

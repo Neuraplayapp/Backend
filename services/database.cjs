@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 const knex = require('knex');
 const StateOfTheArtDatabase = require('./StateOfTheArtDatabase.cjs');
+const { v4: uuid } = require('uuid')
 
 let pool = null;
 let databaseAvailable = false;
@@ -913,16 +914,20 @@ async function saveToDatabase(client, collection, data) {
   
   switch (collection) {
     case 'users':
-      await client.query(`
-        INSERT INTO users (id, username, email, profile, updated_at)
-        VALUES ($1, $2, $3, $4, $5)
-        ON CONFLICT (id) DO UPDATE SET
-          username = EXCLUDED.username,
-          email = EXCLUDED.email,
-          profile = EXCLUDED.profile,
-          updated_at = EXCLUDED.updated_at
-      `, [data.id, data.username, data.email, JSON.stringify(data.profile), timestamp]);
-      break;
+  await client.query(`
+    INSERT INTO users (username, email, profile, updated_at)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT (username) DO UPDATE SET
+      email = EXCLUDED.email,
+      profile = EXCLUDED.profile,
+      updated_at = EXCLUDED.updated_at
+  `, [
+    data.username,
+    data.email,
+    JSON.stringify(data.profile),
+    timestamp
+  ]);
+  break;
 
     case 'analytics':
       // ENHANCED FIX: Better error handling for analytics data
@@ -983,7 +988,7 @@ async function saveToDatabase(client, collection, data) {
       await client.query(`
         INSERT INTO posts (id, user_id, channel, title, content, votes, replies, updated_at)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-        ON CONFLICT (id) DO UPDATE SET
+        ON CONFLICT (email) DO UPDATE SET
           title = EXCLUDED.title,
           content = EXCLUDED.content,
           votes = EXCLUDED.votes,
@@ -2031,7 +2036,7 @@ async function storeWithGracefulDegradation(table, data) {
       error: error.message
     });
     
-    return { id: `fallback_${Date.now()}`, ...data, _fallback: true };
+    return { id: uuid4(), ...data, _fallback: true };
   }
 }
 
@@ -2054,11 +2059,11 @@ async function legacySaveToDatabase(table, data) {
     const query = `INSERT INTO ${table} (${columns}) VALUES (${placeholders}) ON CONFLICT DO NOTHING RETURNING *`;
     
     const result = await pool.query(query, values);
-    return result.rows[0] || { id: `fallback_${Date.now()}`, ...data };
+    return result.rows[0] || { id: uuid4(), ...data };
     
   } catch (error) {
     console.warn(`⚠️ Legacy save failed for ${table}:`, error.message);
-    return { id: `fallback_${Date.now()}`, ...data, _error: error.message };
+    return { id: uuid4(), ...data, _error: error.message };
   }
 }
 
@@ -2072,7 +2077,7 @@ async function getOrCreateFallbackUser() {
     }
     
     // Create fallback user with proper ID format
-    const fallbackUserId = `user_${Date.now()}_fallback`;
+    const fallbackUserId = uuidv4();
     await pool.query(`
       INSERT INTO users (id, username, email, password, role, metadata)
       VALUES ($1, $2, $3, $4, $5, $6)
