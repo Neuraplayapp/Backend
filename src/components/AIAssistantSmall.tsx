@@ -910,7 +910,7 @@ const AIAssistantSmall: React.FC<AIAssistantSmallProps> = ({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.9 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="fixed bottom-6 right-6 w-[380px] h-[500px] bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl z-40 flex flex-col overflow-hidden"
+        className="fixed bottom-6 right-6 w-[380px] h-[550px] bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl z-40 flex flex-col overflow-hidden"
       >
       {/* Header */}
       <div className={`flex items-center justify-between p-4 border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'}`}>
@@ -1177,84 +1177,90 @@ const AIAssistantSmall: React.FC<AIAssistantSmallProps> = ({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input with STT */}
-      <div className={`p-4 border-t ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'}`}>
-        <div className="flex space-x-2">
-          <textarea
-            ref={inputRef}
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage()}
-            placeholder={sttSettings.isRecording ? (t('assistant.listening') || 'Listening...') : (t('assistant.placeholder') || 'Ask me anything...')}
-            rows={1}
-            className={`flex-1 px-3 py-2 rounded-lg text-sm resize-none overflow-hidden min-h-[40px] max-h-[80px] ${
-              isDarkMode 
-                ? 'bg-gray-800 text-white placeholder-gray-400 border-gray-700' 
-                : 'bg-white text-gray-900 placeholder-gray-500 border-gray-300'
-            } border focus:outline-none focus:ring-2 focus:ring-purple-500`}
-            disabled={isLoading || sttSettings.isRecording}
-            style={{
-              height: 'auto',
-              minHeight: '40px',
-              maxHeight: '80px'
-            }}
-            onInput={(e) => {
-              const target = e.target as HTMLTextAreaElement;
-              target.style.height = 'auto';
-              target.style.height = Math.min(target.scrollHeight, 80) + 'px';
-            }}
-          />
-          
-          {/* STT Button */}
-          <button
-            onClick={toggleSTT}
-            disabled={isLoading}
-            className={`px-3 py-2 rounded-lg transition-all ${
-              sttSettings.isRecording
-                ? 'bg-red-500 text-white animate-pulse'
-                : 'bg-gray-600 text-white hover:bg-gray-700'
-            } disabled:opacity-50`}
-            title={sttSettings.isRecording ? 'Stop recording' : 'Start voice input'}
-          >
-            {sttSettings.isRecording ? <MicOff size={16} /> : <Mic size={16} />}
-          </button>
-          
-          {/* Send Button */}
-          <button
-            onClick={() => handleSendMessage()}
-            disabled={!inputMessage.trim() || isLoading || sttSettings.isRecording}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            <Send size={16} />
-          </button>
-        </div>
-        
-        {error && (
-          <p className="text-red-500 text-xs mt-2">{error}</p>
-        )}
-        
-        {/* Status indicators */}
-        <div className="flex justify-between text-xs mt-2 text-gray-500">
-          <span className="flex items-center space-x-1">
-            <span>TTS: {ttsSettings.enabled ? '🔊' : '🔇'}</span>
-            <span>|</span>
-            <span className="flex items-center">
-              {SUPPORTED_LANGUAGES[sttSettings.language]?.flag || '🌍'}
-              <span className="ml-1">
-                {sttSettings.language === 'auto' ? 'Auto' : SUPPORTED_LANGUAGES[sttSettings.language]?.name || sttSettings.language.toUpperCase()}
-              </span>
-            </span>
-          </span>
-          {(sttSettings.isRecording || ttsSettings.isSpeaking) && (
-            <span className="text-purple-500 animate-pulse">
-              {sttSettings.isRecording ? '🎙️ Recording...' : '🔊 Speaking...'}
-            </span>
-          )}
-        </div>
-      </div>
-    </motion.div>
-    );
-  }
+     {/* Input with STT */}
+<div className={`p-4 border-t ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'}`}>
+  <div className="flex items-center gap-2">
+    <div className="flex-1 min-w-0">
+      <textarea
+        ref={inputRef}
+        value={inputMessage}
+        onChange={(e) => setInputMessage(e.target.value)}
+        onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage()}
+        placeholder={sttSettings.isRecording ? (t('assistant.listening') || 'Listening...') : (t('assistant.placeholder') || 'Ask me anything...')}
+        rows={1}
+        className={`w-full px-4 py-3.5 rounded-lg text-sm resize-none overflow-hidden border leading-normal ${
+          isDarkMode
+            ? 'bg-gray-800 text-white placeholder-gray-400 border-gray-700'
+            : 'bg-white text-gray-900 placeholder-gray-500 border-gray-300'
+        } focus:outline-none focus:ring-2 focus:ring-purple-500`}
+        disabled={isLoading || sttSettings.isRecording}
+        style={{
+          height: '52px',
+          minHeight: '52px',
+          maxHeight: '120px'
+        }}
+        onInput={(e) => {
+          const target = e.target as HTMLTextAreaElement;
+          target.style.height = '52px'; // Reset to base
+          target.style.height = Math.min(target.scrollHeight, 120) + 'px';
+        }}
+      />
+    </div>
+
+    {/* Button Container */}
+    <div className="flex items-center gap-2 flex-shrink-0">
+      {/* STT Button */}
+      <button
+        onClick={toggleSTT}
+        disabled={isLoading}
+        className={`h-[52px] w-[52px] flex items-center justify-center rounded-xl transition-all ${
+          sttSettings.isRecording
+            ? 'bg-red-500 text-white animate-pulse'
+            : 'bg-gray-600 text-white hover:bg-gray-700'
+        } disabled:opacity-50`}
+        title={sttSettings.isRecording ? 'Stop recording' : 'Start voice input'}
+      >
+        {sttSettings.isRecording ? <MicOff size={20} /> : <Mic size={20} />}
+      </button>
+      
+      {/* Send Button */}
+      <button
+        onClick={() => handleSendMessage()}
+        disabled={!inputMessage.trim() || isLoading || sttSettings.isRecording}
+        className="h-[52px] w-[52px] flex items-center justify-center bg-purple-600 text-white rounded-xl hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      >
+        <Send size={20} />
+      </button>
+    </div>
+  </div>
+  
+  {/* Error and status indicators INSIDE the container */}
+  {error && (
+    <p className="text-red-500 text-xs mt-2">{error}</p>
+  )}
+  
+  {/* Status indicators */}
+  <div className="flex justify-between text-xs mt-2 text-gray-500">
+    <span className="flex items-center space-x-1">
+      <span>TTS: {ttsSettings.enabled ? '🔊' : '🔇'}</span>
+      <span>|</span>
+      <span className="flex items-center">
+        {SUPPORTED_LANGUAGES[sttSettings.language]?.flag || '🌍'}
+        <span className="ml-1">
+          {sttSettings.language === 'auto' ? 'Auto' : SUPPORTED_LANGUAGES[sttSettings.language]?.name || sttSettings.language.toUpperCase()}
+        </span>
+      </span>
+    </span>
+    {(sttSettings.isRecording || ttsSettings.isSpeaking) && (
+      <span className="text-purple-500 animate-pulse">
+        {sttSettings.isRecording ? '🎙️ Recording...' : '🔊 Speaking...'}
+      </span>
+    )}
+  </div>
+</div>
+</motion.div>
+  );
+};
 
   // ===== SLIDEUP VARIANT (Mobile Bottom Sheet) =====
   // Only render when open (external control)
@@ -1508,55 +1514,58 @@ const AIAssistantSmall: React.FC<AIAssistantSmallProps> = ({
 
       {/* Input with STT - Mobile optimized */}
       <div className={`p-4 border-t ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'}`}>
-        <div className="flex space-x-2">
-          <textarea
-            ref={inputRef}
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage()}
-            placeholder={sttSettings.isRecording ? (t('assistant.listening') || 'Listening...') : (t('assistant.placeholder') || 'Ask me anything...')}
-            rows={1}
-            className={`flex-1 px-4 py-3 rounded-xl text-base resize-none overflow-hidden min-h-[48px] max-h-[100px] ${
-              isDarkMode 
-                ? 'bg-gray-800 text-white placeholder-gray-400 border-gray-700' 
-                : 'bg-gray-100 text-gray-900 placeholder-gray-500 border-gray-300'
-            } border focus:outline-none focus:ring-2 focus:ring-purple-500`}
-            disabled={isLoading || sttSettings.isRecording}
-            style={{
-              height: 'auto',
-              minHeight: '48px',
-              maxHeight: '100px'
-            }}
-            onInput={(e) => {
-              const target = e.target as HTMLTextAreaElement;
-              target.style.height = 'auto';
-              target.style.height = Math.min(target.scrollHeight, 100) + 'px';
-            }}
-          />
-          
-          {/* STT Button - Larger for mobile */}
-          <button
-            onClick={toggleSTT}
-            disabled={isLoading}
-            className={`px-4 py-3 rounded-xl transition-all ${
-              sttSettings.isRecording
-                ? 'bg-red-500 text-white animate-pulse'
-                : 'bg-gray-600 text-white hover:bg-gray-700'
-            } disabled:opacity-50`}
-            title={sttSettings.isRecording ? 'Stop recording' : 'Start voice input'}
-          >
-            {sttSettings.isRecording ? <MicOff size={20} /> : <Mic size={20} />}
-          </button>
-          
-          {/* Send Button - Larger for mobile */}
-          <button
-            onClick={() => handleSendMessage()}
-            disabled={!inputMessage.trim() || isLoading || sttSettings.isRecording}
-            className="px-5 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            <Send size={20} />
-          </button>
-        </div>
+        <div className="flex items-end gap-2">
+          <div className="flex-1 min-w-0">
+            <textarea
+              ref={inputRef}
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder={sttSettings.isRecording ? (t('assistant.listening') || 'Listening...') : (t('assistant.placeholder') || 'Ask me anything...')}
+              rows={1}
+              className={`w-full px-4 py-3 rounded-xl text-sm resize-none overflow-y-auto min-h-[44px] max-h-[120px] ${
+                isDarkMode
+                  ? 'bg-gray-800 text-white placeholder-gray-400 border-gray-700'
+                  : 'bg-white text-gray-900 placeholder-gray-500 border-gray-300'
+              } border focus:outline-none focus:ring-2 focus:ring-purple-500`}
+              disabled={isLoading || sttSettings.isRecording}
+              style={{
+                height: 'auto',
+                minHeight: '44px',
+                maxHeight: '120px'
+              }}
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = 'auto';
+                target.style.height = Math.min(target.scrollHeight, 120) + 'px';
+              }}
+            />
+          </div>
+    
+    {/* Button Container - Fixed width to prevent shifting */}
+    <div className="flex items-end gap-2 flex-shrink-0">
+      {/* STT Button */}
+      <button
+        onClick={toggleSTT}
+        disabled={isLoading}
+        className={`px-4 py-3 rounded-xl transition-all flex-shrink-0 ${
+          sttSettings.isRecording
+            ? 'bg-red-500 text-white animate-pulse'
+            : 'bg-gray-600 text-white hover:bg-gray-700'
+        } disabled:opacity-50`}
+        title={sttSettings.isRecording ? 'Stop recording' : 'Start voice input'}
+      >
+        {sttSettings.isRecording ? <MicOff size={20} /> : <Mic size={20} />}
+      </button>
+      
+      {/* Send Button */}
+      <button
+        onClick={() => handleSendMessage()}
+        disabled={!inputMessage.trim() || isLoading || sttSettings.isRecording}
+        className="px-4 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+      >
+        <Send size={20} />
+      </button>
+    </div>
         
         {error && (
           <p className="text-red-500 text-xs mt-2">{error}</p>
@@ -1580,6 +1589,7 @@ const AIAssistantSmall: React.FC<AIAssistantSmallProps> = ({
             </span>
           )}
         </div>
+      </div>
       </div>
     </motion.div>
   );
