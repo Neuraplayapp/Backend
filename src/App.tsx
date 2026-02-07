@@ -4,10 +4,14 @@ import MainLayout from './layouts/MainLayout';
 import ParentHomePage from './pages/ParentHomePage';
 import DashboardPage from './pages/DashboardPage';
 import AboutUsPage from './pages/AboutUsPage';
+import ProfilePage from './pages/ProfilePage';
 import MobileShell from "./components/mobile/MobileShell";
 import NeuraPlayAssistantLitePage from './pages/NeuraPlayAssistantLitePage';
 import CourseGeneratorPage from './pages/CourseGeneratorPage';
 import { useUser } from './contexts/UserContext';
+import ForumPage from './pages/ForumPage';
+import PlaygroundPage from './pages/PlaygroundPage';
+import AIReportPage from './pages/AIReportPage';
 
 // Mobile detection hook
 function useIsMobile(): boolean {
@@ -61,6 +65,10 @@ function App() {
         <Route path="/" element={<ParentHomePage />} />
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/playground" element={<PlaygroundPage/>} />
+        <Route path="/forum" element={<ForumPage />} />
+        <Route path="/ai-insights" element={<AIReportPage />} />
         <Route path="/features" element={<div className="p-8 text-center">Feature Page - Coming Soon</div>} />
         <Route path="/assistant-lite" element={<NeuraPlayAssistantLitePage />} />
         <Route path="/courses" element={<CourseGeneratorPage />} />
