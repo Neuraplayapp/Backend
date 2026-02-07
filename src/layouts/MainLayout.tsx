@@ -29,7 +29,7 @@ const MainLayout: React.FC = () => {
 
   return (
     <ErrorBoundary>
-      <div className="font-sf">
+      <div className="font-sf min-h-screen flex flex-col">
         {/* Pass openSignUpModal and openLoginModal to Navbar */}
         <Navbar openSignUpModal={openSignUpModal} openLoginModal={openLoginModal} />
 
@@ -51,7 +51,7 @@ const MainLayout: React.FC = () => {
           }}
         />
 
-        <main>
+        <main className="flex-1">
           <Outlet />
         </main>
 
