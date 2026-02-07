@@ -5,7 +5,7 @@ import { useAIAgent } from '../contexts/AIAgentContext';
 import { 
   Star, UserPlus, Edit2, Check, X, Users, ShieldAlert, 
   Trophy, Brain, Settings, 
-  Activity, Clock, Zap, MessageCircle, Cog,
+  Activity, Clock, Zap, MessageCircle, Cog, Target,
   ChevronRight, Home, Gamepad2, Users2, FileText, 
   BarChart3, Sparkles, Crown, Lock, Wand2, Loader2
 } from 'lucide-react';
@@ -115,7 +115,7 @@ const ProfilePage: React.FC = () => {
                 Create Account
               </button>
             ) : (
-              <div className="inline-block w-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-bold px-8 py-4 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center gap-2">
+              <div className="w-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-bold px-8 py-4 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center gap-2">
                 <Lock className="w-5 h-5" />
                 Registration Disabled
               </div>
@@ -628,7 +628,7 @@ const ProfilePage: React.FC = () => {
                     <span className="font-semibold">Forum</span>
                   </button>
                   <button 
-                    onClick={triggerAIInsights}
+                    onClick={() => navigate('/ai-insights')}
                     className="bg-gradient-to-r from-pink-200 to-purple-200 text-gray-800 dark:from-pink-700 dark:to-purple-700 dark:text-white p-4 rounded-xl hover:from-pink-300 hover:to-purple-300 dark:hover:from-pink-600 dark:hover:to-purple-600 transition-all flex flex-col items-center gap-2"
                   >
                     <Brain className="w-6 h-6" />

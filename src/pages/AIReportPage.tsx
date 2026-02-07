@@ -318,7 +318,7 @@ Create an encouraging, professional report that celebrates achievements, explain
                       alert('API test successful! Check console for details.');
                     } catch (error) {
                       console.error('API test failed:', error);
-                      alert('API test failed: ' + error.message);
+                      alert('API test failed: ' + (error as Error).message);
                     }
                   }}
                   className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold px-6 py-2 rounded-full hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2 mx-auto"
@@ -343,7 +343,7 @@ Create an encouraging, professional report that celebrates achievements, explain
                       alert('Simple API test successful! Check console for details.');
                     } catch (error) {
                       console.error('Simple API test failed:', error);
-                      alert('Simple API test failed: ' + error.message);
+                      alert('Simple API test failed: ' + (error as Error).message);
                     }
                   }}
                   className="bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold px-6 py-2 rounded-full hover:from-green-700 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2 mx-auto mt-2"
@@ -388,7 +388,7 @@ Create an encouraging, professional report that celebrates achievements, explain
                       alert('Analytics test successful! Check console for details.');
                     } catch (error) {
                       console.error('Analytics test failed:', error);
-                      alert('Analytics test failed: ' + error.message);
+                      alert('Analytics test failed: ' + (error as Error).message);
                     }
                   }}
                   className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white font-bold px-6 py-2 rounded-full hover:from-yellow-700 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2 mx-auto mt-2"
@@ -431,7 +431,7 @@ Create an encouraging, professional report that celebrates achievements, explain
                       alert('API response format test completed! Check console for details.');
                     } catch (error) {
                       console.error('API response format test failed:', error);
-                      alert('API response format test failed: ' + error.message);
+                      alert('API response format test failed: ' + (error as Error).message);
                     }
                   }}
                   className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold px-6 py-2 rounded-full hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center gap-2 mx-auto mt-2"
