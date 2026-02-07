@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowRight, ChevronRight } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
@@ -18,10 +18,56 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSignUp, onLogin, onLearnMor
   const { t } = useTranslation();
   const { isDarkMode } = useTheme();
 
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => new Set(prev).add(entry.target.id));
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+    );
+
+    const sections = document.querySelectorAll('[data-animate]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
+
+  const globalStyles = `
+    .fade-in-section {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+
+    .fade-in-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+  `;
+
   return (
-    <section className={`min-h-screen relative overflow-hidden pt-20 sm:pt-24 lg:pt-28 ${
-      isDarkMode ? 'dark-hero-gradient' : 'light-hero-gradient'
-    }`}>
+    <>
+      <style>{globalStyles}</style>
+    <section
+      id="hero-section"
+      data-animate
+      className={`min-h-screen relative overflow-hidden pt-20 sm:pt-24 lg:pt-28 fade-in-section ${
+        visibleSections.has('hero-section') ? 'visible' : ''
+      } ${
+        isDarkMode ? 'dark-hero-gradient' : 'light-hero-gradient'
+      }`}
+    >
       {/* Animated Grid Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
@@ -120,100 +166,125 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSignUp, onLogin, onLearnMor
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 lg:pt-8 pb-16">
         <div className="text-center">
           {/* Title */}
-          <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight tracking-tight ${
-            isDarkMode ? 'text-white' : 'text-gray-900'
-          }`}>
-            {t('parentHome.hero.title')}
-            <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-purple-600 to-indigo-600">
-              {t('parentHome.hero.titleHighlight')}
-            </span>
-          </h1>
+          <div
+            id="hero-title"
+            data-animate
+            className={`fade-in-section ${visibleSections.has('hero-title') ? 'visible' : ''}`}
+          >
+            <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight tracking-tight ${
+              isDarkMode ? 'text-white' : 'text-gray-900'
+            }`}>
+              {t('parentHome.hero.title')}
+              <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-purple-600 to-indigo-600">
+                {t('parentHome.hero.titleHighlight')}
+              </span>
+            </h1>
+          </div>
 
           {/* Subtitle */}
-          <p className={`text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed ${
-            isDarkMode ? 'text-gray-300' : 'text-gray-600'
-          }`}>
-            {t('parentHome.hero.subtitle')}
-          </p>
+          <div
+            id="hero-subtitle"
+            data-animate
+            className={`fade-in-section ${visibleSections.has('hero-subtitle') ? 'visible' : ''}`}
+          >
+            <p className={`text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-600'
+            }`}>
+              {t('parentHome.hero.subtitle')}
+            </p>
+          </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 sm:mb-16">
-            {/* Primary CTA */}
-            <button
-              onClick={onSignUp}
-              className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-white overflow-hidden transition-all duration-500 transform hover:scale-105 shadow-lg hover:shadow-xl"
-              style={{
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%)',
-                boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3)',
-              }}
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
-              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></span>
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                {t('parentHome.hero.cta')}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </span>
-            </button>
+          <div
+            id="hero-cta"
+            data-animate
+            className={`fade-in-section ${visibleSections.has('hero-cta') ? 'visible' : ''}`}
+          >
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 sm:mb-16">
+              {/* Primary CTA */}
+              <button
+                onClick={onSignUp}
+                className="stagger-1 group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-white overflow-hidden transition-all duration-500 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                style={{
+                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%)',
+                  boxShadow: '0 10px 40px rgba(139, 92, 246, 0.3)',
+                }}
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></span>
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  {t('parentHome.hero.cta')}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </span>
+              </button>
 
-            {/* Secondary CTA - Login */}
-            <button
-              onClick={onLogin}
-              className={`group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold overflow-hidden transition-all duration-500 transform hover:scale-105 ${
-                isDarkMode
-                  ? 'text-white border border-purple-500/50 hover:border-purple-400'
-                  : 'text-gray-900 border border-gray-300 hover:border-purple-500'
-              }`}
-              style={{
-                background: isDarkMode ? 'rgba(139, 92, 246, 0.1)' : 'rgba(255, 255, 255, 0.8)',
-                backdropFilter: 'blur(10px)',
-              }}
-            >
-              <span className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
-                isDarkMode ? 'bg-gradient-to-r from-purple-600/20 to-purple-500/20' : 'bg-gradient-to-r from-purple-50 to-purple-100'
-              }`}></span>
-              <span className="relative z-10">{t('navigation.login')}</span>
-            </button>
+              {/* Secondary CTA - Login */}
+              <button
+                onClick={onLogin}
+                className={`stagger-2 group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold overflow-hidden transition-all duration-500 transform hover:scale-105 ${
+                  isDarkMode
+                    ? 'text-white border border-purple-500/50 hover:border-purple-400'
+                    : 'text-gray-900 border border-gray-300 hover:border-purple-500'
+                }`}
+                style={{
+                  background: isDarkMode ? 'rgba(139, 92, 246, 0.1)' : 'rgba(255, 255, 255, 0.8)',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
+                <span className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
+                  isDarkMode ? 'bg-gradient-to-r from-purple-600/20 to-purple-500/20' : 'bg-gradient-to-r from-purple-50 to-purple-100'
+                }`}></span>
+                <span className="relative z-10">{t('navigation.login')}</span>
+              </button>
 
-            {/* Learn More */}
-            <button
-              onClick={onLearnMore}
-              className={`group flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-all duration-300 ${
-                isDarkMode ? 'text-purple-300 hover:text-purple-200' : 'text-purple-600 hover:text-purple-700'
-              }`}
-            >
-              <span>{t('parentHome.hero.learnMore')}</span>
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-            </button>
+              {/* Learn More */}
+              <button
+                onClick={onLearnMore}
+                className={`stagger-3 group flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-all duration-300 ${
+                  isDarkMode ? 'text-purple-300 hover:text-purple-200' : 'text-purple-600 hover:text-purple-700'
+                }`}
+              >
+                <span>{t('parentHome.hero.learnMore')}</span>
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+              </button>
+            </div>
           </div>
 
           {/* Popular Courses */}
-          <div className="mt-8 text-center">
-          <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Popular courses:</span>
-          <div className="mt-2 flex flex-wrap justify-center gap-3">
-            {[
-              { name: 'Introductory English', link: '/courses/introductory-english' },
-              { name: 'Geography', link: '/courses/geography' },
-              { name: 'AI-Machine Learning', link: '/courses/ai-machine-learning' },
-              { name: 'Psychology and Philosophy', link: '/courses/psychology-philosophy' },
-              { name: 'Saudi History', link: '/courses/saudi-history' },
-              { name: 'Business Management', link: '/courses/business-management' },
-              { name: 'Business Administration', link: '/courses/business-administration' },
-              { name: 'Project Management', link: '/courses/project-management' },
-            ].map((course, index) => (
-              <a
-                key={index}
-                href={course.link}
-                className="px-3 py-1 rounded-full bg-purple-100 hover:bg-purple-200 text-purple-700 text-sm transition-colors duration-300"
-              >
-                {course.name}
-              </a>
-            ))}
+          <div
+            id="hero-courses"
+            data-animate
+            className={`fade-in-section ${visibleSections.has('hero-courses') ? 'visible' : ''}`}
+          >
+            <div className="mt-8 text-center">
+              <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Popular courses:</span>
+              <div className="mt-2 flex flex-wrap justify-center gap-3">
+                {[
+                  { name: 'Introductory English', link: '/courses/introductory-english' },
+                  { name: 'Geography', link: '/courses/geography' },
+                  { name: 'AI-Machine Learning', link: '/courses/ai-machine-learning' },
+                  { name: 'Psychology and Philosophy', link: '/courses/psychology-philosophy' },
+                  { name: 'Saudi History', link: '/courses/saudi-history' },
+                  { name: 'Business Management', link: '/courses/business-management' },
+                  { name: 'Business Administration', link: '/courses/business-administration' },
+                  { name: 'Project Management', link: '/courses/project-management' },
+                ].map((course, index) => (
+                  <a
+                    key={index}
+                    href={course.link}
+                    className={`stagger-${Math.min(index + 1, 4)} px-3 py-1 rounded-full bg-purple-100 hover:bg-purple-200 text-purple-700 text-sm transition-colors duration-300`}
+                  >
+                    {course.name}
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
       </div>
-    </div>
     </section>
+    </>
   );
 };
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Lock, Shield, Eye, Users } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
@@ -6,6 +7,26 @@ import { useTheme } from '../contexts/ThemeContext';
 const SafetySection: React.FC = () => {
   const { t } = useTranslation();
   const { isDarkMode } = useTheme();
+
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => new Set(prev).add(entry.target.id));
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+    );
+
+    const sections = document.querySelectorAll('[data-animate]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
 
   const safetyFeatures = [
     {
@@ -79,11 +100,13 @@ const SafetySection: React.FC = () => {
           {safetyFeatures.map((feature, index) => (
             <div
               key={index}
+              id={`safety-card-${index}`}
+              data-animate
               className={`p-6 sm:p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1 ${
                 isDarkMode
                   ? 'bg-purple-950/40 backdrop-blur-xl border border-purple-500/20 hover:border-purple-400/40'
                   : 'bg-white/70 backdrop-blur-xl border border-purple-200/50 hover:border-purple-300/70 shadow-lg hover:shadow-xl'
-              }`}
+              } ${visibleSections.has(`safety-card-${index}`) ? 'visible' : ''}`}
             >
               <div className="flex items-start gap-4">
 

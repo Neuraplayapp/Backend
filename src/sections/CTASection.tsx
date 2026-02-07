@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Smartphone, Tablet, Trophy, Shield, Clock, ArrowRight } from 'lucide-react';
@@ -13,9 +14,33 @@ const CTASection: React.FC<CTASectionProps> = ({ onLoginClick }) => {
   const navigate = useNavigate();
   const { isDarkMode } = useTheme();
 
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => new Set(prev).add(entry.target.id));
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+    );
+
+    const sections = document.querySelectorAll('[data-animate]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
-      className={`py-8 sm:py-12 relative overflow-hidden ${
+      id="cta-section"
+      data-animate
+      className={`py-8 sm:py-12 relative overflow-hidden fade-in-section ${
+        visibleSections.has('cta-section') ? 'visible' : ''
+      } ${
         isDarkMode ? 'bg-[#0f0f1a]' : 'bg-gray-50'
       }`}
     >

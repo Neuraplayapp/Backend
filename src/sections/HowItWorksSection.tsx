@@ -2,10 +2,30 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { UserPlus, Brain, TrendingUp } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-
+import { useEffect, useState } from 'react';
 const HowItWorksSection: React.FC = () => {
   const { t } = useTranslation();
   const { isDarkMode } = useTheme();
+
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => new Set(prev).add(entry.target.id));
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+    );
+
+    const sections = document.querySelectorAll('[data-animate]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
 
   const steps = [
     {
@@ -87,7 +107,9 @@ const HowItWorksSection: React.FC = () => {
             {steps.map((step, index) => (
               <div
                 key={index}
-                className="relative flex flex-col items-center text-center"
+                id={`howitworks-step-${index}`}
+                data-animate
+                className={`relative flex flex-col items-center text-center ${visibleSections.has(`howitworks-step-${index}`) ? 'visible' : ''}`}
               >
 
                 {/* Number */}

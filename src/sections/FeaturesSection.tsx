@@ -1,8 +1,8 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Brain, BookOpen, Target, Heart, Award } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 /* ----------------------------------
    Feature Card
@@ -20,16 +20,38 @@ const FeatureCard = ({
   benefits: string[];
 }) => {
   const { isDarkMode } = useTheme();
-  const { ref, isVisible } = useScrollAnimation();
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div
-      ref={ref}
-      className={`p-8 sm:p-10 rounded-2xl transition-all duration-500 hover:-translate-y-1 ${
+      ref={cardRef}
+      className={`p-8 sm:p-10 rounded-2xl transition-all duration-500 hover:-translate-y-1 fade-in-section ${
+        isVisible ? 'visible' : ''
+      } ${
         isDarkMode
           ? 'bg-purple-950/40 backdrop-blur-xl border border-purple-500/20 hover:border-purple-400/40'
           : 'bg-white/70 backdrop-blur-xl border border-purple-200/50 hover:border-purple-300/70 shadow-lg hover:shadow-xl'
-      } ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+      }`}
     >
       {/* Header */}
       <div className="flex items-center gap-4 mb-4">
@@ -96,6 +118,34 @@ const FeatureCard = ({
 const FeaturesSection: React.FC = () => {
   const { t } = useTranslation();
   const { isDarkMode } = useTheme();
+
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => new Set(prev).add(entry.target.id));
+          }
+        });
+      },
+      { threshold: 0, rootMargin: '0px 0px 0px 0px' }
+    );
+
+    const sections = document.querySelectorAll('[data-animate]');
+    sections.forEach((section) => observer.observe(section));
+
+    // Check if elements are already visible
+    sections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        setVisibleSections((prev) => new Set(prev).add(section.id));
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const topFeatures = [
     {
@@ -222,14 +272,18 @@ const FeaturesSection: React.FC = () => {
           <div className="grid sm:grid-cols-2 gap-5 sm:gap-6 mb-10">
 
             {[
-              { icon: Brain, key: 'remembers' },
-              { icon: Heart, key: 'patient' },
-              { icon: Award, key: 'celebrates' },
-              { icon: Target, key: 'adapts' },
-            ].map(({ icon: Icon, key }) => (
+              { icon: Brain, key: 'remembers', id: 'tutor-remembers' },
+              { icon: Heart, key: 'patient', id: 'tutor-patient' },
+              { icon: Award, key: 'celebrates', id: 'tutor-celebrates' },
+              { icon: Target, key: 'adapts', id: 'tutor-adapts' },
+            ].map(({ icon: Icon, key, id }, index) => (
               <div
                 key={key}
-                className={`p-6 sm:p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1 ${
+                id={id}
+                data-animate
+                className={`p-6 sm:p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1 fade-in-section stagger-${index + 1} ${
+                  visibleSections.has(id) ? 'visible' : ''
+                } ${
                   isDarkMode
                     ? 'bg-purple-950/40 backdrop-blur-xl border border-purple-500/20 hover:border-purple-400/40'
                     : 'bg-white/70 backdrop-blur-xl border border-purple-200/50 hover:border-purple-300/70 shadow-lg hover:shadow-xl'
