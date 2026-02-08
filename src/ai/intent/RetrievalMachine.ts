@@ -40,8 +40,11 @@ export interface SemanticCategory {
 
 export class RetrievalMachine {
   private static instance: RetrievalMachine;
+  // @ts-ignore
   private semanticCategories: Map<string, SemanticCategory> = new Map();
+  // @ts-ignore
   private emotionalIndicators: Map<string, number> = new Map();
+  // @ts-ignore
   private temporalIndicators: Map<string, string> = new Map();
 
   static getInstance(): RetrievalMachine {
