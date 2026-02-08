@@ -311,7 +311,7 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
-      <div className="max-w-6xl mx-auto py-8 px-4">
+      <div className="max-w-6xl mx-auto pt-32 pb-8 px-4">
         {/* Profile Header */}
         <div className={`backdrop-blur-xl rounded-2xl p-8 mb-8 transition-all duration-500 hover:transform hover:scale-[1.02] ${
           isDarkMode 

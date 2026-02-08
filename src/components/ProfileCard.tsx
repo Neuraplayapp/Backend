@@ -22,8 +22,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateBio, onRemoveFr
   };
 
   return (
-    <div className="card flex flex-col items-center p-6 mb-8 shadow-lg rounded-xl relative animate-fade-in bg-white">
-      {/* Purple Gradient Profile Header */}
+  <div className="card flex flex-col items-center p-6 mb-8 shadow-lg rounded-xl relative animate-fade-in bg-white">
+    {/* Purple Gradient Profile Header */}
       <div className="w-full rounded-t-xl bg-gradient-to-r from-purple-600 to-violet-500 py-3 mb-4 flex items-center justify-center">
         <h2 className="text-xl font-bold text-white tracking-wide">Profile</h2>
       </div>
@@ -130,4 +130,4 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateBio, onRemoveFr
   );
 };
 
-export default ProfileCard; 
+export default ProfileCard;
