@@ -3,7 +3,6 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useParallax } from '../hooks/useParallax';
 import ContactForm from '../components/ContactForm';
 import { Sparkles, Users, Target, Shield, Heart, Linkedin } from 'lucide-react';
-
 const AboutUsPage: React.FC = () => {
   const { isDarkMode } = useTheme();
   const scrollY = useParallax();

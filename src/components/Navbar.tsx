@@ -33,7 +33,6 @@ const Navbar: React.FC<NavbarProps> = ({ openSignUpModal, openLoginModal }) => {
     { label: t('navigation.dashboard') || 'Learning Central', href: '/dashboard' },
     { label: 'Courses', href: '/courses' },
     { label: 'Mobile', href: '/mobile' },
-    { label: 'Profile', href: '/profile' },
   ];
 
   const navLinks = isLoggedIn ? [...baseNavLinks, ...authNavLinks] : baseNavLinks;
