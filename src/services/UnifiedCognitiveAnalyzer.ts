@@ -954,4 +954,3 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
 // Export singleton instance
 export const unifiedCognitiveAnalyzer = UnifiedCognitiveAnalyzer.getInstance();
 export { UnifiedCognitiveAnalyzer };
-

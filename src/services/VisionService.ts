@@ -546,8 +546,13 @@ class VisionService {
               processedDocs.push(`Document: ${fileName}\n[Processing failed: ${pdfResponse.error || 'Unknown error'}]`);
             }
           } catch (pdfError) {
+            const errorMessage =
+              pdfError instanceof Error
+                ? pdfError.message
+                : String(pdfError);
+          
             console.error('❌ PDF parsing failed:', fileName, pdfError);
-            processedDocs.push(`Document: ${fileName}\n[PDF parsing failed: ${pdfError.message}]`);
+            processedDocs.push(`Document: ${fileName}\n[PDF parsing failed: ${errorMessage}]`);
           }
         } else {
           // Try to read as text for other file types

@@ -7,6 +7,16 @@ export type ContentType = 'visual' | 'textual' | 'interactive';
 export type ModuleStatus = 'not_started' | 'in_progress' | 'completed';
 export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced';
 export type QuestionType = 'multiple_choice' | 'short_answer' | 'scenario';
+export type LearnerPracticeState =
+  | 'not_started'
+  | 'practicing'
+  | 'mastered'
+  | LearnerPracticeStateObject;
+
+interface LearnerPracticeStateObject {
+  practiceItemId: string,
+  courseId: string,
+}
 
 // User-Level Cognitive Tracking
 export interface LearningModuleCognitiveProfile {

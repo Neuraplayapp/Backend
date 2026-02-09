@@ -12,7 +12,12 @@
  */
 
 // Browser-compatible EventEmitter
-class EventEmitter {
+
+import { llmService } from './LLMHelper';
+import { getUniversalCanvasService } from './UniversalCanvasService';
+
+// Browser-compatible EventEmitter
+class EventEmitter {  
   private events: Map<string, Function[]> = new Map();
 
   on(event: string, listener: Function): void {
@@ -43,8 +48,6 @@ class EventEmitter {
     this.events.clear();
   }
 }
-
-import { getUniversalCanvasService } from './UniversalCanvasService';
 
 export type CardType = 'section' | 'code' | 'chart' | 'concept' | 'expand';
 
@@ -104,7 +107,7 @@ export class TopicCardService extends EventEmitter {
       }
     });
 
-    // Analyze content
+    // Analyze content (now using LLM)
     const analysis = await this.analyzeContent(content, contentType);
     
     // Generate cards based on analysis
@@ -121,15 +124,18 @@ export class TopicCardService extends EventEmitter {
   }
 
   /**
-   * Analyze content (in production, this would call an LLM API)
+   * 🎯 TIER 2: LLM-powered content analysis
+   * Replaces regex keyword extraction and topic inference
    */
   private async analyzeContent(content: string, contentType: 'document' | 'code' | 'chart'): Promise<CanvasAnalysis> {
-    // Extract keywords (simple implementation - in production use NLP/LLM)
-    const keywords = this.extractKeywords(content);
-    const mainTopic = this.inferMainTopic(content, keywords);
+    // Step 1: Extract keywords using LLM
+    const keywords = await this.extractKeywordsLLM(content);
     
-    // Generate suggestions based on content type and keywords
-    const suggestedAdditions = this.generateSuggestions(mainTopic, keywords, contentType);
+    // Step 2: Infer main topic using LLM
+    const mainTopic = await this.inferMainTopicLLM(content, keywords);
+    
+    // Step 3: Generate suggestions using LLM
+    const suggestedAdditions = await this.generateSuggestionsLLM(mainTopic, keywords, contentType);
     
     return {
       mainTopic,
@@ -141,15 +147,67 @@ export class TopicCardService extends EventEmitter {
   }
 
   /**
-   * Extract keywords from content (simplified - in production use LLM)
+   * 🎯 TIER 2: LLM keyword extraction (with structural fallback)
    */
-  private extractKeywords(content: string): string[] {
-    const stopWords = new Set(['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'is', 'are', 'was', 'were']);
+  private async extractKeywordsLLM(content: string): Promise<string[]> {
+    return llmService.classify(
+      content.substring(0, 1000), // Limit for faster processing
+      `Extract 5-10 most important keywords from this content. Respond with JSON: ["keyword1", "keyword2", ...]. ONLY JSON, no other text.`,
+      () => this.extractKeywordsStructural(content),
+      `keywords:${content.substring(0, 50)}`
+    ).then(result => {
+      try {
+        const parsed = typeof result.result === 'string'
+          ? JSON.parse(result.result)
+          : result.result;
+        
+        return Array.isArray(parsed) 
+          ? parsed.filter((k: any) => typeof k === 'string')
+          : this.extractKeywordsStructural(content);
+      } catch (e) {
+        console.warn('⚠️ Keyword extraction JSON parsing failed, using structural fallback');
+        return this.extractKeywordsStructural(content);
+      }
+    });
+  }
+
+  /**
+   * 🎯 TIER 3: Structural keyword extraction (fallback)
+   * Simple word frequency analysis without regex
+   */
+  private extractKeywordsStructural(content: string): string[] {
+    const stopWords = new Set([
+      'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 
+      'of', 'with', 'is', 'are', 'was', 'were', 'be', 'been', 'have', 'has',
+      'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might'
+    ]);
     
-    const words = content.toLowerCase()
-      .replace(/[^\w\s]/g, ' ')
-      .split(/\s+/)
-      .filter(word => word.length > 3 && !stopWords.has(word));
+    // Split by whitespace (no regex)
+    const words: string[] = [];
+    let currentWord = '';
+    
+    for (let i = 0; i < content.length; i++) {
+      const char = content[i];
+      const code = char.charCodeAt(0);
+      
+      // Check if alphanumeric (no regex: just character codes)
+      const isAlphaNum = (code >= 48 && code <= 57) ||  // 0-9
+                         (code >= 65 && code <= 90) ||   // A-Z
+                         (code >= 97 && code <= 122);    // a-z
+      
+      if (isAlphaNum) {
+        currentWord += char.toLowerCase();
+      } else {
+        if (currentWord.length > 3 && !stopWords.has(currentWord)) {
+          words.push(currentWord);
+        }
+        currentWord = '';
+      }
+    }
+    
+    if (currentWord.length > 3 && !stopWords.has(currentWord)) {
+      words.push(currentWord);
+    }
     
     // Count frequency
     const frequency: Record<string, number> = {};
@@ -165,13 +223,39 @@ export class TopicCardService extends EventEmitter {
   }
 
   /**
-   * Infer main topic (simplified - in production use LLM)
+   * 🎯 TIER 2: LLM topic inference (with structural fallback)
    */
-  private inferMainTopic(content: string, keywords: string[]): string {
-    // Look for title in markdown headers
-    const headerMatch = content.match(/^#\s+(.+)$/m);
-    if (headerMatch) {
-      return headerMatch[1];
+  private async inferMainTopicLLM(content: string, keywords: string[]): Promise<string> {
+    return llmService.classify(
+      `Content: ${content.substring(0, 500)}\n\nKeywords: ${keywords.join(', ')}`,
+      `What is the main topic or title for this content? Respond with ONLY the topic name (1-5 words), no JSON, no explanation.`,
+      () => this.inferMainTopicStructural(content, keywords),
+      `topic:${content.substring(0, 50)}`
+    ).then(result => result.result.trim());
+  }
+
+  /**
+   * 🎯 TIER 3: Structural topic inference (fallback)
+   * Looks for markdown headers or uses top keyword
+   */
+  private inferMainTopicStructural(content: string, keywords: string[]): string {
+    // Look for markdown headers (# Header) without regex
+    const lines = content.split('\n');
+    for (let i = 0; i < Math.min(10, lines.length); i++) {
+      const line = lines[i].trim();
+      
+      // Check if line starts with # (no regex)
+      if (line.length > 0 && line[0] === '#') {
+        let hashCount = 0;
+        for (let j = 0; j < line.length && line[j] === '#'; j++) {
+          hashCount++;
+        }
+        
+        // Valid header: 1-6 hashes followed by space
+        if (hashCount <= 6 && hashCount > 0 && line[hashCount] === ' ') {
+          return line.substring(hashCount + 1).trim();
+        }
+      }
     }
     
     // Use top keyword
@@ -183,96 +267,122 @@ export class TopicCardService extends EventEmitter {
   }
 
   /**
-   * Generate suggestions based on topic and keywords
+   * 🎯 TIER 2: LLM suggestion generation (with structural fallback)
    */
-  private generateSuggestions(
+  private async generateSuggestionsLLM(
+    mainTopic: string,
+    keywords: string[],
+    contentType: 'document' | 'code' | 'chart'
+  ): Promise<CanvasAnalysis['suggestedAdditions']> {
+    return llmService.classify(
+      `Topic: ${mainTopic}\nKeywords: ${keywords.join(', ')}\nContent Type: ${contentType}`,
+      `Generate 3-5 content suggestions as JSON array:
+[
+  { "type": "section|code|chart|concept|expand", "title": "...", "preview": "...", "relevance": 0-100 },
+  ...
+]
+ONLY JSON array, no other text.`,
+      () => this.generateSuggestionsStructural(mainTopic, keywords, contentType),
+      `suggestions:${mainTopic}:${contentType}`
+    ).then(result => {
+      try {
+        const parsed = typeof result.result === 'string'
+          ? JSON.parse(result.result)
+          : result.result;
+        
+        return Array.isArray(parsed)
+          ? parsed.filter((s: any) => s.type && s.title && s.preview && typeof s.relevance === 'number')
+          : this.generateSuggestionsStructural(mainTopic, keywords, contentType);
+      } catch (e) {
+        console.warn('⚠️ Suggestion generation JSON parsing failed, using structural fallback');
+        return this.generateSuggestionsStructural(mainTopic, keywords, contentType);
+      }
+    });
+  }
+
+  /**
+   * 🎯 TIER 3: Structural suggestion generation (fallback)
+   * Simple keyword-based suggestions
+   */
+  private generateSuggestionsStructural(
     mainTopic: string,
     keywords: string[],
     contentType: 'document' | 'code' | 'chart'
   ): CanvasAnalysis['suggestedAdditions'] {
     const suggestions: CanvasAnalysis['suggestedAdditions'] = [];
     
-    // Document-specific suggestions
+    // Check for specific keywords (no regex, just includes/indexOf)
+    const hasNeuroKeywords = keywords.some(k => 
+      k.includes('neural') || k.includes('brain') || k.includes('neuro') || k.includes('biology')
+    );
+    
+    const hasLearningKeywords = keywords.some(k =>
+      k.includes('learn') || k.includes('education') || k.includes('cognitive') || k.includes('understand')
+    );
+    
     if (contentType === 'document') {
-      // Add section suggestions
-      if (keywords.includes('neurobiology') || keywords.includes('neural') || keywords.includes('brain')) {
+      if (hasNeuroKeywords) {
         suggestions.push({
           type: 'section',
           title: 'Add section: Neural Mechanisms',
-          preview: 'Detailed explanation of neural mechanisms underlying ' + mainTopic + ', including synaptic connections and neurotransmitter pathways.',
+          preview: 'Detailed explanation of neural mechanisms underlying ' + mainTopic,
           relevance: 95
         });
         
         suggestions.push({
           type: 'code',
           title: 'Add code: Brain Activity Visualization',
-          preview: 'Python code for visualizing neural activity patterns using matplotlib and numpy.',
+          preview: 'Python code for visualizing neural activity patterns',
           relevance: 85
-        });
-        
-        suggestions.push({
-          type: 'chart',
-          title: 'Add chart: Learning Curve Analysis',
-          preview: 'Visual representation of learning progress over time with retention metrics.',
-          relevance: 80
         });
       }
       
-      if (keywords.includes('learning') || keywords.includes('education') || keywords.includes('cognitive')) {
+      if (hasLearningKeywords) {
         suggestions.push({
           type: 'section',
           title: 'Add section: Cognitive Load Theory',
-          preview: 'Explanation of cognitive load principles and their application to ' + mainTopic + '.',
+          preview: 'Explanation of cognitive load principles applied to ' + mainTopic,
           relevance: 90
-        });
-        
-        suggestions.push({
-          type: 'concept',
-          title: 'Add concept: Working Memory',
-          preview: 'Overview of working memory capacity and its role in learning processes.',
-          relevance: 85
         });
       }
       
-      // Always add general expansions
+      // Always add general expansion
       suggestions.push({
         type: 'expand',
         title: 'Expand on: ' + (keywords[0] || mainTopic),
-        preview: 'Add more detailed information and examples related to ' + (keywords[0] || mainTopic) + '.',
+        preview: 'Add more detailed information related to ' + (keywords[0] || mainTopic),
         relevance: 75
       });
     }
     
-    // Code-specific suggestions
     if (contentType === 'code') {
       suggestions.push({
         type: 'code',
         title: 'Add tests: Unit Testing',
-        preview: 'Comprehensive unit tests for the code above with edge cases and assertions.',
+        preview: 'Comprehensive unit tests for the code with edge cases',
         relevance: 90
       });
       
       suggestions.push({
         type: 'section',
         title: 'Add documentation: API Reference',
-        preview: 'Detailed API documentation with parameters, return values, and usage examples.',
+        preview: 'Detailed API documentation with parameters and examples',
         relevance: 85
       });
     }
     
-    // Chart-specific suggestions
     if (contentType === 'chart') {
       suggestions.push({
         type: 'chart',
         title: 'Add related chart: Comparative View',
-        preview: 'Additional chart showing comparative analysis or alternative visualization.',
+        preview: 'Additional chart showing comparative analysis',
         relevance: 85
       });
       
       suggestions.push({
         type: 'section',
         title: 'Add analysis: Data Insights',
-        preview: 'Written analysis explaining patterns and insights from the chart data.',
+        preview: 'Written analysis explaining patterns from chart data',
         relevance: 80
       });
     }
@@ -305,9 +415,6 @@ export class TopicCardService extends EventEmitter {
    * Generate actual content for a card (calls LLM in production)
    */
   async generateCardContent(card: TopicCard): Promise<string> {
-    // In production, this would call an LLM API to generate full content
-    // For now, return expanded preview
-    
     let content = card.preview;
     
     switch (card.type) {
@@ -366,10 +473,8 @@ export class TopicCardService extends EventEmitter {
       
       // Create new element or add version to existing
       if (card.positionHint === 'append') {
-        // Add as new version to existing element
         await canvasService.addVersion(elementId, content, card.title);
       } else {
-        // Create new element
         await canvasService.createElement({
           type: elementType,
           content: elementType === 'chart' ? JSON.parse(content) : content,
@@ -482,7 +587,6 @@ export class TopicCardService extends EventEmitter {
   clearCards(): void {
     this.cards.clear();
     this.dismissedCards.clear();
-    // Keep pinned cards
     this.emit('cards-cleared');
     console.log('[np] topic-cards:clear');
   }
@@ -497,4 +601,3 @@ export class TopicCardService extends EventEmitter {
 
 // Singleton instance
 export const topicCardService = new TopicCardService();
-
