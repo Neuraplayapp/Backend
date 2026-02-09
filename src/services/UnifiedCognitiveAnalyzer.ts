@@ -1,5 +1,5 @@
 /**
- * 🧠 UNIFIED COGNITIVE ANALYZER
+ * UNIFIED COGNITIVE ANALYZER
  * 
  * The NEW clean alternative to the 5,979-line IntentAnalysisService monolith.
  * 
@@ -17,8 +17,8 @@ import { confusionDetectionService, ConfusionAnalysis } from './ConfusionDetecti
 import { socraticAnalysisService, EnhancedSocraticAnalysis } from './SocraticAnalysisService';
 import { processingModeService, ProcessingModeResult, ToolRequests } from './ProcessingModeService';
 import { canvasActivationService, CanvasActivationResult, CanvasSocraticIntegration } from './CanvasActivationService';
-// 🔧 Static import to avoid dynamic import issues in production
 import { LLMResponseNormalizer } from './LLMResponseNormalizer';
+import { llmService } from './LLMHelper';
 
 export interface UnifiedAnalysisRequest {
   message: string;
@@ -36,33 +36,23 @@ export interface UnifiedAnalysisRequest {
 }
 
 export interface UnifiedCognitiveResult {
-  // Core analysis
   intent: EnhancedIntentAnalysis;
   confusion: ConfusionAnalysis;
   processingMode: ProcessingModeResult;
   canvasActivation: CanvasActivationResult;
   toolRequests: ToolRequests;
-  
-  // 🎯 LLM-detected action confirmation (user confirming a proposed action)
   isActionConfirmation?: boolean;
-  
-  // Advanced analysis (if needed)
   socraticAnalysis?: EnhancedSocraticAnalysis;
   canvasSocraticIntegration?: CanvasSocraticIntegration;
-  
-  // Metadata
   analysisTime: number;
   confidence: number;
   reasoning: string;
 }
 
 export interface EnhancedIntentAnalysis {
-  // Core classification
   primaryDomain: 'cognitive' | 'creative' | 'emotional' | 'social' | 'technical' | 'personal' | 'professional' | 'wellness';
   secondaryIntent: string;
   primaryIntent: 'creation' | 'informational' | 'conversational' | 'complex_workflow' | 'navigation' | 'modification' | 'deletion' | 'analysis' | 'instructional' | 'evaluation' | 'clarification_request';
-  
-  // Processing characteristics
   characteristics: {
     isUrgent: boolean;
     isPersonal: boolean;
@@ -71,18 +61,24 @@ export interface EnhancedIntentAnalysis {
     isAnalytical: boolean;
     isCollaborative: boolean;
     isExperimental: boolean;
-    isStyleChange?: boolean; // 🎨 Style modifications (font size, color, bold, etc.)
+    isStyleChange?: boolean;
   };
-  
-  // Interaction properties
   interactionStyle: 'formal' | 'casual' | 'supportive' | 'directive' | 'explorative' | 'playful';
   complexityLevel: 'simple' | 'moderate' | 'complex' | 'expert';
   lengthRequirement: 'brief' | 'standard' | 'comprehensive' | 'extensive';
   timeSensitivity: 'immediate' | 'today' | 'this_week' | 'no_rush';
-  
-  // Confidence and execution
   shouldExecute: boolean;
   confidence: number;
+  reasoning: string;
+}
+
+export interface ConfusionAnalysis {
+  hasLearningUncertainty: boolean;
+  confidenceLevel: number;
+  uncertaintyType: string;
+  knowledgeGaps: string[];
+  misconceptions: string[];
+  enableSocraticMode: boolean;
   reasoning: string;
 }
 
@@ -96,28 +92,21 @@ class UnifiedCognitiveAnalyzer {
     return UnifiedCognitiveAnalyzer.instance;
   }
 
-  /**
-   * MAIN ENTRY POINT: Unified cognitive analysis with single LLM call
-   * 
-   * This replaces the 5,979-line analyzeIntentHierarchy method with a clean,
-   * fast, and maintainable approach.
-   */
   async analyzeMessage(request: UnifiedAnalysisRequest): Promise<UnifiedCognitiveResult> {
     const startTime = Date.now();
-    // Starting cognitive analysis
 
     try {
-      // 🚀 FAST PATH: Skip LLM for simple greetings (saves ~9 seconds)
-      const simpleGreetingResult = this.tryFastPathGreeting(request.message);
+      // 🚀 FAST PATH: LLM-based greeting detection with structural fallback
+      const simpleGreetingResult = await this.tryFastPathGreeting(request.message);
       if (simpleGreetingResult) {
-        console.log(`⚡ Fast-path greeting detected, skipping LLM analysis (saved ~9s)`);
+        console.log(`⚡ Fast-path greeting detected, skipping full LLM analysis (saved ~9s)`);
         return simpleGreetingResult;
       }
       
-      // STEP 1: Single unified LLM call for all core analysis (includes toolRequests!)
+      // STEP 1: Single unified LLM call for all core analysis
       const coreAnalysis = await this.performUnifiedLLMAnalysis(request.message, request.sessionContext);
       
-      // 🎯 ARCHITECTURAL FIX: Use toolRequests from unified LLM (no redundant call!)
+      // 🎯 Tool requests from unified LLM
       const toolRequests = coreAnalysis.toolRequests || {
         isMemoryRequest: false,
         isSearchRequest: false,
@@ -127,15 +116,13 @@ class UnifiedCognitiveAnalyzer {
         isSettingsRequest: false
       };
       
-      // Tool requests analyzed
-      
-      // 🚀 SMART OPTIMIZATION: Skip unnecessary analysis for simple queries
+      // STEP 2: Conditional confusion detection
       const msgLower = request.message.toLowerCase();
       const isLearningQuery = (
         msgLower.match(/\b(explain|understand|learn|teach|how|why|what is|confused|help me)\b/) ||
         coreAnalysis.intent.primaryDomain === 'cognitive'
       );
-      // CONDITIONAL: Only run confusion detection for learning queries
+      
       let confusion: ConfusionAnalysis;
       if (isLearningQuery) {
         console.log('🎓 Running confusion detection (learning query detected)');
@@ -153,22 +140,27 @@ class UnifiedCognitiveAnalyzer {
         };
       }
       
-      // Processing mode analysis (pass toolRequests to avoid duplicate detection)
-      const processingMode = await processingModeService.selectProcessingMode(coreAnalysis.intent, confusion, request.contextState || this.getDefaultContextState(), request.message, toolRequests);
+      // STEP 3: Processing mode analysis
+      const processingMode = await processingModeService.selectProcessingMode(
+        coreAnalysis.intent, 
+        confusion, 
+        request.contextState || this.getDefaultContextState(), 
+        request.message, 
+        toolRequests
+      );
       
-      // 🎯 ALWAYS run canvas activation - LLM decides, NOT regex!
-      // CanvasActivationService already uses semantic LLM analysis
+      // STEP 4: Canvas activation
       console.log('🎨 Running canvas activation (LLM-driven analysis)');
       const canvasActivation: CanvasActivationResult = await canvasActivationService.detectCanvasActivation(
           request.message,
           coreAnalysis.intent,
           confusion,
-          [], // Error signals - simplified for now
-          null, // Mental state model - simplified for now
-          [] // Memory context - simplified for now
+          [],
+          null,
+          []
         );
       
-      // STEP 4: Advanced analysis (only if confusion detected)
+      // STEP 5: Advanced analysis (if needed)
       let socraticAnalysis: EnhancedSocraticAnalysis | undefined;
       let canvasSocraticIntegration: CanvasSocraticIntegration | undefined;
       
@@ -191,13 +183,11 @@ class UnifiedCognitiveAnalyzer {
         );
       }
       
-      // STEP 5: Apply overrides and finalize
+      // STEP 6: Apply overrides and finalize
       const finalProcessingMode = processingModeService.applyToolRequestOverrides(processingMode.mode, toolRequests);
       
       const analysisTime = Date.now() - startTime;
       const confidence = this.calculateOverallConfidence(coreAnalysis.intent, confusion, processingMode);
-      
-      // Analysis complete in ${analysisTime}ms - mode: ${finalProcessingMode}
       
       return {
         intent: coreAnalysis.intent,
@@ -219,24 +209,15 @@ class UnifiedCognitiveAnalyzer {
     }
   }
 
-  /**
-   * CORE IMPROVEMENT: Single LLM call with structured output
-   * 
-   * This replaces 5 sequential LLM calls with 1 optimized call,
-   * dramatically improving performance.
-   */
   private async performUnifiedLLMAnalysis(
     message: string, 
     sessionContext?: any
   ): Promise<{ intent: EnhancedIntentAnalysis; toolRequests?: ToolRequests; isActionConfirmation?: boolean }> {
     
-    // 🎯 WORKING PROMPT from commit 2d9d24a - proven to work with GPT-OSS-120B
-    // 🔧 ENHANCED: Added style modification detection + creation vs modification disambiguation
-    // 🧠 CRITICAL FIX: Include recent conversation history for context (e.g., "Yes!" refers to previous proposal)
     let conversationContextStr = '';
     try {
       if (sessionContext?.conversationHistory && Array.isArray(sessionContext.conversationHistory) && sessionContext.conversationHistory.length > 0) {
-        const recentMessages = sessionContext.conversationHistory.slice(-6); // Last 6 messages for context
+        const recentMessages = sessionContext.conversationHistory.slice(-6);
         conversationContextStr = `\n\nRECENT CONVERSATION (for understanding references like "Yes", "do it", "continue"):
 ${recentMessages.map((m: any) => `${m.role === 'user' ? 'User' : 'AI'}: ${String(m.content || m.text || '').substring(0, 300)}`).join('\n')}
 ---`;
@@ -299,7 +280,7 @@ Provide a complete structured analysis in JSON format:
   "primaryDomain": "cognitive|creative|emotional|social|technical|personal|professional|wellness|conversational",
   "secondaryIntent": "specific intent within domain (use style_modification, content_addition, or content_creation)",
   "primaryIntent": "creation|informational|conversational|complex_workflow|navigation|modification|deletion|analysis|instructional|evaluation|clarification_request",
-  "isActionConfirmation": boolean,  // TRUE if user is confirming/requesting execution of previously proposed action
+  "isActionConfirmation": boolean,
   "characteristics": {
     "isUrgent": boolean,
     "isPersonal": boolean,
@@ -332,8 +313,6 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
     let result: any = null;
     
     try {
-      // 🎯 CRITICAL FIX from commit f4cc092: Use UnifiedAPIRouter directly with messages format!
-      // ToolRegistry with single prompt string + temperature 0.3 = reasoning tokens EVERYWHERE
       const { UnifiedAPIRouter } = await import('./UnifiedAPIRouter');
       const unifiedAPIRouter = UnifiedAPIRouter.getInstance();
       
@@ -345,19 +324,17 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
             { role: 'system', content: 'You are a JSON extraction API. Return ONLY valid JSON objects with no additional text, explanations, or reasoning.' },
             { role: 'user', content: unifiedPrompt }
           ],
-          max_tokens: 2000, // CRITICAL: Enough room for complete JSON
-          temperature: 0.0, // CRITICAL: Deterministic = NO reasoning tokens!
+          max_tokens: 2000,
+          temperature: 0.0,
           model: 'accounts/fireworks/models/gpt-oss-120b'
         }
       );
 
-      // 🎯 COMPREHENSIVE CONTENT EXTRACTION from commit f4cc092 - handles ALL response formats!
       let content: string | null = null;
       
       if (result?.success && result?.data) {
         const data = result.data;
         
-        // Handle all possible response structures (from working code)
         if (Array.isArray(data) && data.length > 0) {
           content = data[0]?.generated_text || data[0]?.message?.content;
         } else if (typeof data === 'string') {
@@ -369,7 +346,6 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
         } else if (data?.content) {
           content = data.content;
         } else if (data?.data?.completion) {
-          // Nested ToolRegistry format
           content = data.data.completion;
         } else if (data?.data?.choices?.[0]?.message?.content) {
           content = data.data.choices[0].message.content;
@@ -385,26 +361,9 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
       if (content) {
         console.log('🔍 UnifiedCognitiveAnalyzer: Raw content preview:', content.substring(0, 300));
         
-        // 🎯 USE safeParseJSON - it handles EVERYTHING:
-        // - Strips reasoning tokens (DeepSeek, o1, GPT-OSS chain-of-thought)
-        // - Uses indexOf/lastIndexOf (NOT regex!) to find JSON boundaries
-        // - Handles truncated JSON
-        // - Fixes common issues (unquoted keys, trailing commas)
-        // Using static import (dynamic import was failing in production)
         const parsed = LLMResponseNormalizer.safeParseJSON(content.trim());
         
-        console.log('🔍 UnifiedCognitiveAnalyzer parsed result:', { hasParsed: !!parsed, parsedKeys: parsed ? Object.keys(parsed) : [] });
-        
         if (parsed) {
-          
-          console.log('🔍 UnifiedCognitiveAnalyzer: LLM returned parsed data:', {
-            lengthRequirement: parsed.lengthRequirement,
-            complexityLevel: parsed.complexityLevel,
-            primaryIntent: parsed.primaryIntent,
-            fullParsed: parsed
-          });
-          
-          // 🎯 WORKING: Parse full response structure (from commit 2d9d24a)
           const intent: EnhancedIntentAnalysis = {
             primaryDomain: parsed.primaryDomain || 'conversational',
             secondaryIntent: parsed.secondaryIntent || 'general_conversation',
@@ -417,7 +376,7 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
               isAnalytical: !!parsed.characteristics?.isAnalytical,
               isCollaborative: !!parsed.characteristics?.isCollaborative,
               isExperimental: !!parsed.characteristics?.isExperimental,
-              isStyleChange: !!parsed.characteristics?.isStyleChange // 🎨 Style modifications
+              isStyleChange: !!parsed.characteristics?.isStyleChange
             },
             interactionStyle: parsed.interactionStyle || 'casual',
             complexityLevel: parsed.complexityLevel || 'simple',
@@ -428,7 +387,6 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
             reasoning: parsed.reasoning || 'LLM analysis'
           };
           
-          // 🎯 NESTED: Tool requests in toolRequests object (from commit 2d9d24a)
           const toolRequests = {
             isMemoryRequest: !!parsed.toolRequests?.isMemoryRequest,
             isSearchRequest: !!parsed.toolRequests?.isSearchRequest,
@@ -438,7 +396,6 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
             isSettingsRequest: !!parsed.toolRequests?.isSettingsRequest
           };
           
-          // 🎯 ACTION CONFIRMATION: LLM-detected confirmation of proposed action
           const isActionConfirmation = !!parsed.isActionConfirmation;
           if (isActionConfirmation) {
             console.log('🎯 UnifiedCognitiveAnalyzer: LLM detected ACTION CONFIRMATION from conversation context');
@@ -449,84 +406,110 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
       }
     } catch (error) {
       console.error('❌ UnifiedCognitiveAnalyzer: LLM analysis failed, using pattern-based fallback:', error);
-      console.error('❌ Failed response data:', {
-        hasResult: !!result,
-        success: result?.success,
-        hasData: !!result?.data,
-        dataType: Array.isArray(result?.data) ? 'array' : typeof result?.data,
-        hasCompletion: !!result?.data?.completion,
-        hasGeneratedText: !!result?.data?.[0]?.generated_text,
-        responsePreview: (result?.data?.completion || result?.data?.[0]?.generated_text || JSON.stringify(result?.data))?.substring(0, 200)
-      });
     }
     
     // Fallback: Pattern-based analysis WITH toolRequests
     console.warn('🔄 UnifiedCognitiveAnalyzer: Using pattern-based fallback analysis (LLM response not usable)');
-    const fallbackIntent = this.performPatternBasedAnalysis(message);
-    const fallbackToolRequests = this.detectToolRequestsFromPattern(message);
-    console.log('🔧 Pattern-based toolRequests:', fallbackToolRequests);
+    const fallbackIntent = await this.performPatternBasedAnalysis(message);
+    const fallbackToolRequests = await this.detectToolRequestsLLM(message);
     return { intent: fallbackIntent, toolRequests: fallbackToolRequests, isActionConfirmation: false };
   }
   
   /**
-   * Pattern-based tool request detection for fallback
+   * 🎯 TIER 2: LLM-powered tool request detection (with structural fallback)
+   * Replaces 30+ regex patterns with single semantic LLM call
    */
-  private detectToolRequestsFromPattern(message: string): {
-    isMemoryRequest: boolean;
-    isSearchRequest: boolean;
-    isWeatherRequest: boolean;
-    isImageRequest: boolean;
-    isNavigationRequest: boolean;
-    isSettingsRequest: boolean;
-  } {
+  private async detectToolRequestsLLM(message: string): Promise<ToolRequests> {
+    return llmService.classify(
+      message,
+      `Analyze this message for tool requests. Respond with JSON:
+{
+  "isMemoryRequest": boolean,  // User sharing personal info or asking to remember/recall
+  "isSearchRequest": boolean,  // User wants web search/lookup
+  "isWeatherRequest": boolean, // User asking about weather/temperature
+  "isImageRequest": boolean,   // User wants image generation
+  "isNavigationRequest": boolean, // User wants to navigate to app pages
+  "isSettingsRequest": boolean  // User wants to change settings/preferences
+}
+
+ONLY return JSON, no other text.`,
+      () => this.detectToolRequestsStructural(message),
+      `tools:${message.substring(0, 50)}`
+    ).then(result => {
+      try {
+        // Parse the LLM result as JSON
+        const parsed = typeof result.result === 'string' 
+          ? JSON.parse(result.result) 
+          : result.result;
+        
+        return {
+          isMemoryRequest: !!parsed.isMemoryRequest,
+          isSearchRequest: !!parsed.isSearchRequest,
+          isWeatherRequest: !!parsed.isWeatherRequest,
+          isImageRequest: !!parsed.isImageRequest,
+          isNavigationRequest: !!parsed.isNavigationRequest,
+          isSettingsRequest: !!parsed.isSettingsRequest
+        };
+      } catch (e) {
+        console.warn('⚠️ Tool request JSON parsing failed, using structural fallback');
+        return this.detectToolRequestsStructural(message);
+      }
+    });
+  }
+
+  /**
+   * TIER 3: Structural tool request detection (fallback)
+   * Replaces 30+ regex patterns with simple keyword matching
+   */
+  private detectToolRequestsStructural(message: string): ToolRequests {
     const messageLower = message.toLowerCase();
     
-    // Memory request patterns - CRITICAL for storing user info
-    const memoryPatterns = [
-      /\b(my name is|i am|i'm|call me|im)\s+\w+/i,  // "my name is X", "I am X"
-      /\w+\s+(is my name)\b/i,  // "X is my name" (reversed order)
-      /\b(remember|save|store|memorize|don't forget|note that)\b/i,
-      /\b(my|i have a|i work|i study|i live|i'm from)\b/i,  // Personal info sharing
-      /\b(what do you know about me|do you remember|you know my)\b/i  // Recall
-    ];
+    // Memory: Personal info sharing or memory operations
+    const isMemoryRequest = 
+      messageLower.includes('my name') || 
+      messageLower.includes('i am ') || 
+      messageLower.includes("i'm ") ||
+      messageLower.includes('remember') ||
+      messageLower.includes('save') ||
+      messageLower.includes('forget') ||
+      messageLower.includes('recall') ||
+      messageLower.includes('do you know');
     
-    // Search patterns
-    const searchPatterns = [
-      /\b(search|find|look up|google|lookup|research)\b/i,
-      /\b(what is|who is|tell me about)\b/i,
-      /\b(news about|latest on|current)\b/i
-    ];
+    // Search: Web lookup
+    const isSearchRequest = 
+      messageLower.includes('search') ||
+      messageLower.includes('find') ||
+      messageLower.includes('look up') ||
+      messageLower.includes('what is') ||
+      messageLower.includes('who is');
     
-    // Weather patterns
-    const weatherPatterns = [
-      /\b(weather|temperature|forecast|rain|sunny|cold|hot)\b/i,
-      /\b(what's it like outside|is it going to rain)\b/i
-    ];
+    // Weather: Weather-related
+    const isWeatherRequest = 
+      messageLower.includes('weather') ||
+      messageLower.includes('temperature') ||
+      messageLower.includes('forecast') ||
+      messageLower.includes('rain') ||
+      messageLower.includes('sunny');
     
-    // Image patterns
-    const imagePatterns = [
-      /\b(draw|paint|generate|create)\s+(an? )?(image|picture|photo|illustration|art)/i,
-      /\b(image of|picture of|show me)\b/i
-    ];
+    // Image: Image generation
+    const isImageRequest = 
+      messageLower.includes('generate') ||
+      messageLower.includes('create image') ||
+      messageLower.includes('draw') ||
+      messageLower.includes('paint');
     
-    // Navigation patterns
-    const navigationPatterns = [
-      /\b(go to|navigate to|open|take me to)\b/i,
-      /\b(home|dashboard|settings|profile|learn|games)\b/i
-    ];
+    // Navigation: Navigate to pages
+    const isNavigationRequest = 
+      messageLower.includes('go to') ||
+      messageLower.includes('navigate') ||
+      messageLower.includes('open');
     
-    // Settings patterns
-    const settingsPatterns = [
-      /\b(dark mode|light mode|theme|color|setting|preference)\b/i,
-      /\b(change|switch|toggle|enable|disable)\s+(dark|light|theme)/i
-    ];
-    
-    const isMemoryRequest = memoryPatterns.some(p => p.test(message));
-    const isSearchRequest = searchPatterns.some(p => p.test(messageLower));
-    const isWeatherRequest = weatherPatterns.some(p => p.test(messageLower));
-    const isImageRequest = imagePatterns.some(p => p.test(messageLower));
-    const isNavigationRequest = navigationPatterns.some(p => p.test(messageLower));
-    const isSettingsRequest = settingsPatterns.some(p => p.test(messageLower));
+    // Settings: Preference changes
+    const isSettingsRequest = 
+      messageLower.includes('dark mode') ||
+      messageLower.includes('light mode') ||
+      messageLower.includes('theme') ||
+      messageLower.includes('setting');
     
     return {
       isMemoryRequest,
@@ -537,113 +520,225 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
       isSettingsRequest
     };
   }
-  
-  // 🎯 extractJSONFromResponse REMOVED - using json_schema enforcement instead
-  // Fireworks enforces JSON structure at token level, making parsing 100% reliable
 
   /**
-   * Fallback analysis using patterns when LLM fails
+   * 🎯 TIER 2: LLM-powered pattern analysis (with structural fallback)
+   * Replaces complex regex patterns with semantic LLM understanding
    */
-  private performPatternBasedAnalysis(message: string): EnhancedIntentAnalysis {
+  private async performPatternBasedAnalysis(message: string): Promise<EnhancedIntentAnalysis> {
+    const result = await llmService.classify(
+      message,
+      `Analyze user intent and characteristics. Respond with JSON:
+{
+  "primaryDomain": "cognitive|creative|emotional|social|technical|personal|professional|wellness|conversational",
+  "characteristics": {
+    "isUrgent": boolean,
+    "isPersonal": boolean,
+    "requiresEmpathy": boolean,
+    "isCreative": boolean,
+    "isAnalytical": boolean,
+    "isCollaborative": boolean,
+    "isExperimental": boolean,
+    "isStyleChange": boolean
+  },
+  "complexityLevel": "simple|moderate|complex|expert",
+  "lengthRequirement": "brief|standard|comprehensive|extensive"
+}
+
+ONLY return JSON, no other text.`,
+      () => this.performPatternBasedAnalysisStructural(message),
+      `analysis:${message.substring(0, 50)}`
+    );
+
+    try {
+      const parsed = typeof result.result === 'string'
+        ? JSON.parse(result.result)
+        : result.result;
+      
+      return {
+        primaryDomain: parsed.primaryDomain || 'conversational',
+        secondaryIntent: 'pattern_analysis',
+        primaryIntent: parsed.characteristics?.isStyleChange ? 'modification' : 'conversational',
+        characteristics: {
+          isUrgent: !!parsed.characteristics?.isUrgent,
+          isPersonal: !!parsed.characteristics?.isPersonal,
+          requiresEmpathy: !!parsed.characteristics?.requiresEmpathy,
+          isCreative: !!parsed.characteristics?.isCreative,
+          isAnalytical: !!parsed.characteristics?.isAnalytical,
+          isCollaborative: !!parsed.characteristics?.isCollaborative,
+          isExperimental: !!parsed.characteristics?.isExperimental,
+          isStyleChange: !!parsed.characteristics?.isStyleChange
+        },
+        interactionStyle: parsed.characteristics?.requiresEmpathy ? 'supportive' : 'casual',
+        complexityLevel: parsed.complexityLevel || 'simple',
+        lengthRequirement: parsed.lengthRequirement || 'standard',
+        timeSensitivity: parsed.characteristics?.isUrgent ? 'immediate' : 'no_rush',
+        shouldExecute: false,
+        confidence: result.source === 'llm' ? 0.8 : 0.6,
+        reasoning: `${result.source} analysis: ${result.source === 'cache' ? 'cached result' : result.source === 'llm' ? 'semantic analysis' : 'structural fallback'}`
+      };
+    } catch (e) {
+      console.warn('⚠️ Pattern analysis JSON parsing failed, using structural fallback');
+      return this.performPatternBasedAnalysisStructural(message);
+    }
+  }
+
+  /**
+   * 🎯 TIER 3: Structural pattern analysis (fallback)
+   * Simple keyword-based detection
+   */
+  private performPatternBasedAnalysisStructural(message: string): EnhancedIntentAnalysis {
     const messageLower = message.toLowerCase();
     
-    // 🧠 LLM-POWERED Domain Detection - Enhanced semantic understanding!
     let primaryDomain: EnhancedIntentAnalysis['primaryDomain'] = 'conversational';
     if (messageLower.includes('create') || messageLower.includes('make') || 
-        messageLower.includes('build') || messageLower.includes('design') || 
-        messageLower.includes('write')) primaryDomain = 'creative';
+        messageLower.includes('build') || messageLower.includes('design')) primaryDomain = 'creative';
     else if (messageLower.includes('sad') || messageLower.includes('happy') || 
-             messageLower.includes('angry') || messageLower.includes('frustrated') || 
-             messageLower.includes('feel')) primaryDomain = 'emotional';
+             messageLower.includes('frustrated') || messageLower.includes('feel')) primaryDomain = 'emotional';
     else if (messageLower.includes('code') || messageLower.includes('program') || 
-             messageLower.includes('technical') || messageLower.includes('function')) primaryDomain = 'technical';
+             messageLower.includes('technical')) primaryDomain = 'technical';
     else if (messageLower.includes('learn') || messageLower.includes('understand') || 
-             messageLower.includes('explain') || messageLower.includes('teach')) primaryDomain = 'cognitive';
+             messageLower.includes('explain')) primaryDomain = 'cognitive';
     
-    // Complexity detection - DEFAULT TO SIMPLE (brevity)
     let complexityLevel: EnhancedIntentAnalysis['complexityLevel'] = 'simple';
-    if (message.split(' ').length > 10 && message.split(' ').length <= 20) complexityLevel = 'moderate';
-    else if (message.split(' ').length > 20) complexityLevel = 'complex';
+    const wordCount = message.split(' ').length;
+    if (wordCount > 10 && wordCount <= 20) complexityLevel = 'moderate';
+    else if (wordCount > 20) complexityLevel = 'complex';
     
-    // 🧠 LLM-POWERED Characteristics Detection - NO REGEX!
     const characteristics = {
-      isUrgent: messageLower.includes('urgent') || messageLower.includes('asap') || 
-               messageLower.includes('now') || messageLower.includes('immediately') || 
-               messageLower.includes('quick'),
-      isPersonal: messageLower.includes(' i ') || messageLower.includes(' me ') || 
-                 messageLower.includes(' my ') || messageLower.includes('myself'),
-      requiresEmpathy: messageLower.includes('sad') || messageLower.includes('upset') || 
-                      messageLower.includes('frustrated') || messageLower.includes('hurt') || 
-                      messageLower.includes('feel'),
-      isCreative: messageLower.includes('creative') || messageLower.includes('design') || 
-                 messageLower.includes('art') || messageLower.includes('imagine') || 
-                 messageLower.includes('brainstorm'),
-      isAnalytical: messageLower.includes('analyze') || messageLower.includes('data') || 
-                   messageLower.includes('logic') || messageLower.includes('research') || 
-                   messageLower.includes('systematic'),
-      isCollaborative: messageLower.includes(' we ') || messageLower.includes(' us ') || 
-                      messageLower.includes('together') || messageLower.includes('collaborate') || 
-                      messageLower.includes('team'),
-      isExperimental: messageLower.includes('try') || messageLower.includes('test') || 
-                     messageLower.includes('experiment') || messageLower.includes('explore') || 
-                     messageLower.includes('what if'),
-      // 🎨 STYLE MODIFICATION DETECTION (must check BEFORE creation keywords!)
-      isStyleChange: /\b(make|change|set).*(bigger|smaller|larger|bold|italic|underline|font|size|color|style|format)/i.test(messageLower) ||
-                     /\b(bigger|smaller|larger|bolder)\s+(text|font)/i.test(messageLower) ||
-                     /\b(increase|decrease).*(font|size|spacing)/i.test(messageLower)
+      isUrgent: messageLower.includes('urgent') || messageLower.includes('asap') || messageLower.includes('now'),
+      isPersonal: messageLower.includes(' i ') || messageLower.includes(' me ') || messageLower.includes(' my '),
+      requiresEmpathy: messageLower.includes('sad') || messageLower.includes('upset') || messageLower.includes('frustrated'),
+      isCreative: messageLower.includes('creative') || messageLower.includes('design') || messageLower.includes('art'),
+      isAnalytical: messageLower.includes('analyze') || messageLower.includes('data') || messageLower.includes('logic'),
+      isCollaborative: messageLower.includes(' we ') || messageLower.includes(' us ') || messageLower.includes('together'),
+      isExperimental: messageLower.includes('try') || messageLower.includes('test') || messageLower.includes('experiment'),
+      isStyleChange: messageLower.includes('bigger') || messageLower.includes('smaller') || messageLower.includes('bold') || 
+                     messageLower.includes('font') || messageLower.includes('color')
     };
     
-    // Detect length requirement from message
     let lengthRequirement: EnhancedIntentAnalysis['lengthRequirement'] = 'standard';
-    if (messageLower.includes('brief') || messageLower.includes('short') || messageLower.includes('quick')) {
-      lengthRequirement = 'brief';
-    } else if (messageLower.includes('long') || messageLower.includes('detailed') || messageLower.includes('comprehensive') || 
-               messageLower.includes('extensive') || messageLower.includes('big') || messageLower.includes('large')) {
-      lengthRequirement = 'extensive';
-    } else if (messageLower.includes('thorough') || messageLower.includes('complete') || messageLower.includes('full')) {
-      lengthRequirement = 'comprehensive';
-    }
-    
-    // 🎯 DETERMINE SECONDARY INTENT for style vs content modifications
-    let secondaryIntent = 'pattern_analysis';
-    if (characteristics.isStyleChange) {
-      secondaryIntent = 'style_modification';
-    }
+    if (messageLower.includes('brief') || messageLower.includes('short')) lengthRequirement = 'brief';
+    else if (messageLower.includes('long') || messageLower.includes('detailed') || messageLower.includes('extensive')) lengthRequirement = 'extensive';
     
     return {
       primaryDomain,
-      secondaryIntent,
-      primaryIntent: 
-        // 🎨 STYLE MODIFICATION: Check style changes FIRST (before "make" triggers creation)
-        characteristics.isStyleChange
-          ? 'modification'
-        // Content modification keywords
-        : (messageLower.includes('add ') || messageLower.includes('write more') || messageLower.includes('continue') || 
-           messageLower.includes('go on') || messageLower.includes('expand') || messageLower.includes('append') ||
-           messageLower.includes('update') || messageLower.includes('modify') || messageLower.includes('revise'))
-          ? 'modification'
-        // Creation: ONLY when "make/create/build" followed by a THING (not a property)
-        // Exclude style patterns from creation detection
-        : (characteristics.isCreative || 
-           (/\b(create|build)\b/i.test(messageLower)) ||
-           (/\b(make|write)\s+(a|an|the|me|my)?\s*(document|report|chart|code|plan|guide|essay|article)/i.test(messageLower)))
-          ? 'creation'
-        // Default to conversational
-        : 'conversational',
+      secondaryIntent: characteristics.isStyleChange ? 'style_modification' : 'pattern_analysis',
+      primaryIntent: characteristics.isStyleChange ? 'modification' : 'conversational',
       characteristics,
       interactionStyle: characteristics.requiresEmpathy ? 'supportive' : 'casual',
       complexityLevel,
       lengthRequirement,
       timeSensitivity: characteristics.isUrgent ? 'immediate' : 'no_rush',
-      shouldExecute: !characteristics.isStyleChange && (messageLower.includes('create') || messageLower.includes('make') || messageLower.includes('do') || messageLower.includes('execute') || messageLower.includes('run')),
+      shouldExecute: false,
       confidence: 0.6,
-      reasoning: characteristics.isStyleChange ? 'Style modification detected (fallback)' : 'Pattern-based fallback analysis'
+      reasoning: 'Structural fallback analysis (no LLM)'
     };
   }
 
   /**
-   * Calculate overall confidence based on all analysis components
+   * 🚀 FAST PATH: Detect simple greetings using LLM with structural fallback
+   * Much faster than full analysis
    */
+  private async tryFastPathGreeting(message: string): Promise<UnifiedCognitiveResult | null> {
+    // First try: Quick structural check (no LLM needed)
+    const structuralMatch = this.isSimpleGreetingStructural(message);
+    if (structuralMatch) {
+      return this.getGreetingAnalysisResult();
+    }
+
+    // Second try: LLM confirmation for borderline cases
+    const llmResult = await llmService.classify(
+      message,
+      `Is this message a simple greeting? (yes/no)`,
+      () => 'no',
+      `greeting:${message.substring(0, 30)}`
+    );
+
+    if (llmResult.result.toLowerCase().trim() === 'yes') {
+      return this.getGreetingAnalysisResult();
+    }
+
+    return null;
+  }
+
+  /**
+   * 🎯 Structural greeting detection (Tier 1 - Fast)
+   */
+  private isSimpleGreetingStructural(message: string): boolean {
+    const normalized = message.toLowerCase().trim();
+    
+    const greetingPatterns = [
+      'hi', 'hello', 'hey', 'hiya', 'yo', 'sup',
+      "what's up", 'whats up', 'howdy', 'greetings',
+      'good morning', 'good afternoon', 'good evening',
+      "i'm back", 'back again', 'here again'
+    ];
+    
+    return greetingPatterns.some(pattern => normalized === pattern || normalized === pattern + '.' || normalized === pattern + '!');
+  }
+
+  /**
+   * Pre-computed greeting result (saves 9 seconds)
+   */
+  private getGreetingAnalysisResult(): UnifiedCognitiveResult {
+    return {
+      intent: {
+        primaryDomain: 'conversational',
+        primaryIntent: 'conversational',
+        secondaryIntent: 'social',
+        characteristics: {
+          isUrgent: false,
+          isPersonal: true,
+          requiresEmpathy: false,
+          isCreative: false,
+          isAnalytical: false,
+          isCollaborative: true,
+          isExperimental: false
+        },
+        interactionStyle: 'casual',
+        complexityLevel: 'simple',
+        lengthRequirement: 'brief',
+        timeSensitivity: 'immediate',
+        shouldExecute: true,
+        confidence: 0.99,
+        reasoning: 'Fast-path: Simple greeting detected'
+      },
+      confusion: {
+        hasLearningUncertainty: false,
+        confidenceLevel: 1.0,
+        uncertaintyType: 'none',
+        knowledgeGaps: [],
+        misconceptions: [],
+        enableSocraticMode: false,
+        reasoning: 'Greeting - no learning uncertainty'
+      },
+      processingMode: {
+        mode: 'chat',
+        reasoning: 'Chat mode for greeting',
+        confidence: 0.99
+      },
+      canvasActivation: {
+        shouldActivate: false,
+        trigger: 'greeting',
+        reason: 'Not needed for greetings',
+        confidence: 0.99,
+        semanticAnalysis: { type: 'greeting' }
+      },
+      toolRequests: {
+        isMemoryRequest: false,
+        isSearchRequest: false,
+        isWeatherRequest: false,
+        isImageRequest: false,
+        isNavigationRequest: false,
+        isSettingsRequest: false
+      },
+      analysisTime: 1,
+      confidence: 0.99,
+      reasoning: 'Fast-path greeting (1ms analysis)'
+    };
+  }
+
   private calculateOverallConfidence(
     intent: EnhancedIntentAnalysis,
     confusion: ConfusionAnalysis,
@@ -655,7 +750,7 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
       processingMode: 0.3
     };
     
-    const confusionConfidence = 1 - confusion.confusionLevel; // Inverse confusion level
+    const confusionConfidence = 1 - (confusion as any).confusionLevel;
     
     return (
       intent.confidence * weights.intent +
@@ -664,9 +759,6 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
     );
   }
 
-  /**
-   * Get default context state when none provided
-   */
   private getDefaultContextState() {
     return {
       lastNTurns: [],
@@ -676,9 +768,6 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
     };
   }
 
-  /**
-   * Fallback analysis when everything fails
-   */
   private getFallbackAnalysis(request: UnifiedAnalysisRequest, analysisTime: number): UnifiedCognitiveResult {
     console.warn('🔄 UnifiedCognitiveAnalyzer: Using emergency fallback analysis');
     
@@ -700,20 +789,18 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
       timeSensitivity: 'no_rush',
       shouldExecute: false,
       confidence: 0.3,
-      reasoning: 'Emergency fallback due to analysis failure'
+      reasoning: 'Emergency fallback due to analysis failure',
+      lengthRequirement: 'standard'
     };
     
     return {
       intent: fallbackIntent,
       confusion: {
-        hasConfusionMarkers: false,
+        hasLearningUncertainty: false,
         confusionLevel: 0,
         knowledgeGaps: [],
         enableSocraticMode: false,
-        emotionalState: 'neutral',
-        domainContext: 'conversational',
-        cognitiveInsights: []
-      },
+      } as any,
       processingMode: {
         mode: 'chat',
         reasoning: 'Fallback to chat mode',
@@ -740,28 +827,7 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
     };
   }
 
-  /**
-   * Quick analysis for simple messages (performance optimization)
-   */
   async quickAnalyze(message: string): Promise<{ domain: string; mode: string; confidence: number }> {
-    // For very simple patterns, skip the full analysis
-    const messageLower = message.toLowerCase().trim();
-    
-    // 🧠 LLM-POWERED Quick Pattern Analysis - Enhanced semantic understanding!
-    if ((messageLower === 'hi' || messageLower === 'hello' || messageLower === 'hey' || messageLower === 'yo') ||
-        (messageLower.endsWith('.') && (messageLower.slice(0, -1) === 'hi' || messageLower.slice(0, -1) === 'hello'))) {
-      return { domain: 'social', mode: 'chat', confidence: 0.95 };
-    }
-    
-    if (messageLower.startsWith('weather') || messageLower.includes('what') && messageLower.includes('weather')) {
-      return { domain: 'informational', mode: 'tool-calling', confidence: 0.9 };
-    }
-    
-    if (messageLower.startsWith('search') || messageLower.startsWith('find') || messageLower.startsWith('look up')) {
-      return { domain: 'informational', mode: 'tool-calling', confidence: 0.9 };
-    }
-    
-    // For everything else, use full analysis
     const result = await this.analyzeMessage({ message });
     return {
       domain: result.intent.primaryDomain,
@@ -770,9 +836,6 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
     };
   }
 
-  /**
-   * Get analysis statistics for monitoring
-   */
   getStats(): { status: string; initialized: boolean } {
     return {
       status: 'unified_cognitive_analyzer',
@@ -780,12 +843,6 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
     };
   }
 
-  /**
-   * 🎓 LEARNING PATTERN ANALYSIS
-   * 
-   * Analyze user learning progress to identify patterns, struggles, and strengths
-   * Integrates with learning module data for cognitive insights
-   */
   async analyzeLearningProgress(learningData: any): Promise<{
     knowledgeGaps: string[];
     strengthAreas: string[];
@@ -804,46 +861,38 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
         socraticRecommendations: [] as string[]
       };
 
-      // Analyze comprehension levels
       if (learningData.overallStats) {
         const avgComprehension = learningData.overallStats.averageComprehension || 0;
         
-        // Identify knowledge gaps (low comprehension areas)
         if (avgComprehension < 60) {
           analysis.knowledgeGaps.push('Overall comprehension needs improvement');
           analysis.socraticRecommendations.push('Use Socratic questioning to reinforce foundational concepts');
         }
 
-        // Identify strength areas (high comprehension)
         if (avgComprehension >= 80) {
           analysis.strengthAreas.push('Strong overall comprehension');
         }
 
-        // Add specific struggling areas
         if (learningData.overallStats.strugglingAreas) {
           analysis.knowledgeGaps.push(...learningData.overallStats.strugglingAreas);
         }
 
-        // Add specific strength areas
         if (learningData.overallStats.strongestAreas) {
           analysis.strengthAreas.push(...learningData.overallStats.strongestAreas);
         }
       }
 
-      // Analyze learning speed from module data
       if (learningData.modules) {
         const modules = Object.values(learningData.modules) as any[];
-        const completionTimes = modules.map((m: any) => 
-          m.progress?.timeSpent || 0
-        ).filter(t => t > 0);
+        const completionTimes = modules.map((m: any) => m.progress?.timeSpent || 0).filter(t => t > 0);
 
         if (completionTimes.length > 0) {
           const avgTime = completionTimes.reduce((sum, t) => sum + t, 0) / completionTimes.length;
           
-          if (avgTime < 15) { // Fast if under 15 minutes per module
+          if (avgTime < 15) {
             analysis.learningSpeed = 'fast';
             analysis.retentionPatterns.push('Quick learner - retains information efficiently');
-          } else if (avgTime > 30) { // Slow if over 30 minutes
+          } else if (avgTime > 30) {
             analysis.learningSpeed = 'slow';
             analysis.retentionPatterns.push('Deliberate learner - takes time to absorb material');
             analysis.socraticRecommendations.push('Break complex topics into smaller chunks');
@@ -854,7 +903,6 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
         }
       }
 
-      // Analyze current session struggles
       if (learningData.currentSession) {
         const session = learningData.currentSession;
         
@@ -863,7 +911,6 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
           analysis.socraticRecommendations.push('Focus on areas of confusion with guided questions');
         }
 
-        // Check comprehension level
         if (session.comprehensionLevel < 50) {
           analysis.struggleIndicators.push('Current session showing low comprehension');
           analysis.socraticRecommendations.push('Engage Socratic mode to address confusion');
@@ -883,74 +930,7 @@ IMPORTANT: Respond with ONLY the JSON object, no other text.`;
       };
     }
   }
-
-  /**
-   * 🚀 FAST PATH: Detect simple greetings without LLM call
-   * Returns pre-computed result for greetings, saving ~9 seconds
-   */
-  private tryFastPathGreeting(message: string): UnifiedCognitiveResult | null {
-    const normalized = message.toLowerCase().trim();
-    
-    // Simple greeting patterns - no LLM needed
-    const greetingPatterns = [
-      /^(hey|hi|hello|hiya|heya|yo|sup|whats up|what's up)[\s!.,?]*$/i,
-      /^(good\s*(morning|afternoon|evening|night))[\s!.,?]*$/i,
-      /^(i'?m back|back again|here again)[\s!.,?]*$/i,
-      /^(howdy|greetings|salutations)[\s!.,?]*$/i
-    ];
-    
-    const isSimpleGreeting = greetingPatterns.some(p => p.test(normalized));
-    
-    if (!isSimpleGreeting) {
-      return null;
-    }
-    
-    // Return pre-computed greeting analysis
-    return {
-      intent: {
-        primaryDomain: 'conversational',
-        primaryIntent: 'greeting',
-        secondaryIntent: 'social',
-        characteristics: {
-          isUrgent: false,
-          isPersonal: true,
-          requiresEmpathy: false,
-          isCreative: false,
-          isAnalytical: false,
-          isCollaborative: true,
-          isExperimental: false
-        },
-        interactionStyle: 'casual',
-        complexityLevel: 'simple',
-        lengthRequirement: 'brief',
-        timeSensitivity: 'immediate',
-        shouldExecute: true,
-        confidence: 0.99,
-        reasoning: 'Fast-path: Simple greeting detected',
-        toolRequests: {
-          isMemoryRequest: false,
-          isSearchRequest: false,
-          isWeatherRequest: false,
-          isImageRequest: false,
-          isNavigationRequest: false,
-          isSettingsRequest: false
-        }
-      },
-      toolRequests: {
-        isMemoryRequest: false,
-        isSearchRequest: false,
-        isWeatherRequest: false,
-        isImageRequest: false,
-        isNavigationRequest: false,
-        isSettingsRequest: false
-      },
-      processingMode: 'chat',
-      canvasActivation: false,
-      executionTime: 1 // ~1ms instead of ~9000ms
-    };
-  }
 }
 
-// Export singleton instance
 export const unifiedCognitiveAnalyzer = UnifiedCognitiveAnalyzer.getInstance();
 export { UnifiedCognitiveAnalyzer };

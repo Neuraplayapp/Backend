@@ -86,14 +86,28 @@ export class MemoryOperations {
       const relevance = mem.similarity || 0.8;
       const importance = mem.metadata?.importanceScore || 0.5;
       
-      const source = mem.metadata?.source || mem.source || 'auto_captured';
-      const sourcePriority = {
-        'llm_extraction_validated': 0.7,
-        'explicit_statement': 1.0,
-        'inferred_from_context': 0.8,
-        'auto_captured': 0.7,
-        'canvas_derived': 0.6
-      }[source] || 0.7;
+      type SourceType = 
+      | 'llm_extraction_validated'
+      | 'explicit_statement'
+      | 'inferred_from_context'
+      | 'auto_captured'
+      | 'canvas_derived';
+    
+    const source: SourceType = (mem.metadata?.source || mem.source || 'auto_captured') as SourceType;
+    
+    const sourcePriorityMap: Record<
+  'llm_extraction_validated' | 'explicit_statement' | 'inferred_from_context' | 'auto_captured' | 'canvas_derived',
+  number
+> = {
+  llm_extraction_validated: 0.7,
+  explicit_statement: 1.0,
+  inferred_from_context: 0.8,
+  auto_captured: 0.7,
+  canvas_derived: 0.6
+};
+
+const sourceKey = source as keyof typeof sourcePriorityMap;
+const priority = sourcePriorityMap[sourceKey] ?? 0.7;
       
       const accessCount = mem.metadata?.accessCount || 0;
       const accessBonus = Math.min(0.2, accessCount * 0.02);
@@ -129,7 +143,6 @@ export class MemoryOperations {
     scoredMemories.sort((a, b) => (b._supersession?.score || 0) - (a._supersession?.score || 0));
     return scoredMemories.slice(0, topN);
   }
-
   /**
    * 🧠 LLM-POWERED MEMORY CONTEXT ANALYSIS
    */

@@ -511,3 +511,26 @@ export function filterByCategories(memories: StructuredMemory[], categories: Mem
 export function getPersonalMemories(memories: StructuredMemory[]): StructuredMemory[] {
   return filterByCategories(memories, PERSONAL_CATEGORIES);
 }
+
+// ============================================
+// DEBUG UTILITIES
+// ============================================
+
+export function debugMemories(memories?: StructuredMemory[], label?: string): void {
+  if (memories) {
+    console.log(`🔍 ${label || 'Memories'} (${memories.length} total):`);
+    memories.forEach((m, i) => {
+      console.log(`  ${i + 1}. [${m.category}] ${m.key}: "${m.content?.substring(0, 60)}${m.content && m.content.length > 60 ? '...' : ''}"`);
+      if (m.entityName) {
+        console.log(`     → Entity: ${m.entityName} (${m.entityRelation || 'unknown relation'})`);
+      }
+    });
+  } else {
+    console.log('📝 MEMORY CATEGORY REGISTRY DEBUG INFO');
+    console.log('All categories:', ALL_CATEGORIES);
+    console.log('Personal categories:', PERSONAL_CATEGORIES);
+    console.log('Education categories:', EDUCATION_CATEGORIES);
+    console.log('Document categories:', DOCUMENT_CATEGORIES);
+    console.log('Category priority boosts:', CATEGORY_PRIORITY_BOOSTS);
+  }
+}
