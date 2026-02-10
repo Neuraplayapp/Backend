@@ -1,9 +1,18 @@
 // Backfill embeddings for existing memories
+require('dotenv').config();
 const { Pool } = require('pg');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || process.env.RENDER_POSTGRES_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: process.env.POSTGRES_SSL === 'true' || process.env.DATABASE_URL?.includes('render.com') || process.env.RENDER_POSTGRES_URL?.includes('render.com') ? {
+    rejectUnauthorized: false,
+    require: true,
+    ca: false
+  } : false,
+  max: 5, // Reduce from 50 to 5 for local development
+  idleTimeoutMillis: 60000, // Increase to 60 seconds
+  connectionTimeoutMillis: 10000, // Increase to 10 seconds
+  acquireTimeoutMillis: 60000, // Add acquire timeout
 });
 
 async function generateEmbedding(text) {

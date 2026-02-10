@@ -271,15 +271,15 @@ if (dbUrl) {
   try {
     pool = new Pool({
       connectionString: dbUrl,
-      ssl: dbUrl.includes('render.com') || dbUrl.includes('postgresql://') ? { 
+      ssl: process.env.POSTGRES_SSL === 'true' || dbUrl.includes('render.com') || dbUrl.includes('postgresql://') ? {
         rejectUnauthorized: false,
-        // Render and most hosted PostgreSQL require SSL
         require: true,
         ca: false
       } : false,
-      max: 50, // Maximum number of clients in pool
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000,
+      max: 5, // Reduce from 50 to 5 for local development
+      idleTimeoutMillis: 60000, // Increase to 60 seconds
+      connectionTimeoutMillis: 10000, // Increase to 10 seconds
+      acquireTimeoutMillis: 60000, // Add acquire timeout
     });
     console.log('🔗 PostgreSQL connection pool initialized');
     console.log('📍 Database URL:', dbUrl.replace(/\/\/[^:]+:[^@]+@/, '//***:***@')); // Mask credentials

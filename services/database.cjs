@@ -11,7 +11,23 @@ let stateOfArtDb = null;
 // Initialize PostgreSQL connection
 const initializeDatabase = () => {
   const connectionString = process.env.RENDER_POSTGRES_URL || process.env.DATABASE_URL;
-  // Render and other hosted PostgreSQL require SSL even in dev
+
+  pool = new Pool({
+    connectionString,
+    ssl: process.env.POSTGRES_SSL === 'true' || connectionString?.includes('render.com') || connectionString?.includes('postgresql://') ? {
+      rejectUnauthorized: false,
+      require: true,
+      ca: false
+    } : false,
+    max: 2, // Reduce to 2 for Render limits
+    min: 0, // No minimum connections
+    idleTimeoutMillis: 20000, // Reduce to 20 seconds
+    connectionTimeoutMillis: 30000, // Increase to 30 seconds for slow connections
+    acquireTimeoutMillis: 45000, // Reduce acquire timeout
+    allowExitOnIdle: true, // Allow pool to close when idle
+  });
+
+  // Initialize Knex query builder
   const needsSSL = connectionString && (
     connectionString.includes('render.com') ||
     connectionString.includes('heroku') ||
@@ -20,12 +36,6 @@ const initializeDatabase = () => {
     process.env.POSTGRES_SSL === 'true'
   );
 
-  pool = new Pool({
-    connectionString,
-    ssl: needsSSL ? { rejectUnauthorized: false } : false,
-  });
-
-  // Initialize Knex query builder
   queryBuilder = knex({
     client: 'pg',
     connection: {
@@ -33,8 +43,8 @@ const initializeDatabase = () => {
       ssl: needsSSL ? { rejectUnauthorized: false } : false,
     },
     pool: {
-      min: 2,
-      max: 10
+      min: 1,
+      max: 3
     }
   });
 
