@@ -50,7 +50,7 @@ const HowItWorksSection: React.FC = () => {
 
   return (
     <section
-      className={`py-20 sm:py-24 relative overflow-hidden ${
+      className={`py-24 relative overflow-hidden ${
         isDarkMode
           ? 'bg-gradient-to-b from-[#1a1a2e] to-[#0f0f1a]'
           : 'bg-gradient-to-b from-gray-50 to-purple-100/50'
@@ -71,12 +71,12 @@ const HowItWorksSection: React.FC = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 container mx-auto px-6">
 
         {/* Section Header */}
         <div className="text-center mb-14 sm:mb-18">
           <h2
-            className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-3 tracking-tight ${
+            className={`text-4xl sm:text-5xl font-bold mb-3 tracking-tight ${
               isDarkMode ? 'text-white' : 'text-gray-900'
             }`}
           >
@@ -84,7 +84,7 @@ const HowItWorksSection: React.FC = () => {
           </h2>
 
           <p
-            className={`text-sm sm:text-base max-w-xl mx-auto leading-relaxed ${
+            className={`text-lg max-w-2xl mx-auto leading-relaxed ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}
           >
@@ -102,7 +102,7 @@ const HowItWorksSection: React.FC = () => {
           />
 
           {/* Steps */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
 
             {steps.map((step, index) => (
               <div

@@ -176,7 +176,7 @@ const FeaturesSection: React.FC = () => {
     <>
       {/* Science Section */}
       <section
-        className={`py-20 sm:py-24 relative overflow-hidden ${
+        className={`py-24 relative overflow-hidden ${
           isDarkMode
             ? 'bg-gradient-to-b from-[#0f0f1a] via-[#1a1a2e] to-[#1a1a2e]'
             : 'bg-gradient-to-b from-white via-purple-50/30 to-purple-50/50'
@@ -208,12 +208,12 @@ const FeaturesSection: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 container mx-auto px-6">
 
           {/* Header */}
           <div className="text-center mb-12 sm:mb-16">
             <h2
-              className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 tracking-tight ${
+              className={`text-4xl sm:text-5xl font-bold mb-4 tracking-tight ${
                 isDarkMode ? 'text-white' : 'text-gray-900'
               }`}
             >
@@ -221,7 +221,7 @@ const FeaturesSection: React.FC = () => {
             </h2>
 
             <p
-              className={`text-sm sm:text-base max-w-2xl mx-auto leading-relaxed ${
+              className={`text-lg max-w-2xl mx-auto leading-relaxed ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`}
             >
@@ -230,7 +230,7 @@ const FeaturesSection: React.FC = () => {
           </div>
 
           {/* Cards */}
-          <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             {topFeatures.map((feature, index) => (
               <FeatureCard key={index} {...feature} />
             ))}
@@ -247,7 +247,7 @@ const FeaturesSection: React.FC = () => {
         }`}
       >
         {/* Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 container mx-auto px-6">
 
           {/* Header */}
           <div className="text-center mb-12 sm:mb-16">

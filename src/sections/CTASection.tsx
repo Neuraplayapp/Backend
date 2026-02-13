@@ -38,13 +38,13 @@ const CTASection: React.FC<CTASectionProps> = ({ onLoginClick }) => {
     <section
       id="cta-section"
       data-animate
-      className={`py-8 sm:py-12 relative overflow-hidden fade-in-section ${
+      className={`py-24 relative overflow-hidden fade-in-section ${
         visibleSections.has('cta-section') ? 'visible' : ''
       } ${
         isDarkMode ? 'bg-[#0f0f1a]' : 'bg-gray-50'
       }`}
     >
-      <div className="relative z-12 max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-12 container mx-auto px-6`">
         {/* Main CTA Card */}
         <div className="relative py-6 px-6 sm:px-10 rounded-3xl bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 shadow-2xl">
           
@@ -52,12 +52,12 @@ const CTASection: React.FC<CTASectionProps> = ({ onLoginClick }) => {
           <div className="text-center space-y-5">
   
             {/* Title */}
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight text-white tracking-tight">
+            <h2 className="text-4xl md:text-5xl font-bold leading-tight text-white">
               {t('parentHome.cta.title')}
             </h2>
   
             {/* Subtitle */}
-            <p className="text-sm sm:text-base max-w-xl mx-auto text-white/90 leading-relaxed">
+            <p className="text-xl max-w-2xl mx-auto text-white/90 leading-relaxed">
               {t('parentHome.cta.subtitle')}
             </p>
   
@@ -71,7 +71,7 @@ const CTASection: React.FC<CTASectionProps> = ({ onLoginClick }) => {
             </div>
   
             {/* Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
   
               {/* Login Button */}
               <button

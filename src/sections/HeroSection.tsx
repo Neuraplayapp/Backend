@@ -163,7 +163,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSignUp, onLogin, onLearnMor
 
 
       {/* Hero Content */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 lg:pt-8 pb-16">
+      <div className="relative z-10 w-full container mx-auto px-6">
         <div className="text-center">
           {/* Title */}
           <div
@@ -171,7 +171,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSignUp, onLogin, onLearnMor
             data-animate
             className={`fade-in-section ${visibleSections.has('hero-title') ? 'visible' : ''}`}
           >
-            <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight tracking-tight ${
+            <h1 className={`text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight ${
               isDarkMode ? 'text-white' : 'text-gray-900'
             }`}>
               {t('parentHome.hero.title')}
@@ -187,7 +187,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSignUp, onLogin, onLearnMor
             data-animate
             className={`fade-in-section ${visibleSections.has('hero-subtitle') ? 'visible' : ''}`}
           >
-            <p className={`text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed ${
+            <p className={`text-xl md:text-2xl max-w-2xl mx-auto mb-12 leading-relaxed ${
               isDarkMode ? 'text-gray-300' : 'text-gray-600'
             }`}>
               {t('parentHome.hero.subtitle')}
@@ -200,7 +200,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSignUp, onLogin, onLearnMor
             data-animate
             className={`fade-in-section ${visibleSections.has('hero-cta') ? 'visible' : ''}`}
           >
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 sm:mb-16">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
               {/* Primary CTA */}
               <button
                 onClick={onSignUp}

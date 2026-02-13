@@ -145,7 +145,7 @@ const AboutUsPage: React.FC = () => {
       <style>{globalStyles}</style>
 
       {/* Hero Section - Full Screen */}
-      <section className={`min-h-screen relative overflow-hidden pt-24 flex items-center ${isDarkMode ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-50 via-white to-purple-50'
+      <section className={`min-h-screen relative overflow-hidden pt-20 flex items-center ${isDarkMode ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-50 via-white to-purple-50'
         }`}>
         {/* Animated Grid Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
