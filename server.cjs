@@ -3,6 +3,8 @@
 
 // Load environment configuration and set defaults
 
+// Priority: .env file first (user's correct config), then development.env as fallback
+require('dotenv').config(({ path: './.env' }));
 require('dotenv').config(({ path: './development.env' }));
 console.log('FACEBOOK_CLIENT_ID:', process.env.FACEBOOK_CLIENT_ID);
 console.log('FACEBOOK_CLIENT_SECRET:', process.env.FACEBOOK_CLIENT_SECRET);
