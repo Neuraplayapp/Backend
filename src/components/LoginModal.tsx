@@ -83,7 +83,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
         revealType="fade"
         duration={0.4}
         showCloseButton={true}
-        modalClassName="!max-w-5xl !max-h-[85vh] !overflow-hidden"
+        modalClassName="!max-w-5xl !max-h-[95vh] !overflow-hidden"
       >
         {/* Content Grid */}
         <div className="grid lg:grid-cols-2 h-full -m-3 sm:-m-4 md:-m-6">
