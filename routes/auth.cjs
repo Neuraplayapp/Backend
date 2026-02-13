@@ -3,6 +3,11 @@ const bcrypt = require('bcryptjs');
 const { v4: uuid } = require('uuid');
 const databaseService = require('../services/database.cjs');
 const emailService = require('../services/email.cjs');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+const AppleStrategy = require('passport-apple').Strategy;
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 // Security configuration
@@ -15,6 +20,352 @@ const verificationCodes = new Map();
 const generateVerificationCode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
+
+// Configure Passport Google OAuth Strategy
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3001/api/auth/google/callback'
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    const queryBuilder = databaseService.queryBuilder();
+    if (!queryBuilder) {
+      return done(new Error('Database not available'));
+    }
+
+    // Check if user exists by Google ID or email
+    let user = await queryBuilder('users')
+      .where('google_id', profile.id)
+      .orWhere('email', profile.emails[0].value.toLowerCase())
+      .first();
+
+    if (user) {
+      // Update Google ID if not set
+      if (!user.google_id) {
+        await queryBuilder('users')
+          .where('id', user.id)
+          .update({
+            google_id: profile.id,
+            updated_at: new Date()
+          });
+      }
+    } else {
+      // Create new user from Google profile
+      const userId = uuid();
+      const defaultProfile = {
+        avatar: profile.photos[0]?.value || '/assets/images/Mascot.png',
+        rank: 'New Learner',
+        xp: 0,
+        xpToNextLevel: 100,
+        stars: 0,
+        about: '',
+        gameProgress: {}
+      };
+
+      const [newUser] = await queryBuilder('users')
+        .insert({
+          id: userId,
+          username: profile.displayName || profile.emails[0].value.split('@')[0],
+          email: profile.emails[0].value.toLowerCase(),
+          google_id: profile.id,
+          password: 'GOOGLE_OAUTH_USER', // Placeholder password
+          role: 'learner',
+          is_verified: true,
+          profile: JSON.stringify(defaultProfile),
+          subscription: JSON.stringify({ tier: 'free', status: 'active' }),
+          usage: JSON.stringify({
+            aiPrompts: { count: 0, lastReset: new Date().toISOString(), history: [] },
+            imageGeneration: { count: 0, lastReset: new Date().toISOString(), history: [] }
+          })
+        })
+        .returning('*');
+
+      user = newUser;
+      console.log(`✅ New user created via Google OAuth: ${user.username} (${user.email})`);
+    }
+
+    return done(null, user);
+  } catch (error) {
+    console.error('Google OAuth error:', error);
+    return done(error);
+  }
+}));
+
+// Configure Passport Facebook OAuth Strategy
+passport.use(new FacebookStrategy({
+  clientID: process.env.FACEBOOK_CLIENT_ID,
+  clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+  callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+  profileFields: ['id', 'emails', 'name', 'displayName', 'photos']
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    const queryBuilder = databaseService.queryBuilder();
+    if (!queryBuilder) {
+      return done(new Error('Database not available'));
+    }
+
+    const email =
+      profile.emails?.[0]?.value?.toLowerCase() ||
+      `${profile.id}@facebook.com`;
+
+    let user = await queryBuilder('users')
+      .where('facebook_id', profile.id)
+      .orWhere('email', email)
+      .first();
+
+    if (!user) {
+      const userId = uuid();
+
+      const defaultProfile = {
+        avatar: profile.photos?.[0]?.value || '/assets/images/Mascot.png',
+        rank: 'New Learner',
+        xp: 0,
+        xpToNextLevel: 100,
+        stars: 0,
+        about: '',
+        gameProgress: {}
+      };
+
+      const [newUser] = await queryBuilder('users')
+        .insert({
+          id: userId,
+          username: profile.displayName || email.split('@')[0],
+          email,
+          facebook_id: profile.id,
+          password: 'FACEBOOK_OAUTH_USER',
+          role: 'learner',
+          is_verified: true,
+          profile: JSON.stringify(defaultProfile),
+          subscription: JSON.stringify({ tier: 'free', status: 'active' }),
+          usage: JSON.stringify({
+            aiPrompts: { count: 0, lastReset: new Date().toISOString(), history: [] },
+            imageGeneration: { count: 0, lastReset: new Date().toISOString(), history: [] }
+          })
+        })
+        .returning('*');
+
+      user = newUser;
+    }
+
+    return done(null, user);
+  } catch (error) {
+    console.error('Facebook OAuth error:', error);
+    return done(error);
+  }
+}));
+
+
+passport.use(new AppleStrategy({
+  clientID: process.env.APPLE_CLIENT_ID,
+  teamID: process.env.APPLE_TEAM_ID,
+  keyID: process.env.APPLE_KEY_ID,
+  privateKeyLocation: process.env.APPLE_PRIVATE_KEY_PATH, // path to .p8 file
+  callbackURL: process.env.APPLE_CALLBACK_URL || 'http://localhost:3001/api/auth/apple/callback',
+  passReqToCallback: true,
+}, async (req, accessToken, refreshToken, idToken, profile, done) => {
+  try {
+    const queryBuilder = databaseService.queryBuilder();
+    if (!queryBuilder) return done(new Error('Database not available'));
+
+    // Apple profile returns email in idToken, sometimes no name
+    const email = profile.email || `${idToken.sub}@apple.com`;
+    const appleId = idToken.sub;
+
+    // Check if user exists by Apple ID or email
+    let user = await queryBuilder('users')
+      .where('apple_id', appleId)
+      .orWhere('email', email.toLowerCase())
+      .first();
+
+    if (!user) {
+      const userId = uuid();
+      const defaultProfile = {
+        avatar: '/assets/images/Mascot.png',
+        rank: 'New Learner',
+        xp: 0,
+        xpToNextLevel: 100,
+        stars: 0,
+        about: '',
+        gameProgress: {}
+      };
+
+      const [newUser] = await queryBuilder('users')
+        .insert({
+          id: userId,
+          username: profile.name?.firstName || email.split('@')[0],
+          email,
+          apple_id: appleId,
+          password: 'APPLE_OAUTH_USER',
+          role: 'learner',
+          is_verified: true,
+          profile: JSON.stringify(defaultProfile),
+          subscription: JSON.stringify({ tier: 'free', status: 'active' }),
+          usage: JSON.stringify({
+            aiPrompts: { count: 0, lastReset: new Date().toISOString(), history: [] },
+            imageGeneration: { count: 0, lastReset: new Date().toISOString(), history: [] }
+          })
+        })
+        .returning('*');
+
+      user = newUser;
+      console.log(`✅ New user created via Apple OAuth: ${user.username} (${user.email})`);
+    }
+
+    return done(null, user);
+  } catch (error) {
+    console.error('Apple OAuth error:', error);
+    return done(error);
+  }
+}));
+
+// Serialize user for session
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+// Deserialize user from session
+passport.deserializeUser(async (id, done) => {
+  try {
+    const queryBuilder = databaseService.queryBuilder();
+    if (!queryBuilder) {
+      return done(new Error('Database not available'));
+    }
+
+    const user = await queryBuilder('users')
+      .where('id', id)
+      .first();
+
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
+});
+
+// ============================================
+// GOOGLE OAUTH ROUTES
+// ============================================
+
+router.get('/google', passport.authenticate('google', {
+  scope: ['profile', 'email']
+}));
+
+router.get('/google/callback', passport.authenticate('google', {
+  failureRedirect: 'http://localhost:5173/login?error=oauth_failed'
+}), async (req, res) => {
+  try {
+    // Generate JWT token for the authenticated user
+    const token = jwt.sign(
+      {
+        userId: req.user.id,
+        email: req.user.email,
+        role: req.user.role
+      },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '7d' }
+    );
+
+    // Format user for response
+    const { password: _, ...userWithoutPassword } = req.user;
+    const formattedUser = {
+      ...userWithoutPassword,
+      isVerified: req.user.is_verified,
+      profile: typeof req.user.profile === 'string' ? JSON.parse(req.user.profile) : req.user.profile,
+      subscription: typeof req.user.subscription === 'string' ? JSON.parse(req.user.subscription) : req.user.subscription,
+      usage: typeof req.user.usage === 'string' ? JSON.parse(req.user.usage) : req.user.usage
+    };
+
+    // Redirect to frontend with token and user data
+    const redirectUrl = new URL('http://localhost:5173/dashboard');
+    redirectUrl.searchParams.set('token', token);
+    redirectUrl.searchParams.set('user', JSON.stringify(formattedUser));
+
+    res.redirect(redirectUrl.toString());
+  } catch (error) {
+    console.error('Google OAuth callback error:', error);
+    res.redirect('http://localhost:5173/login?error=oauth_error');
+  }
+});
+
+// ============================================
+// FACEBOOK OAUTH ROUTES
+// ============================================
+
+router.get('/facebook',
+  passport.authenticate('facebook', {
+    scope: ['email'],
+    session: false
+  })
+);
+
+router.get('/facebook/callback',
+  passport.authenticate('facebook', {
+    failureRedirect: 'http://localhost:5173/login?error=oauth_failed',
+    session: false
+  }),
+  async (req, res) => {
+    try {
+      const token = jwt.sign(
+        {
+          userId: req.user.id,
+          email: req.user.email,
+          role: req.user.role
+        },
+        process.env.JWT_SECRET || 'your-secret-key',
+        { expiresIn: '7d' }
+      );
+
+      const { password: _, ...userWithoutPassword } = req.user;
+
+      const redirectUrl = new URL('http://localhost:5173/dashboard');
+      redirectUrl.searchParams.set('token', token);
+      redirectUrl.searchParams.set('user', JSON.stringify(userWithoutPassword));
+
+      res.redirect(redirectUrl.toString());
+
+    } catch (error) {
+      console.error('Facebook OAuth callback error:', error);
+      res.redirect('http://localhost:5173/login?error=oauth_error');
+    }
+  }
+);
+
+// ============================================
+// APPLE OAUTH ROUTES
+// ============================================
+
+router.get('/apple', passport.authenticate('apple', {
+  scope: ['name', 'email'],
+  session: false
+}));
+
+router.post('/apple/callback', passport.authenticate('apple', {
+  failureRedirect: 'http://localhost:5173/login?error=oauth_failed',
+  session: false
+}), async (req, res) => {
+  try {
+    const token = jwt.sign(
+      { userId: req.user.id, email: req.user.email, role: req.user.role },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '7d' }
+    );
+
+    const { password: _, ...userWithoutPassword } = req.user;
+
+    const redirectUrl = new URL('http://localhost:5173/dashboard');
+    redirectUrl.searchParams.set('token', token);
+    redirectUrl.searchParams.set('user', JSON.stringify(userWithoutPassword));
+
+    res.redirect(redirectUrl.toString());
+  } catch (error) {
+    console.error('Apple OAuth callback error:', error);
+    res.redirect('http://localhost:5173/login?error=oauth_error');
+  }
+});
+
+
+// ============================================
+// STANDARD AUTH ROUTES
+// ============================================
 
 // Login endpoint
 router.post('/login', async (req, res) => {
@@ -424,7 +775,9 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// 🔐 PASSWORD RESET ENDPOINTS
+// ============================================
+// PASSWORD RESET ENDPOINTS
+// ============================================
 
 // Database-backed password reset tokens (production-safe)
 const passwordResetTokens = {
@@ -553,7 +906,7 @@ router.get('/verify-reset-token/:token', async (req, res) => {
     const crypto = require('crypto');
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
     
-    const tokenData = passwordResetTokens.get(hashedToken);
+    const tokenData = await passwordResetTokens.get(hashedToken);
     
     if (!tokenData) {
       return res.status(400).json({
@@ -563,7 +916,7 @@ router.get('/verify-reset-token/:token', async (req, res) => {
     }
     
     if (Date.now() > tokenData.expires) {
-      passwordResetTokens.delete(hashedToken);
+      await passwordResetTokens.delete(hashedToken);
       return res.status(400).json({
         success: false,
         message: 'Reset token has expired'

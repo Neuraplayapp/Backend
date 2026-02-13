@@ -67,7 +67,11 @@ const LoginModal: React.FC<LoginModalProps> = ({
   };
 
   const handleSocialLogin = (provider: string) => {
-    console.log(`Social login with ${provider}`);
+    if (provider === 'google') {
+      window.location.href = 'http://localhost:3001/api/auth/google';
+    } else {
+      console.log(`Social login with ${provider} not implemented`);
+    }
   };
 
   return (
@@ -226,7 +230,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
               </div>
 
               {/* Registration Link */}
-              <p className={`text-center text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              <p className={`text-center text-sm ${isDarkMode ? 'text-gray-400' : 'text-black'}`}>
                 Not a member?{' '}
                 <button
                   type="button"

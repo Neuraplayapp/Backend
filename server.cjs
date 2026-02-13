@@ -69,6 +69,11 @@ const cors = require('cors');
 const http = require('http');
 const WebSocket = require('ws');
 const { Pool } = require('pg');
+const passport = require('passport');
+const session = require('express-session');
+
+// Initialize Passport
+require('./routes/auth.cjs'); // This will initialize the Google strategy
 
 // ===== ENTERPRISE SERVER SETUP =====
 const app = express();
