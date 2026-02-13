@@ -511,7 +511,7 @@ async function handleFireworksRequest(endpoint, data, res) {
         if (isLocalDevelopment && apiKey) {
           // LOCAL DEVELOPMENT: Forward to Render backend
           console.log('LOCAL DEV: Handling llm-completion directly')
-        } else if (islocalDevelopment) {
+        } else if (isLocalDevelopment) {
           console.log('🔀 LOCAL DEV: Forwarding llm-completion to Render backend');
           
           // CRITICAL FIX: Use unified route format for forwarding
