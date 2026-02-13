@@ -48,17 +48,8 @@ function App() {
   const { user } = useUser();
   const isMobile = useIsMobile();
 
-  // Mobile layout for signed-in users - automatically show MobileShell
-  if (isMobile && user) {
-    return (
-      <Routes>
-        <Route path="/mobile" element={<MobileShell />} />
-        <Route path="*" element={<MobileShell />} />
-      </Routes>
-    );
-  }
-
-  // Desktop layout
+  // Show the same layout for all users (mobile and desktop)
+  // MobileShell is only accessible via explicit /mobile route
   return (
     <Routes>
       <Route element={<MainLayout />}>
