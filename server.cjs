@@ -3,7 +3,10 @@
 
 // Load environment configuration and set defaults
 
-require('dotenv').config();
+require('dotenv').config(({ path: './development.env' }));
+console.log('FACEBOOK_CLIENT_ID:', process.env.FACEBOOK_CLIENT_ID);
+console.log('FACEBOOK_CLIENT_SECRET:', process.env.FACEBOOK_CLIENT_SECRET);
+console.log('FACEBOOK_CALLBACK_URL:', process.env.FACEBOOK_CALLBACK_URL);
 // try {
 //   require('dotenv').config();
 // } catch (error) {

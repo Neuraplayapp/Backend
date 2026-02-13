@@ -95,7 +95,7 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-  callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+  callbackURL: process.env.FACEBOOK_CALLBACK_URL || 'http://localhost:3001/api/auth/facebook/callback',
   profileFields: ['id', 'emails', 'name', 'displayName', 'photos']
 }, async (accessToken, refreshToken, profile, done) => {
   try {
