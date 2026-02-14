@@ -62,7 +62,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSignUp, onLogin, onLearnMor
     <section
       id="hero-section"
       data-animate
-      className={`min-h-screen relative overflow-hidden pt-20 sm:pt-24 lg:pt-28 fade-in-section ${
+      className={`min-h-screen relative overflow-hidden pt-20 pb-16 sm:pt-24 lg:pt-28 fade-in-section ${
         visibleSections.has('hero-section') ? 'visible' : ''
       } ${
         isDarkMode ? 'dark-hero-gradient' : 'light-hero-gradient'
