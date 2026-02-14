@@ -180,6 +180,11 @@ const mlSpacedRepetitionRoutes = require('./server-src/routes/ml-spaced-repetiti
 app.use('/api/ml', mlSpacedRepetitionRoutes);
 console.log('✅ ML Spaced Repetition routes registered at /api/ml');
 
+// Discord bot API - www.neuraplay.org/discordbot
+const discordRoutes = require('./routes/discord.cjs');
+app.use('/discordbot', discordRoutes);
+console.log('✅ Discord routes registered at /discordbot');
+
 // General API routes - MUST be last to avoid conflicts
 app.use('/api', apiRoutes.router);
 console.log('✅ General API routes registered at /api');
@@ -815,6 +820,16 @@ server.listen(PORT, HOST, () => {
   }
   
   console.log('✅ All systems operational');
+
+  // Discord bot - starts when NeuraPlay starts, runs 24/7 with server
+  try {
+    const { startDiscordBot } = require('./services/discord-bot.cjs');
+    if (startDiscordBot()) {
+      console.log('🤖 Discord bot starting...');
+    }
+  } catch (discordErr) {
+    console.log('⚠️ Discord bot skipped:', discordErr.message);
+  }
   
   // Add debugging to see if server stays running
   console.log('🔍 DEBUG: Server callback completed, should stay running...');
