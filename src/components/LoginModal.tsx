@@ -67,12 +67,25 @@ const LoginModal: React.FC<LoginModalProps> = ({
   };
 
   const handleSocialLogin = (provider: string) => {
-    if (provider === 'google') {
-      window.location.href = 'http://localhost:3001/api/auth/google';
-    } else {
-      console.log(`Social login with ${provider} not implemented`);
+    const baseURL = 'http://localhost:3001/api/auth';
+  
+    switch (provider) {
+      case 'google':
+        window.location.href = `${baseURL}/google`;
+        break;
+  
+      case 'facebook':
+        window.location.href = `${baseURL}/facebook`;
+        break;
+  
+      case 'apple':
+        window.location.href = `${baseURL}/apple`;
+        break;
+  
+      default:
+        console.error(`Unknown provider: ${provider}`);
     }
-  };
+  };  
 
   return (
     <>

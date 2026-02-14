@@ -76,7 +76,7 @@ const HowItWorksSection: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-14 sm:mb-18">
           <h2
-            className={`text-4xl sm:text-5xl font-bold mb-3 tracking-tight ${
+            className={`text-4xl md:text-5xl font-bold mb-6 ${
               isDarkMode ? 'text-white' : 'text-gray-900'
             }`}
           >
@@ -109,7 +109,7 @@ const HowItWorksSection: React.FC = () => {
                 key={index}
                 id={`howitworks-step-${index}`}
                 data-animate
-                className={`relative flex flex-col items-center text-center ${visibleSections.has(`howitworks-step-${index}`) ? 'visible' : ''}`}
+                className={`glass-card relative flex flex-col items-center text-center ${visibleSections.has(`howitworks-step-${index}`) ? 'visible' : ''}`}
               >
 
                 {/* Number */}

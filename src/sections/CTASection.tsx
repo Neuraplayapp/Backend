@@ -44,7 +44,7 @@ const CTASection: React.FC<CTASectionProps> = ({ onLoginClick }) => {
         isDarkMode ? 'bg-[#0f0f1a]' : 'bg-gray-50'
       }`}
     >
-      <div className="relative z-12 container mx-auto px-6`">
+      <div className="relative z-12 container mx-auto px-6">
         {/* Main CTA Card */}
         <div className="relative py-6 px-6 sm:px-10 rounded-3xl bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 shadow-2xl">
           
