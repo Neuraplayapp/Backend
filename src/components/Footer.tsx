@@ -71,8 +71,8 @@ const FOOTER_LINKS: Record<string, { name: string; href: string; onClick?: () =>
   ],
   legal: [
     { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms of Service', href: '/neuraplay/license' },
-    { name: 'License', href: '#', onClick: () => { } }, // will be overridden
+    { name: 'Terms of Service', href: '/license' },
+    { name: 'License', href: '/license' },
   ],
 };
 
@@ -160,12 +160,7 @@ const Footer: React.FC = () => {
   }, []);
 
   // Override onClick dynamically
-  const footerLinks = {
-    ...FOOTER_LINKS,
-    legal: FOOTER_LINKS.legal.map(link =>
-      link.name === 'License' ? { ...link, onClick: () => setShowLicense(true) } : link
-    ),
-  };
+  const footerLinks = FOOTER_LINKS
 
   return (
     <motion.footer
@@ -294,7 +289,7 @@ const Footer: React.FC = () => {
           </p>
           <div className={`flex items-center gap-4 sm:gap-6 text-xs sm:text-sm footer-element ${isDarkMode ? 'text-purple-200/40' : 'text-slate-500'}`}>
             <Link to="/privacy" className={`transition-colors duration-200 ${getLinkClasses(isDarkMode)}`}>Privacy</Link>
-            <Link to="/neuraplay/license" className={`transition-colors duration-200 ${getLinkClasses(isDarkMode)}`}>Terms</Link>
+            <Link to="/license" className={`transition-colors duration-200 ${getLinkClasses(isDarkMode)}`}>Terms</Link>
             <span className={isDarkMode ? 'text-purple-200/40' : 'text-slate-500'}>Cookies</span>
           </div>
         </div>

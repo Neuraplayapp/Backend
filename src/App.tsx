@@ -12,6 +12,7 @@ import { useUser } from './contexts/UserContext';
 import ForumPage from './pages/ForumPage';
 import PlaygroundPage from './pages/PlaygroundPage';
 import AIReportPage from './pages/AIReportPage';
+import LicensePage from './pages/LicensePage';
 
 // Mobile detection hook
 function useIsMobile(): boolean {
@@ -60,10 +61,11 @@ function App() {
         <Route path="/playground" element={<PlaygroundPage/>} />
         <Route path="/forum" element={<ForumPage />} />
         <Route path="/ai-insights" element={<AIReportPage />} />
-        <Route path="/features" element={<div className="p-8 text-center">Feature Page - Coming Soon</div>} />
+<Route path="/features" element={<div className="p-8 text-center">Feature Page - Coming Soon</div>} />
         <Route path="/assistant-lite" element={<NeuraPlayAssistantLitePage />} />
         <Route path="/courses" element={<CourseGeneratorPage />} />
         <Route path="/courses/:courseName" element={<CourseGeneratorPage />} />
+        <Route path="/license" element={<LicensePage />} />
       </Route>
       {/* Mobile route - fullscreen, no layout */}
       <Route path="/mobile" element={<MobileShell />} />
